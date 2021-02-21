@@ -1,0 +1,9 @@
+{
+    "template": "member_view",
+    "description": "Add character sheet panel.",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<!--[XF:tab_panes:start]-->",
+    "replace": "$0\n<li class=\"is-active\" role=\"tabpanel\" id=\"character-sheet\">\n\t<div>\n\t\t<b>HELLOOOOOO TERRASPHERE~!</b>\n\t</div>\n</li>"
+}

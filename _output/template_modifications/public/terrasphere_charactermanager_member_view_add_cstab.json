@@ -1,0 +1,9 @@
+{
+    "template": "member_view",
+    "description": "Adds default 'Character Sheet' tab to user info.",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<!--[XF:tabs:start]-->\n\t\t\t\t<xf:if is=\"$user.canViewPostsOnProfile()\">\n\t\t\t\t\t<a href=\"{{ link('members', $user) }}\"\n\t\t\t\t\t\tclass=\"tabs-tab is-active\"\n\t\t\t\t\t\trole=\"tab\"\n\t\t\t\t\t\taria-controls=\"profile-posts\">{{ phrase('profile_posts') }}</a>\n\t\t\t\t</xf:if>",
+    "replace": "<a href=\"{{ link('members', $user) }}\"\n\t\t\t\t\t\tclass=\"tabs-tab is-active\"\n\t\t\t\t\t\trole=\"tab\"\n\t\t\t\t\t\taria-controls=\"profile-posts\">{{ phrase('character_sheet') }}</a>\n\t\t\t\t<!--[XF:tabs:start]-->\n\t\t\t\t<xf:if is=\"$user.canViewPostsOnProfile()\">\n\t\t\t\t\t<a href=\"{{ link('members/profile-posts', $user) }}\"\n\t\t\t\t\t   \trel=\"nofollow\"\n\t\t\t\t\t\tclass=\"tabs-tab\"\n\t\t\t\t\t   \tid=\"profile-posts-tab\"\n\t\t\t\t\t\trole=\"tab\">{{ phrase('profile_posts') }}</a>\n\t\t\t\t</xf:if>"
+}
