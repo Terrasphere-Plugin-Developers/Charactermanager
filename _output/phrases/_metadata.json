@@ -4,5 +4,29 @@
         "version_id": 1000010,
         "version_string": "1.0.0 Alpha",
         "hash": "b17eb3bd9e1ab6caa2a278a4ca8a0a7c"
+    },
+    "option.tcmMasteryList.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "6e63655206288dc64f69d90ba5bae7f9"
+    },
+    "option_explain.tcmMasteryList.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "341db3e72744028f115bef41797adf28"
+    },
+    "option_group.terrasphereCharacterManager.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "80f0897de3767eae286e1af7e9ec0fcb"
+    },
+    "option_group_description.terrasphereCharacterManager.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "c5e07aa37c9fcebc05ddbe0f9e30de0d"
     }
 }
