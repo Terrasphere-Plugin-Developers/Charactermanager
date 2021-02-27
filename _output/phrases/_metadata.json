@@ -1,4 +1,22 @@
 {
+    "admin_navigation.terrasphereCMMasteries.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "85974df9883c6a22a20746546451a294"
+    },
+    "admin_navigation.terrasphereCharacterManager.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "80f0897de3767eae286e1af7e9ec0fcb"
+    },
+    "admin_permission.terrasphereCM.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "80f0897de3767eae286e1af7e9ec0fcb"
+    },
     "character_sheet.txt": {
         "global_cache": false,
         "version_id": 1000010,
@@ -28,5 +46,11 @@
         "version_id": 1000010,
         "version_string": "1.0.0 Alpha",
         "hash": "c5e07aa37c9fcebc05ddbe0f9e30de0d"
+    },
+    "terrasphere_character_manager_title.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "80f0897de3767eae286e1af7e9ec0fcb"
     }
 }
