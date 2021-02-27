@@ -3,5 +3,10 @@
         "version_id": 1000010,
         "version_string": "1.0.0 Alpha",
         "hash": "e9fd49fef923d9e54c61ac7c0d2dca08"
+    },
+    "public/character_sheet_view.html": {
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "d9f964925139723db28f1068f262c6ff"
     }
 }

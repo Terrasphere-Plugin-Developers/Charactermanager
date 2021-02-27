@@ -5,8 +5,28 @@
 namespace Terrasphere\Charactermanager\XF\Pub\Controller;
 
 //use XF\Pub\Controller\Member;
+use XF\Entity\User;
+use XF\Entity\UserProfile;
+use XF\Mvc\FormAction;
+use XF\Mvc\ParameterBag;
 
 class Member extends XFCP_Member
 {
+
+    //copied and changed from Member latestActivity
+    public function actionCharacterSheet(ParameterBag $params)
+	{
+        
+        //gotta figure out what dis does
+		$user = $this->assertViewableUser($params->user_id);
+
+	
+
+
+		$viewParams = [
+			'user' => $user
+		];
+		return $this->view('XF:Member\CharacterSheet', 'character_sheet_view', $viewParams);
+	}
 
 }
