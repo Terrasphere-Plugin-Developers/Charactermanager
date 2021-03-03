@@ -1,6 +1,6 @@
 <?php
 
-namespace Terrasphere\Charactermanager\XF\Pub\Conntroller;
+namespace Terrasphere\Charactermanager\Pub\Conntroller;
 
 //Controller for the CharacterSheet php page.
 
