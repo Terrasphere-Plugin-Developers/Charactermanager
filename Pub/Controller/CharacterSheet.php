@@ -2,9 +2,9 @@
 
 namespace Terrasphere\Charactermanager\Pub\Conntroller;
 
-//Controller for the CharacterSheet php page.
+use XF\Pub\Controller\AbstractController;
 
-class CharacterSheet extends \XF\Pub\Controller\AbstractController
+class CharacterSheet extends AbstractController
 {
 
 }
