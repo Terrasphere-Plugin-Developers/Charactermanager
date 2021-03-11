@@ -26,7 +26,7 @@ class Member extends XFCP_Member
 		$viewParams = [
 			'user' => $user
 		];
-		return $this->view('XF:Member\CharacterSheet', 'character_sheet_view', $viewParams);
+		return $this->view('XF:Member\CharacterSheet', 'terrasphere_cm_character_sheet', $viewParams);
 	}
 
 }
