@@ -1,7 +1,7 @@
 {
     "legacy_addon_id": "",
     "title": "Terrasphere - Character Manager",
-    "description": "",
+    "description": "Applies mastery, equipment, and other systems to character accounts with profile-integrated character sheets and mastery shops.",
     "version_id": 1000010,
     "version_string": "1.0.0 Alpha",
     "dev": "",
