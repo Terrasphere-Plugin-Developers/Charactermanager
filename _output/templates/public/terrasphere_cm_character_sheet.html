@@ -28,21 +28,40 @@
 }
 	
 .character-sheet-mastery-list {
-	display: grid;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
 }
 	
 .character-sheet-mastery-container {
-	
+	width: 25vmin;
+	height: 25vmin;
 }
 	
-.character-sheet-mastery-title {
-	
+.character-sheet-mastery {
+	width: 100%;
+    height: 100%;
 }
 	
 .character-sheet-mastery-title {
 	text-align: center;
 }
+	
+.character-sheet-mastery-icon {
+	margin: auto;
+}
 </xf:css>
+
+<xf:macro name="mastery_macro"
+		  arg-mastery_name="!"
+		  arg-mastery_url="!">
+	<div class="character-sheet-mastery-container">
+		<div class="character-sheet-mastery">
+			<img class="character-sheet-mastery-icon center" src="{$mastery_url}" alt="{$mastery_name}">
+			<h3 class="character-sheet-mastery-title">{$mastery_name}</h3>
+		</div>
+	</div>
+</xf:macro>
 
 <div class="block"><div class="block-container"><div class="block-body">
 	<div class="block character-sheet-info-container">
@@ -69,31 +88,11 @@
 	<div class="character-sheet-cell">
 		<h2 class="character-sheet-title">Masteries</h2>
 		<div class="character-sheet-mastery-list">
-			<div class="character-sheet-mastery-container">
-				<div class="character-sheet-mastery">
-					<h3 class="character-sheet-mastery-title">Arcanamancy</h3>
-				</div>
-			</div>
-			<div class="character-sheet-mastery-container">
-				<div class="character-sheet-mastery">
-					<h3 class="character-sheet-mastery-title">Firemancy</h3>
-				</div>
-			</div>
-			<div class="character-sheet-mastery-container">
-				<div class="character-sheet-mastery">
-					<h3 class="character-sheet-mastery-title">Fluffmancy</h3>
-				</div>
-			</div>
-			<div class="character-sheet-mastery-container">
-				<div class="character-sheet-mastery">
-					<h3 class="character-sheet-mastery-title">Runningoutofideasmancy</h3>
-				</div>
-			</div>
-			<div class="character-sheet-mastery-container">
-				<div class="character-sheet-mastery">
-					<h3 class="character-sheet-mastery-title">The Alter Mastery</h3>
-				</div>
-			</div>
+			<xf:macro name="mastery_macro" arg-mastery_name="Teamancy" arg-mastery_url="uwu" />
+			<xf:macro name="mastery_macro" arg-mastery_name="Arcmancy" arg-mastery_url="uwu" />
+			<xf:macro name="mastery_macro" arg-mastery_name="Wetmancy" arg-mastery_url="uwu" />
+			<xf:macro name="mastery_macro" arg-mastery_name="Firemancy" arg-mastery_url="uwu" />
+			<xf:macro name="mastery_macro" arg-mastery_name="Rokmancy" arg-mastery_url="uwu" />
 		</div>
 	</div>
 	<div class="character-sheet-cell">
