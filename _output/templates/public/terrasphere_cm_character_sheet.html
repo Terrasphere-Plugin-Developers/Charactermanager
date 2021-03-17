@@ -90,7 +90,7 @@
 		  arg-mastery_url="!">
 	<div class="character-sheet-mastery-container">
 		<div class="character-sheet-mastery">
-			<a href="{{ link('terrasphere-cm/cs/mastery/new', $user, {'userid': $user.id, 'index': $mastery_index})}}">
+			<a href="{{ link('terrasphere-cm/cs/mastery/selectnew', null, {'user_id': $user.id, 'index': $mastery_index})}}">
 				<div class="character-sheet-mastery-icon-container">
 					<img class="character-sheet-mastery-icon grid-overlap" src="{$mastery_url}" alt="{$mastery_name}">
 				</div>
