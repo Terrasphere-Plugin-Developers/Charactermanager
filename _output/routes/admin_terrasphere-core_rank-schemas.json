@@ -1,0 +1,11 @@
+{
+    "route_type": "admin",
+    "route_prefix": "terrasphere-core",
+    "sub_name": "rank-schemas",
+    "format": "rank-schemas/:int<rank_schema_id>",
+    "build_class": "",
+    "build_method": "",
+    "controller": "Terrasphere\\Core:RankSchemas",
+    "context": "",
+    "action_prefix": ""
+}
