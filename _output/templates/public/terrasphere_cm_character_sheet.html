@@ -43,9 +43,9 @@
 }
 	
 .character-sheet-mastery-container {
-	width: 20vmin;
-    height: 20vmin;
-    margin: 5vmin;
+	width: 19vmin;
+    height: 19vmin;
+    margin: 3vmin;
 }
 	
 .character-sheet-mastery {
@@ -90,7 +90,9 @@
 		  arg-mastery_url="!">
 	<div class="character-sheet-mastery-container">
 		<div class="character-sheet-mastery">
-			<a href="{{ link('terrasphere-cm/cs/mastery/selectnew', null, {'user_id': $user.id, 'index': $mastery_index})}}">
+			<a href="{{ link('terrasphere-cm/cs/mastery/selectnew', null, {'user_id': $user.id, 'index': $mastery_index})}}"
+			   data-xf-click="overlay"
+			   data-original-title="{$mastery_name}">
 				<div class="character-sheet-mastery-icon-container">
 					<img class="character-sheet-mastery-icon grid-overlap" src="{$mastery_url}" alt="{$mastery_name}">
 				</div>
@@ -107,7 +109,7 @@
 	</div>
 </xf:macro>
 
-<div class="block"><div class="block-container"><div class="block-body">
+<div class="block" style="max-width: 1000px; margin: auto;"><div class="block-container"><div class="block-body">
 	<div class="block character-sheet-info-container">
 		<div class="character-sheet-cell character-sheet-character-info">
 			<h2 class="character-sheet-title">Character</h2>

@@ -15,6 +15,6 @@ class CharacterSheet extends AbstractController
 
     public function actionSelectnew(ParameterBag $params)
     {
-
+        return $this->view('Terrasphere\Charactermanager:CharacterSheet', 'terrasphere_cm_character_sheet', []);
     }
 }

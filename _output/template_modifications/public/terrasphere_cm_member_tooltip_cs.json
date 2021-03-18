@@ -1,0 +1,9 @@
+{
+    "template": "member_tooltip",
+    "description": "Add a character sheet link to a user's tooltip.",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:avatar user=\"{$user}\" size=\"m\" notooltip=\"true\" />",
+    "replace": "$0\n<xf:macro template=\"terrasphere_core_generic_macros\"\n\t\t  name=\"character_sheet_modal_button\"\n\t\t  arg-user=\"{$user}\" />"
+}
