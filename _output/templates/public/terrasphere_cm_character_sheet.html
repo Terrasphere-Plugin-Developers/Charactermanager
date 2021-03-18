@@ -87,14 +87,14 @@
 		  arg-user="!"
 		  arg-mastery_index="!"
 		  arg-mastery_name="!"
-		  arg-mastery_url="!">
+		  arg-mastery_img_url="!">
 	<div class="character-sheet-mastery-container">
 		<div class="character-sheet-mastery">
 			<a href="{{ link('terrasphere-cm/cs/mastery/selectnew', null, {'user_id': $user.id, 'index': $mastery_index})}}"
 			   data-xf-click="overlay"
 			   data-original-title="{$mastery_name}">
 				<div class="character-sheet-mastery-icon-container">
-					<img class="character-sheet-mastery-icon grid-overlap" src="{$mastery_url}" alt="{$mastery_name}">
+					<img class="character-sheet-mastery-icon grid-overlap" src="{$mastery_img_url}" alt="{$mastery_name}">
 				</div>
 			</a>
 			<svg class="character-sheet-mastery-title grid-overlap" viewbox="0, 0, 100, 100">
@@ -103,6 +103,36 @@
 				</defs>
 				<text fill="red">
     				<textPath xlink:href="#mastery-title-path-{$mastery_name}" startOffset="50%" text-anchor="middle">{$mastery_name}</textPath>
+				</text>
+			</svg>
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro name="mastery_macro_empty"
+		  arg-user="!"
+		  arg-mastery_index="!">
+	<div class="character-sheet-mastery-container">
+		<div class="character-sheet-mastery">
+			<a href="{{ link('terrasphere-cm/cs/mastery/selectnew', null, {'user_id': $user.id, 'index': $mastery_index})}}"
+			   data-xf-click="overlay">
+				<div class="character-sheet-mastery-icon-container">
+					<svg viewBox="0 0 459.325 459.325" class="character-sheet-mastery-icon grid-overlap" style="width:50%;height:50%;">
+						<path d="M459.319,229.668c0,22.201-17.992,40.193-40.205,40.193H269.85v149.271c0,22.207-17.998,40.199-40.196,40.193
+								c-11.101,0-21.149-4.492-28.416-11.763c-7.276-7.281-11.774-17.324-11.769-28.419l-0.006-149.288H40.181
+								c-11.094,0-21.134-4.492-28.416-11.774c-7.264-7.264-11.759-17.312-11.759-28.413C0,207.471,17.992,189.475,40.202,189.475h149.267
+								V40.202C189.469,17.998,207.471,0,229.671,0c22.192,0.006,40.178,17.986,40.19,40.187v149.288h149.282
+								C441.339,189.487,459.308,207.471,459.319,229.668z"/>
+					</svg>
+					<!--<img class="character-sheet-mastery-icon grid-overlap" src="" alt="Mastery slot">-->
+				</div>
+			</a>
+			<svg class="character-sheet-mastery-title grid-overlap" viewbox="0, 0, 100, 100">
+				<defs>
+					<path id="mastery-title-path-{$mastery_index}" d="M 0,60 C 0,60 50,-10 100,60" />
+				</defs>
+				<text fill="red">
+    				<textPath xlink:href="#mastery-title-path-{$mastery_index}" startOffset="50%" text-anchor="middle">{$mastery_name}</textPath>
 				</text>
 			</svg>
 		</div>
@@ -134,11 +164,25 @@
 	<div class="character-sheet-cell">
 		<h2 class="character-sheet-title">Masteries</h2>
 		<div class="character-sheet-mastery-list">
-			<xf:macro name="mastery_macro" arg-user="{$user}" arg-mastery_name="Teamancy" arg-mastery_url="uwu" arg-mastery_index="0" />
-			<xf:macro name="mastery_macro" arg-user="{$user}" arg-mastery_name="Arcmancy" arg-mastery_url="uwu" arg-mastery_index="1" />
-			<xf:macro name="mastery_macro" arg-user="{$user}" arg-mastery_name="Wetmancy" arg-mastery_url="uwu" arg-mastery_index="2" />
-			<xf:macro name="mastery_macro" arg-user="{$user}" arg-mastery_name="Firemancy" arg-mastery_url="uwu" arg-mastery_index="3" />
-			<xf:macro name="mastery_macro" arg-user="{$user}" arg-mastery_name="Rokmancy" arg-mastery_url="uwu" arg-mastery_index="4" />
+			<xf:foreach loop="$masterySlots" value="$masterySlot" key="$slotNum">
+				<xf:if is="$masterySlot == 0">
+					<xf:macro name="mastery_macro_empty"
+							  arg-user="{$user}"
+							  arg-mastery_index="{$slotNum}" />
+				</xf:if>
+				<xf:else>
+					<xf:macro name="mastery_macro"
+							  arg-user="{$user}"
+							  arg-mastery_name="Teamancy"
+							  arg-mastery_url="uwu"
+							  arg-mastery_index="{$slotNum}" />
+				</xf:else>
+			</xf:foreach>
+			<xf:macro name="mastery_macro" arg-user="{$user}" arg-mastery_name="Teamancy" arg-mastery_img_url="uwu" arg-mastery_index="0" />
+			<xf:macro name="mastery_macro" arg-user="{$user}" arg-mastery_name="Arcmancy" arg-mastery_img_url="uwu" arg-mastery_index="1" />
+			<xf:macro name="mastery_macro" arg-user="{$user}" arg-mastery_name="Wetmancy" arg-mastery_img_url="uwu" arg-mastery_index="2" />
+			<xf:macro name="mastery_macro" arg-user="{$user}" arg-mastery_name="Firemancy" arg-mastery_img_url="uwu" arg-mastery_index="3" />
+			<xf:macro name="mastery_macro" arg-user="{$user}" arg-mastery_name="Rokmancy" arg-mastery_img_url="uwu" arg-mastery_index="4" />
 		</div>
 	</div>
 	<div class="character-sheet-cell">

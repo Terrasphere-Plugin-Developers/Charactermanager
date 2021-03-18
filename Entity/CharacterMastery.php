@@ -4,18 +4,10 @@ namespace Terrasphere\Charactermanager\Entity;
 
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
+use XF\Pub\Controller\AbstractController;
 
 class CharacterMastery extends Entity
 {
-    /**
-     * Gets masteries for the appropriate character.
-     * @return array
-     */
-    public function getCharacterMasteries($userID): array
-    {
-
-    }
-
     public static function getStructure(Structure $structure) : Structure
     {
         $structure->table = 'xf_terrasphere_cm_character_masteries';
@@ -33,7 +25,7 @@ class CharacterMastery extends Entity
         $structure->relations = [
             'Mastery' => [
                 'entity' => 'Terrasphere\Core:Mastery',
-                'type' => SELF::TO_MANY,
+                'type' => SELF::TO_ONE,
                 'conditions' => 'mastery_id',
                 'primary' => true
             ],
@@ -46,5 +38,37 @@ class CharacterMastery extends Entity
         ];
 
         return $structure;
+    }
+
+    /**
+     * Gets all masteries for the appropriate character.
+     */
+    public static function getCharacterMasteries(AbstractController $controller, int $userID): array
+    {
+        $results = $controller->finder('Terrasphere\Charactermanager:CharacterMastery')
+            ->with('Mastery')
+            ->where('user_id', '=', $userID)
+            ->order('target_index', 'ASC')
+            ->fetch();
+
+        return $results->groupBy('target_index');
+    }
+
+    /**
+     * Similar to above, but always includes an entry for all 5 mastery slots, inserting dummies where a mastery has
+     * yet to be selected.
+     */
+    public static function getCharacterMasterySlots(AbstractController $controller, int $userID): array
+    {
+        $masteries = self::getCharacterMasteries($controller, $userID);
+        for ($index = 0; $index < 5; $index++)
+        {
+            if(!array_key_exists($index, $masteries))
+            {
+                $masteries[$index] = 0;
+            }
+        }
+
+        return $masteries;
     }
 }
