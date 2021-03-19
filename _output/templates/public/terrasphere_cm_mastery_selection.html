@@ -1,0 +1,52 @@
+<xf:css>
+.mastery-category {
+	border: 1px solid cyan;
+}
+.mastery-category-list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+	
+.mastery-category-title {
+	border-bottom: 1px solid cyan;
+	margin: 1rem;
+	padding: 0.5rem;
+	text-align: center;
+}
+	
+.mastery-box {
+	border: 1px solid cyan;
+	margin: 2rem 0.5rem;
+	padding: 1rem;
+    width: 10rem;
+    height: 10rem;
+}
+</xf:css>
+
+<xf:macro name="mastery"
+		  arg-mastery="!">
+	<div class="mastery-box">
+		{$mastery.display_name}
+	</div>
+</xf:macro>
+
+<xf:macro name="mastery_category"
+		  arg-category="!">
+	<div class="mastery-category">
+		<h3 class="mastery-category-title">{$category.name}</h3>
+		<div class="mastery-category-list">
+			<xf:foreach loop="$category.masteries" value="$mastery">
+				<xf:macro name="mastery" arg-mastery="{$mastery}"></xf:macro>
+			</xf:foreach>
+		</div>
+	</div>
+</xf:macro>
+
+<div class="block">
+	<div class="block-container">
+		<xf:foreach loop="$masteries" value="$masteryCategory" key="$categoryIndex">
+			<xf:macro name="mastery_category" arg-category="{$masteryCategory}"></xf:macro>
+		</xf:foreach>
+	</div>
+</div>

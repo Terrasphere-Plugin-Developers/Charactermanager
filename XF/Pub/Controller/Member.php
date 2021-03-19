@@ -4,7 +4,6 @@
 
 namespace Terrasphere\Charactermanager\XF\Pub\Controller;
 
-//use XF\Pub\Controller\Member;
 use Terrasphere\Charactermanager\Entity\CharacterMastery;
 use XF\Entity\User;
 use XF\Entity\UserProfile;
