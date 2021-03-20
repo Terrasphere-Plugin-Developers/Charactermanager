@@ -15,26 +15,106 @@
 	text-align: center;
 }
 	
-.mastery-box {
-	border: 1px solid cyan;
+.mastery-option-container {
 	margin: 2rem 0.5rem;
-	padding: 1rem;
     width: 10rem;
     height: 10rem;
+	display: grid;
+	grid-row-template: 100%;
+	grid-coumn-template: 100%;
+}
+
+/* Hides default radio buttons */
+.mastery-option-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+	
+.mastery-option-box {
+	height: 100%;
+	width: 100%;
+	padding: 0.5rem;
+	border-radius: 3%;
+	
+	border: 1px solid #555;
+	background-color: #eee;
+	box-shadow: 0px 1px 2px 0px black;
+	transition: transform 0.5s, border 0.5s, background-color 0.5s, box-shadow 0.5s;
+}
+	
+.mastery-option-container input:checked ~ .mastery-option-box {
+	transform: Scale(1.15);
+	border: 1px solid cyan;
+	background-color: #fff;
+	box-shadow: 0px 2px 7px 0px black;
+}
+	
+.mastery-option-icon-container {
+    width: 60%;
+    margin: auto;
+}
+	
+.mastery-option-title {
+	text-align: center;
+	margin-top: 0px;
+	margin-bottom: 0.25em;
+}
+
+.mastery-option-trait-container {
+	display: flex;
+	justify-content: space-around;
+}
+
+.mastery-trait-icon {
+	width: 1.5rem;
 }
 </xf:css>
 
 <xf:macro name="mastery"
 		  arg-mastery="!">
-	<div class="mastery-box">
-		{$mastery.display_name}
-	</div>
+	<label class="mastery-option-container">
+		<input class="mastery-option grid-overlap"
+		   type="radio"
+		   id="mastery-{$mastery.mastery_id}"
+		   name="mastery"
+		   value="{$mastery.mastery_id}">
+		<div class="mastery-option-box grid-overlap">
+			<div class="mastery-option-icon-container">
+				<xf:if is="$mastery.icon_url != ''">
+					<img src="{$mastery.icon_url}" class="mastery-option-icon">
+				<xf:else />
+					<img src="data/assets/uk.png" class="mastery-option-icon">
+				</xf:if>
+			</div>
+			<h3 class="mastery-option-title">{$mastery.display_name}</h3>
+			<div class="mastery-option-trait-container">
+				<xf:if is="$mastery.MasteryRole.icon_url != ''">
+					<img src="{$mastery.MasteryRole.icon_url}" class="mastery-trait-icon role-icon">
+				<xf:else />
+					<img src="data/assets/uk.png" class="mastery-trait-icon role-icon">
+				</xf:if>
+				<xf:if is="$mastery.MasteryExpertise.icon_url != ''">
+					<img src="{$mastery.MasteryExpertise.icon_url}" class="mastery-trait-icon expertise-icon">
+				<xf:else />
+					<img src="data/assets/uk.png" class="mastery-trait-icon expertise-icon">
+				</xf:if>
+				<xf:if is="$mastery.MasterySave.icon_url != ''">
+					<img src="{$mastery.MasterySave.icon_url}" class="mastery-trait-icon save-icon">
+				<xf:else />
+					<img src="data/assets/uk.png" class="mastery-trait-icon save-icon">
+				</xf:if>
+			</div>
+		</div>
+	</label>
 </xf:macro>
 
 <xf:macro name="mastery_category"
 		  arg-category="!">
 	<div class="mastery-category">
-		<h3 class="mastery-category-title">{$category.name}</h3>
+		<h2 class="mastery-category-title">{$category.name}</h2>
 		<div class="mastery-category-list">
 			<xf:foreach loop="$category.masteries" value="$mastery">
 				<xf:macro name="mastery" arg-mastery="{$mastery}"></xf:macro>
@@ -45,8 +125,13 @@
 
 <div class="block">
 	<div class="block-container">
-		<xf:foreach loop="$masteries" value="$masteryCategory" key="$categoryIndex">
-			<xf:macro name="mastery_category" arg-category="{$masteryCategory}"></xf:macro>
-		</xf:foreach>
+		<form action="{{ link('terrasphere-cm/cs/savenewmastery', $mastery) }}" method="post" class="block" ajax="true">
+			<xf:foreach loop="$masteries" value="$masteryCategory" key="$categoryIndex">
+				<xf:macro name="mastery_category" arg-category="{$masteryCategory}"></xf:macro>
+			</xf:foreach>
+			<button type="submit" class="button--primary button button--icon button--icon--save">
+				<span class="button-text">Save</span>
+			</button>
+		</form>
 	</div>
 </div>
