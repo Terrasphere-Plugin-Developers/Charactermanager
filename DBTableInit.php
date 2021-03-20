@@ -62,7 +62,7 @@ trait DBTableInit
         $sm->createTable(
             "xf_terrasphere_cm_cs_cell", function(create $table) {
                 $table->addColumn("cell_id","int")->primaryKey()->autoIncrement(true);
-                $table->addColumn("name","varchar")->setDefault('');
+                $table->addColumn("name","varchar",30)->setDefault('');
             }
         );
     }
@@ -73,7 +73,7 @@ trait DBTableInit
             "xf_terrasphere_cm_cs_content", function(create $table) {
                 $table->addColumn("character_sheet_id","int")->primaryKey();
                 $table->addColumn("cell_id","int")->primaryKey();
-                $table->addColumn("content","varchar")->setDefault('');
+                $table->addColumn("content","text");
             }
         );
     }
