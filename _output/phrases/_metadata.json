@@ -11,6 +11,18 @@
         "version_string": "1.0.0 Alpha",
         "hash": "b17eb3bd9e1ab6caa2a278a4ca8a0a7c"
     },
+    "permission.terrasphere_terrasphere_cm_review.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "1b2e924e515eeeca41bbd0b1ce785b93"
+    },
+    "permission_interface.terrasphere.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "5ba4280de9ddaec152de70344b884cea"
+    },
     "terrasphere_character_manager_title.txt": {
         "global_cache": false,
         "version_id": 1000010,

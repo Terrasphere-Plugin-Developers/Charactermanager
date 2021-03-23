@@ -159,9 +159,11 @@
 		<div class="character-sheet-mastery-list">
 			<xf:foreach loop="$masterySlots" value="$masterySlot" key="$slotNum">
 				<xf:if is="$masterySlot == 0">
-					<xf:macro name="mastery_macro_empty"
-							  arg-user="{$user}"
-							  arg-mastery_index="{$slotNum}" />
+					<xf:if is="$viewerIsUser">
+						<xf:macro name="mastery_macro_empty"
+								  arg-user="{$user}"
+								  arg-mastery_index="{$slotNum}" />
+					</xf:if>
 				</xf:if>
 				<xf:else>
 					<xf:macro name="mastery_macro"

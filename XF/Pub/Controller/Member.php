@@ -23,9 +23,25 @@ class Member extends XFCP_Member
 		$viewParams = [
 		    'user' => $user,
 		    'masterySlots' => $masterySlots,
+            'canViewCS' => $this->canVisitorViewCharacterSheet($params->user_id),
+            'canViewRevisions' => $this->canVisitorViewRevisions($params->user_id),
+            'viewerIsUser' => $this->visitorIsUser($params->user_id),
         ];
 
 		return $this->view('XF:Member\CharacterSheet', 'terrasphere_cm_character_sheet', $viewParams);
 	}
 
+	public function canVisitorViewCharacterSheet(int $userID): bool {
+        return true;
+    }
+
+    public function canVisitorViewRevisions(int $userID): bool {
+        return \XF::visitor()->hasPermission('terrasphere', 'terrasphere_cm_review')
+            || $this->visitorIsUser($userID);
+    }
+
+
+    private function visitorIsUser(int $userID): bool {
+        return \XF::visitor()->user_id == $userID;
+    }
 }
