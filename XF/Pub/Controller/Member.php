@@ -4,6 +4,7 @@
 
 namespace Terrasphere\Charactermanager\XF\Pub\Controller;
 
+use Laminas\Mail\Header\From;
 use Terrasphere\Charactermanager\Entity\CharacterMastery;
 use XF\Entity\User;
 use XF\Entity\UserProfile;
@@ -54,9 +55,28 @@ class Member extends XFCP_Member
     {
         if($this->isPost())
         {
-            $redirect = $this->redirect($this->buildLink('members', null, ['user_id' => $params['user_id']]));
-            //$redirect->setJsonParam('testParam', $dependencyId);
-            return $redirect;
+            $input = $this->filter([
+                'mastery' => 'uint'
+            ]);
+
+            /** @var \Terrasphere\Core\Repository\Mastery $masteryRepo */
+            $masteryRepo = $this->repository('Terrasphere\Core:Mastery');
+
+            $mastery = $masteryRepo->getMasteryByID($input['mastery']);
+
+            if($mastery != null)
+            {
+                $redirect = $this->redirect($this->buildLink('members', null, ['user_id' => $params['user_id']]));
+                $redirect->setJsonParam('masterySlotIndex', $params['target_index']);
+                $redirect->setJsonParam('newMasteryName', $mastery['display_name']);
+                $redirect->setJsonParam('newMasteryIconURL', $mastery['icon_url']);
+                // TODO Add another for updating cost of upgrade...
+                return $redirect;
+            }
+            else
+            {
+                return $this->error('Mastery is missing from database; try reloading.');
+            }
         }
     }
 
