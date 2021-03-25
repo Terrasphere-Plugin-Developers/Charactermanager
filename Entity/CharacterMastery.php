@@ -65,7 +65,12 @@ class CharacterMastery extends Entity
         {
             if(!array_key_exists($index, $masteries))
             {
-                $masteries[$index] = 0;
+                /** @var \Terrasphere\Charactermanager\Entity\CharacterMastery $dummy */
+                $dummy = $controller->em()->create('Terrasphere\Charactermanager:CharacterMastery');
+                $dummy['user_id'] = $userID;
+                $dummy['target_index'] = $index;
+                $dummy['mastery_id'] = 'N/A';
+                $masteries[$index] = $dummy;
             }
         }
 

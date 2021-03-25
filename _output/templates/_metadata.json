@@ -2,11 +2,11 @@
     "public/terrasphere_cm_character_sheet.html": {
         "version_id": 1000010,
         "version_string": "1.0.0 Alpha",
-        "hash": "34a6f987fba96e25ae612f385cb1f6e2"
+        "hash": "d6d2353fd270649cf951d51aa701580c"
     },
     "public/terrasphere_cm_mastery_selection.html": {
         "version_id": 1000010,
         "version_string": "1.0.0 Alpha",
-        "hash": "68d043fe00541678f31963dedb93682e"
+        "hash": "d45686f77ed66f82fcb500153c07d705"
     }
 }

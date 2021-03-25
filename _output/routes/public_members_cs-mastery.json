@@ -1,11 +1,11 @@
 {
     "route_type": "public",
-    "route_prefix": "terrasphere-cm",
+    "route_prefix": "members",
     "sub_name": "cs/mastery",
-    "format": "cs/mastery/:int<user_id,index>",
+    "format": ":int<user_id,username>/cs/mastery/:int<target_index>",
     "build_class": "",
     "build_method": "",
-    "controller": "Terrasphere\\Charactermanager:CharacterSheet",
+    "controller": "XF:Member",
     "context": "account",
     "action_prefix": ""
 }

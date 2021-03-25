@@ -90,7 +90,7 @@
 		  arg-mastery_img_url="!">
 	<div class="character-sheet-mastery-container">
 		<div class="character-sheet-mastery">
-			<a href="{{ link('terrasphere-cm/cs/mastery/selectnew', null, {'user_id': $user.id, 'index': $mastery_index})}}"
+			<a href="{{ link('members/cs/mastery/selectNew', {'user_id': $user.user_id, 'index': $mastery_index})}}"
 			   data-xf-click="overlay"
 			   data-original-title="{$mastery_name}">
 				<div class="character-sheet-mastery-icon-container">
@@ -111,28 +111,23 @@
 
 <xf:macro name="mastery_macro_empty"
 		  arg-user="!"
-		  arg-mastery_index="!">
+		  arg-mastery_slot="!">
 	<div class="character-sheet-mastery-container">
 		<div class="character-sheet-mastery">
-			<a href="{{ link('terrasphere-cm/cs/mastery/selectnew', null, {'user_id': $user.user_id, 'index': $mastery_index})}}"
+			<a href="{{ link('members/cs/mastery/selectNew', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
 			   data-xf-click="overlay">
 				<div class="character-sheet-mastery-icon-container">
 					<img class="character-sheet-mastery-icon grid-overlap" src="data/assets/plus_sign.png" alt="Mastery slot" style="width:50%;height:50%;" />
 				</div>
 			</a>
-			<svg class="character-sheet-mastery-title grid-overlap" viewbox="0, 0, 100, 100">
-				<defs>
-					<path id="mastery-title-path-{$mastery_index}" d="M 0,60 C 0,60 50,-10 100,60" />
-				</defs>
-				<text fill="red">
-    				<textPath xlink:href="#mastery-title-path-{$mastery_index}" startOffset="50%" text-anchor="middle">{$mastery_name}</textPath>
-				</text>
-			</svg>
 		</div>
 	</div>
 </xf:macro>
 
 <div class="block" style="max-width: 1000px; margin: auto;"><div class="block-container"><div class="block-body">
+	<button class="button">
+		New revision
+	</button>
 	<div class="block character-sheet-info-container">
 		<div class="character-sheet-cell character-sheet-character-info">
 			<h2 class="character-sheet-title">Character</h2>
@@ -158,11 +153,11 @@
 		<h2 class="character-sheet-title">Masteries</h2>
 		<div class="character-sheet-mastery-list">
 			<xf:foreach loop="$masterySlots" value="$masterySlot" key="$slotNum">
-				<xf:if is="$masterySlot == 0">
+				<xf:if is="$masterySlot.mastery_id == 'N/A'">
 					<xf:if is="$viewerIsUser">
 						<xf:macro name="mastery_macro_empty"
 								  arg-user="{$user}"
-								  arg-mastery_index="{$slotNum}" />
+								  arg-mastery_slot="{$masterySlot}" />
 					</xf:if>
 				</xf:if>
 				<xf:else>

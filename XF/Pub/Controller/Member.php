@@ -31,6 +31,35 @@ class Member extends XFCP_Member
 		return $this->view('XF:Member\CharacterSheet', 'terrasphere_cm_character_sheet', $viewParams);
 	}
 
+    public function actionSelectNew(ParameterBag $params)
+    {
+        /** @var \Terrasphere\Core\Repository\Mastery $masteryRepo */
+        $masteryRepo = $this->repository('Terrasphere\Core:Mastery');
+
+        $masteries = $masteryRepo->getMasteryListGroupedByClassification();
+
+        $dummyMasterySlot = $this->em()->create('Terrasphere\Charactermanager:CharacterMastery');
+        $dummyMasterySlot['user_id'] = $params['user_id'];
+        $dummyMasterySlot['target_index'] = $params['target_index'];
+
+        $viewparams = [
+            'masteries' => $masteries,
+            'masterySlot' => $dummyMasterySlot,
+        ];
+
+        return $this->view('Terrasphere\Charactermanager:MasterySelection', 'terrasphere_cm_mastery_selection', $viewparams);
+    }
+
+    public function actionSaveNewMastery(ParameterBag $params)
+    {
+        if($this->isPost())
+        {
+            $redirect = $this->redirect($this->buildLink('members', null, ['user_id' => $params['user_id']]));
+            //$redirect->setJsonParam('testParam', $dependencyId);
+            return $redirect;
+        }
+    }
+
 	public function canVisitorViewCharacterSheet(int $userID): bool {
         return true;
     }
