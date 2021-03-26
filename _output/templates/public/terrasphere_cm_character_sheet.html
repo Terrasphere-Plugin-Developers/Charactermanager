@@ -46,6 +46,9 @@
 	width: 19vmin;
     height: 19vmin;
     margin: 3vmin;
+	display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: 100%;
 }
 	
 .character-sheet-mastery {
@@ -56,7 +59,7 @@
 	grid-template-rows: 100%;
 }
 	
-.character-sheet-mastery-title {
+.character-sheet-mastery-title-container {
 	display: none;
 	width: 200%;
     height: 200%;
@@ -80,47 +83,67 @@
 	width: 75%;
     height: 75%;
 }
+	
+.mastery-change-flash {
+	transform: scale(0,0);
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background-color: #AAA;
+	z-index: 2;
+	animation: mastery-flash 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.01s 1 normal;
+	animation-play-state: paused;
+}
+	
+@keyframes mastery-flash {
+  0%   {opacity: 100%; transform: scale(1,1);}
+  100% {opacity: 0%; transform: scale(2,2);}
+}
 </xf:css>
 
-
-<xf:macro name="mastery_macro"
+<xf:macro name="mastery"
+		  arg-is_empty="!"
 		  arg-user="!"
-		  arg-mastery_index="!"
-		  arg-mastery_name="!"
-		  arg-mastery_img_url="!">
-	<div class="character-sheet-mastery-container">
-		<div class="character-sheet-mastery">
-			<a href="{{ link('members/cs/mastery/selectNew', {'user_id': $user.user_id, 'index': $mastery_index})}}"
-			   data-xf-click="overlay"
-			   data-original-title="{$mastery_name}">
-				<div class="character-sheet-mastery-icon-container">
-					<img class="character-sheet-mastery-icon grid-overlap" src="{$mastery_img_url}" alt="{$mastery_name}">
-				</div>
+		  arg-mastery_slot="!">
+	
+	<xf:if is="$is_empty">
+		<xf:set var="$emptyElementDisplay" value="inherit" />
+		<xf:set var="$masteryElementDisplay" value="none" />
+	<xf:else />
+		<xf:set var="$emptyElementDisplay" value="none" />
+		<xf:set var="$masteryElementDisplay" value="interit" />
+	</xf:if>
+	
+	<div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
+		<div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
+			<a href="{{ link('members/cs/mastery/selectNew', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
+			   class="character-sheet-mastery-icon-container grid-overlap"
+			   data-xf-click="overlay">
+				<img class="character-sheet-mastery-icon grid-overlap"
+					 src="{{ base_url('styles/default/Terrasphere/Charactermanager/plus_sign.png', true) }}"
+					 alt="Mastery slot"
+					 style="width:50%;height:50%;" />
 			</a>
-			<svg class="character-sheet-mastery-title grid-overlap" viewbox="0, 0, 100, 100">
+			<svg class="character-sheet-mastery-title-container grid-overlap" viewbox="0, 0, 100, 100">
 				<defs>
 					<path id="mastery-title-path-{$mastery_name}" d="M 0,60 C 0,60 50,-10 100,60" />
 				</defs>
 				<text fill="red">
-    				<textPath xlink:href="#mastery-title-path-{$mastery_name}" startOffset="50%" text-anchor="middle">{$mastery_name}</textPath>
+    				<textPath xlink:href="#mastery-title-path-{$mastery_name}" startOffset="50%" text-anchor="middle" class="character-sheet-mastery-title">{$mastery_name}</textPath>
 				</text>
 			</svg>
 		</div>
-	</div>
-</xf:macro>
-
-<xf:macro name="mastery_macro_empty"
-		  arg-user="!"
-		  arg-mastery_slot="!">
-	<div class="character-sheet-mastery-container">
-		<div class="character-sheet-mastery">
+		<div class="character-sheet-mastery-empty grid-overlap" style="display: {$emptyElementDisplay};">
 			<a href="{{ link('members/cs/mastery/selectNew', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
+			   class="character-sheet-mastery-icon-container grid-overlap"
 			   data-xf-click="overlay">
-				<div class="character-sheet-mastery-icon-container">
-					<img class="character-sheet-mastery-icon grid-overlap" src="data/assets/plus_sign.png" alt="Mastery slot" style="width:50%;height:50%;" />
-				</div>
+				<img class="character-sheet-mastery-icon grid-overlap"
+					 src="{{ base_url('styles/default/Terrasphere/Charactermanager/plus_sign.png', true) }}"
+					 alt="Mastery slot"
+					 style="width:50%;height:50%;" />
 			</a>
 		</div>
+		<div class="mastery-change-flash grid-overlap"></div>
 	</div>
 </xf:macro>
 
@@ -143,7 +166,7 @@
 		<div class="character-sheet-cell character-sheet-player-info">
 			<h2 class="character-sheet-title">Player</h2>
 			<div class="character-sheet-picture-container">
-				<img class="character-sheet-pic" src="data/assets/pic.png" alt="player picture">
+				<img class="character-sheet-pic" src="data/assets/pic3.png" alt="player picture">
 			</div>
 			<div class="block">Nag Skys to put tabs here cause I hate making tabs</div>
 			Lorem Ipsem and all that.
@@ -155,17 +178,17 @@
 			<xf:foreach loop="$masterySlots" value="$masterySlot" key="$slotNum">
 				<xf:if is="$masterySlot.mastery_id == 'N/A'">
 					<xf:if is="$viewerIsUser">
-						<xf:macro name="mastery_macro_empty"
-								  arg-user="{$user}"
-								  arg-mastery_slot="{$masterySlot}" />
+						<xf:macro name="mastery"
+								  	arg-is_empty="1"
+								  	arg-user="{$user}"
+								 	arg-mastery_slot="{$masterySlot}" />
 					</xf:if>
 				</xf:if>
 				<xf:else>
-					<xf:macro name="mastery_macro"
-							  arg-user="{$user}"
-							  arg-mastery_name="Teamancy"
-							  arg-mastery_url="uwu"
-							  arg-mastery_index="{$slotNum}" />
+					<xf:macro name="mastery"
+							  	arg-is_empty="0"
+							  	arg-user="{$user}"
+								arg-mastery_slot="{$masterySlot}" />
 				</xf:else>
 			</xf:foreach>
 		</div>

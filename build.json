@@ -1,5 +1,7 @@
 {
   "additional_files": [
-    "plus_sign"
+    "js/Terrasphere/Charactermanager/new_mastery.js",
+    "styles/default/Terrasphere/Charactermanager/plus_sign.png",
+    "styles/default/Terrasphere/Charactermanager/missing_img.png"
   ]
 }

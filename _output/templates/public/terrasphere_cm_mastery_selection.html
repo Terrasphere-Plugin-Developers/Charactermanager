@@ -86,7 +86,7 @@
 				<xf:if is="$mastery.icon_url != ''">
 					<img src="{$mastery.icon_url}" class="mastery-option-icon">
 				<xf:else />
-					<img src="data/assets/uk.png" class="mastery-option-icon">
+					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-option-icon">
 				</xf:if>
 			</div>
 			<h3 class="mastery-option-title">{$mastery.display_name}</h3>
@@ -94,17 +94,17 @@
 				<xf:if is="$mastery.MasteryRole.icon_url != ''">
 					<img src="{$mastery.MasteryRole.icon_url}" class="mastery-trait-icon role-icon">
 				<xf:else />
-					<img src="data/assets/uk.png" class="mastery-trait-icon role-icon">
+					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-trait-icon role-icon">
 				</xf:if>
 				<xf:if is="$mastery.MasteryExpertise.icon_url != ''">
 					<img src="{$mastery.MasteryExpertise.icon_url}" class="mastery-trait-icon expertise-icon">
 				<xf:else />
-					<img src="data/assets/uk.png" class="mastery-trait-icon expertise-icon">
+					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-trait-icon expertise-icon">
 				</xf:if>
 				<xf:if is="$mastery.MasterySave.icon_url != ''">
 					<img src="{$mastery.MasterySave.icon_url}" class="mastery-trait-icon save-icon">
 				<xf:else />
-					<img src="data/assets/uk.png" class="mastery-trait-icon save-icon">
+					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-trait-icon save-icon">
 				</xf:if>
 			</div>
 		</div>
@@ -126,11 +126,12 @@
 <div class="block">
 	<div class="block-container">
 		<xf:form action="{{ link('members/cs/mastery/saveNewMastery', $masterySlot, {'user_id': $masterySlot.user_id, 'target_index': $masterySlot.target_index}) }}"
-			  class="block"
-			  method="post"
-			  ajax="true"
-			  data-reset-complete="true"
-			  data-redirect="off">
+			  	class="block"
+			  	method="post"
+			  	ajax="true"
+				data-xf-init="new-mastery"
+			  	data-reset-complete="true"
+			  	data-redirect="off">
 			<xf:foreach loop="$masteries" value="$masteryCategory" key="$categoryIndex">
 				<xf:macro name="mastery_category" arg-category="{$masteryCategory}"></xf:macro>
 			</xf:foreach>
@@ -138,3 +139,5 @@
 		</xf:form>
 	</div>
 </div>
+
+<xf:js src="Terrasphere/Charactermanager/new_mastery.js" addon="Terrasphere/Charactermanager" />
