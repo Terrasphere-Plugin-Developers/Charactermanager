@@ -39,7 +39,21 @@ class Member extends XFCP_Member
         /** @var \Terrasphere\Core\Repository\Mastery $masteryRepo */
         $masteryRepo = $this->repository('Terrasphere\Core:Mastery');
 
-        $masteries = $masteryRepo->getMasteryListGroupedByClassification();
+        $allMasteries = $masteryRepo->getMasteryListGroupedByClassification();
+        $characterMasteries = CharacterMastery::getCharacterMasteries($this, $params['user_id']);
+        $masteries = [];
+
+        // Construct new list with invalid masteries removed
+        foreach ($allMasteries as $categoryKey => $category)
+        {
+            // Also remove masteries which are already selected
+            $category['masteries'] = $this->stripMasteriesInAFromB($characterMasteries, $category['masteries']);
+
+            if($category['isNormal'])
+                $masteries[$categoryKey] = $category;
+            else if($this->canSelectMasteryFromCategory($category, $params['user_id']))
+                $masteries[$categoryKey] = $category;
+        }
 
         $dummyMasterySlot = $this->em()->create('Terrasphere\Charactermanager:CharacterMastery');
         $dummyMasterySlot['user_id'] = $params['user_id'];
@@ -85,6 +99,15 @@ class Member extends XFCP_Member
             // Mastery selection existence check
             if($mastery == null)
                 return $this->error('Mastery is missing from database; try reloading.');
+
+            $entry = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
+                ->where('user_id', $params['user_id'])
+                ->where('mastery_id', $input['mastery'])
+                ->fetchOne();
+
+            // Mastery already owned check
+            if($entry != null)
+                return $this->error('Character already has this mastery!');
 
             $sameTypeMasteries = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
                 ->with('Mastery')
@@ -153,7 +176,7 @@ class Member extends XFCP_Member
         return \XF::visitor()->user_id == $userID;
     }
 
-    private function fourthSlotUnlocked(int $userID): bool { // Evidently xenforo doesn't understand booleans!?
+    private function fourthSlotUnlocked(int $userID): bool {
         $cAndHigherMasteries = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
             ->where('user_id', $userID)
             ->where('rank_id', '>=', 2)
@@ -168,5 +191,53 @@ class Member extends XFCP_Member
             ->where('user_id', $userID)
             ->where('rank_id', '>=', 5)
             ->fetchOne() != null;
+    }
+
+    private function canSelectMasteryFromCategory(array $masteryGroup, int $userID): bool
+    {
+        // The answer is obviously 'no' if the group is empty
+        if(count($masteryGroup['masteries']) == 0)
+            return false;
+
+        $masteryList = $masteryGroup['masteries'];
+        $firstMastery = $masteryList[array_keys($masteryList)[0]];
+
+        $typeID = $firstMastery->mastery_type_id;
+        $typeCap = $firstMastery->MasteryType->cap_per_character;
+
+        $characterMasteries = CharacterMastery::getCharacterMasteries($this, $userID);
+        $amountOfThisType = 0;
+        foreach ($characterMasteries as $m)
+        {
+            if($m->Mastery->mastery_type_id == $typeID)
+            {
+                $amountOfThisType++;
+                if($amountOfThisType >= $typeCap)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    #[Pure]
+    private function stripMasteriesInAFromB(array $a, array $b): array
+    {
+        $ret = [];
+        foreach ($b as $mastery)
+        {
+            $match = false;
+            foreach ($a as $m)
+            {
+                if($mastery['mastery_id'] == $m['mastery_id'])
+                {
+                    $match = true;
+                    break;
+                }
+            }
+
+            if(!$match) $ret[$mastery['mastery_id']] = $mastery;
+        }
+        return $ret;
     }
 }
