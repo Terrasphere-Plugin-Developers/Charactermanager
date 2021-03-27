@@ -36,6 +36,12 @@ class CharacterMastery extends Entity
                 'conditions' => 'user_id',
                 'primary' => true
             ],
+            'Rank' => [
+                'entity' => 'Terrasphere\Core:Rank',
+                'type' => SELF::TO_ONE,
+                'conditions' => 'rank_id',
+                'primary' => true
+            ],
         ];
 
         return $structure;

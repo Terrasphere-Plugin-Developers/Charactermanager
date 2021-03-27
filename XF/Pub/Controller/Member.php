@@ -159,6 +159,36 @@ class Member extends XFCP_Member
         return $form;
     }
 
+    /**
+     * Opens upgrade confirmation screen. Does not actually upgrade.
+     */
+    public function actionConfirmUpgrade(ParameterBag $params)
+    {
+        $mastery = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
+            ->with(['Rank', 'Mastery'])
+            ->where('user_id', $params['user_id'])
+            ->where('target_index', $params['target_index'])
+            ->fetchOne();
+
+        $nextRank = $this->finder('Terrasphere\Core:Rank')
+            ->with('Currency')
+            ->where('rank_id', $mastery['rank_id']+1)
+            ->fetchOne();
+
+        $user = $this->finder('XF:User')->where('user_id', $params['user_id'])->fetchOne();
+
+        if($nextRank == null)
+            $this->error('Max rank.');
+
+        $viewparams = [
+            'nextRank' => $nextRank,
+            'mastery' => $mastery,
+            'user' => $user,
+            'userVal' => $user[$nextRank->Currency->user_id_column],
+        ];
+        return $this->view('Terrasphere\Charactermanager:MasteryUpgradeConfirm', 'terrasphere_cm_confirm_mastery_upgrade', $viewparams);
+    }
+
 	public function canVisitorViewCharacterSheet(int $userID): bool {
         return true;
     }

@@ -1,0 +1,14 @@
+<div class="block">
+	<div class="block-container">
+		<div class="block-container">
+			<h2>
+				Upgrade {$mastery.Mastery.display_name} to rank {$nextRank.name}?
+			</h2>
+			<div class="block">Cost: {$nextRank.cost}{$nextRank.Currency.title}</div>
+			<div class="block">{$nextRank.Currency.title}: {{$nextRank.Currency.getValueFromUser($user)}} -> {{$nextRank.Currency.getValueFromUser($user) - $nextRank.cost}}</div>
+		</div>
+		<xf:button href="{{ link('members/cs/mastery/upgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}">
+			Confirm
+		</xf:button>
+	</div>
+</div>

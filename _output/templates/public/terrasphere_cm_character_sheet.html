@@ -151,7 +151,22 @@
 	
 	<div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
 		<div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
-			<a href="{{ link('members/cs/mastery/selectNew', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
+			<xf:if is="$viewerIsUser">
+				<a href="{{ link('members/cs/mastery/confirmUpgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
+			  		 class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.rank_id}"
+			   		 data-xf-click="overlay">
+					<img class="character-sheet-mastery-icon grid-overlap"
+					 		src="{$mastery_slot.Mastery.icon_url}"
+					 		alt="Mastery slot" />
+				</a>
+			<xf:else />
+				<div class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.rank_id}" data-xf-click="overlay">
+					<img class="character-sheet-mastery-icon grid-overlap"
+					 		src="{$mastery_slot.Mastery.icon_url}"
+					 		alt="Mastery slot" />
+				</div>
+			</xf:if>
+			<a href="{{ link('members/cs/mastery/confirmUpgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
 			   class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.rank_id}"
 			   data-xf-click="overlay">
 				<img class="character-sheet-mastery-icon grid-overlap"
