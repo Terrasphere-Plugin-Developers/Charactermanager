@@ -12,8 +12,9 @@ class CharacterMastery extends Entity
     {
         $structure->table = 'xf_terrasphere_cm_character_masteries';
         $structure->shortName = 'Terrasphere\Charactermanager:CharacterMastery';
-        $structure->primaryKey = 'mastery_id';
+        $structure->primaryKey = 'id';
         $structure->columns = [
+            'id' => ['type' => self::UINT, 'autoIncrement' => true],
             'mastery_id' => ['type' => self::UINT, 'required' => true],
             'user_id' => ['type' => self::UINT, 'required' => true],
             'rank_id' => ['type' => self::UINT, 'required' => false],
@@ -47,11 +48,17 @@ class CharacterMastery extends Entity
     {
         $results = $controller->finder('Terrasphere\Charactermanager:CharacterMastery')
             ->with('Mastery')
-            ->where('user_id', '=', $userID)
+            ->where('user_id', $userID)
             ->order('target_index', 'ASC')
             ->fetch();
 
-        return $results->groupBy('target_index');
+        $results = $results->toArray();
+
+        $ret = [];
+        foreach ($results as $masteryID => $entry)
+            $ret[$entry['target_index']] = $entry;
+
+        return $ret;
     }
 
     /**
@@ -68,6 +75,8 @@ class CharacterMastery extends Entity
                 /** @var \Terrasphere\Charactermanager\Entity\CharacterMastery $dummy */
                 $dummy = $controller->em()->create('Terrasphere\Charactermanager:CharacterMastery');
                 $dummy['user_id'] = $userID;
+                $dummy['mastery_id'] = 0;
+                $dummy['rank_id'] = 0;
                 $dummy['target_index'] = $index;
                 $dummy['mastery_id'] = 'N/A';
                 $masteries[$index] = $dummy;

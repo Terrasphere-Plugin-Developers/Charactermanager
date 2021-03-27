@@ -27,6 +27,7 @@
             // Set up the new mastery's display...
             $("#mastery-container-" + data.masterySlotIndex + " .character-sheet-mastery-icon").attr('src', data.newMasteryIconURL);
             $("#mastery-container-" + data.masterySlotIndex + " .character-sheet-mastery-title").text(data.newMasteryName);
+            $("#mastery-container-" + data.masterySlotIndex + " .rank-0").removeClass('rank-0').addClass("rank-1");
 
             // ...and show it.
             $("#mastery-container-" + data.masterySlotIndex + " .character-sheet-mastery").show();

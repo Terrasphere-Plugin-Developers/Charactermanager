@@ -36,8 +36,9 @@ trait DBTableInit
     {
         $sm->createTable(
             "xf_terrasphere_cm_character_masteries", function(create $table) {
-                $table->addColumn("mastery_id","int")->primaryKey();
-                $table->addColumn("user_id","int")->primaryKey();
+                $table->addColumn("id","int")->primaryKey()->autoIncrement(true);
+                $table->addColumn("mastery_id","int");
+                $table->addColumn("user_id","int");
                 $table->addColumn("rank_id","int")->nullable(true)->setDefault(1);
                 $table->addColumn("target_index","int")->setDefault(0);
             }

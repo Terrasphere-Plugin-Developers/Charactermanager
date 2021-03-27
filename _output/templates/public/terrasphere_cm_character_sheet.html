@@ -99,53 +99,96 @@
   0%   {opacity: 100%; transform: scale(1,1);}
   100% {opacity: 0%; transform: scale(2,2);}
 }
+	
+.locked {
+	background-color: #3c3c3c;
+}
+
+/* 0 = unselected */
+.rank-0 {}
+	
+.rank-1 {
+	background-color: {$xf.options.terrasphereCoreRankDColor};
+}
+	
+.rank-2 {
+	background-color: {$xf.options.terrasphereCoreRankCColor};
+}
+	
+.rank-3 {
+	background-color: {$xf.options.terrasphereCoreRankBColor};
+}
+	
+.rank-4 {
+	background-color: {$xf.options.terrasphereCoreRankAColor};
+}
+	
+.rank-5 {
+	background-color: {$xf.options.terrasphereCoreRankSColor};
+}
 </xf:css>
 
 <xf:macro name="mastery"
 		  arg-is_empty="!"
 		  arg-user="!"
-		  arg-mastery_slot="!">
+		  arg-mastery_slot="!"
+		  arg-is_locked="0">
 	
 	<xf:if is="$is_empty">
-		<xf:set var="$emptyElementDisplay" value="inherit" />
 		<xf:set var="$masteryElementDisplay" value="none" />
+		<xf:if is="$is_locked">
+			<xf:set var="$emptyElementDisplay" value="none" />
+			<xf:set var="$lockElementDisplay" value="inherit" />
+		<xf:else />
+			<xf:set var="$emptyElementDisplay" value="inherit" />
+			<xf:set var="$lockElementDisplay" value="none" />
+		</xf:if>
 	<xf:else />
 		<xf:set var="$emptyElementDisplay" value="none" />
+		<xf:set var="$lockElementDisplay" value="none" />
 		<xf:set var="$masteryElementDisplay" value="interit" />
 	</xf:if>
 	
 	<div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
 		<div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
 			<a href="{{ link('members/cs/mastery/selectNew', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
-			   class="character-sheet-mastery-icon-container grid-overlap"
+			   class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.rank_id}"
 			   data-xf-click="overlay">
 				<img class="character-sheet-mastery-icon grid-overlap"
-					 src="{{ base_url('styles/default/Terrasphere/Charactermanager/plus_sign.png', true) }}"
-					 alt="Mastery slot"
-					 style="width:50%;height:50%;" />
+					 src="{$mastery_slot.Mastery.icon_url}"
+					 alt="Mastery slot" />
 			</a>
 			<svg class="character-sheet-mastery-title-container grid-overlap" viewbox="0, 0, 100, 100">
 				<defs>
-					<path id="mastery-title-path-{$mastery_name}" d="M 0,60 C 0,60 50,-10 100,60" />
+					<path id="mastery-title-path-{$mastery_slot.target_index}" d="M 0,60 C 0,60 50,-10 100,60" />
 				</defs>
 				<text fill="red">
-    				<textPath xlink:href="#mastery-title-path-{$mastery_name}" startOffset="50%" text-anchor="middle" class="character-sheet-mastery-title">{$mastery_name}</textPath>
+    				<textPath xlink:href="#mastery-title-path-{$mastery_slot.target_index}" startOffset="50%" text-anchor="middle" class="character-sheet-mastery-title">{$mastery_slot.Mastery.display_name}</textPath>
 				</text>
 			</svg>
 		</div>
 		<div class="character-sheet-mastery-empty grid-overlap" style="display: {$emptyElementDisplay};">
 			<a href="{{ link('members/cs/mastery/selectNew', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
-			   class="character-sheet-mastery-icon-container grid-overlap"
-			   data-xf-click="overlay">
-				<img class="character-sheet-mastery-icon grid-overlap"
-					 src="{{ base_url('styles/default/Terrasphere/Charactermanager/plus_sign.png', true) }}"
-					 alt="Mastery slot"
-					 style="width:50%;height:50%;" />
+			   		  class="character-sheet-mastery-icon-container grid-overlap"
+			   		  data-xf-click="overlay">
+					<img class="character-sheet-mastery-icon grid-overlap"
+							src="{{ base_url('styles/default/Terrasphere/Charactermanager/plus_sign.png', true) }}"
+					 		alt="Mastery slot"
+					 		style="width:50%;height:50%;" />
 			</a>
+		</div>
+		<div class="character-sheet-mastery-lock grid-overlap" style="display: {$lockElementDisplay};">
+			<div class="character-sheet-mastery-icon-container grid-overlap locked">
+				<img class="character-sheet-mastery-icon grid-overlap"
+						src="{{ base_url('styles/default/Terrasphere/Charactermanager/padlock.png', true) }}"
+				 		alt="Locked mastery slot"
+				 		style="width:50%;height:50%;" />
+			</div>
 		</div>
 		<div class="mastery-change-flash grid-overlap"></div>
 	</div>
 </xf:macro>
+
 
 <div class="block" style="max-width: 1000px; margin: auto;"><div class="block-container"><div class="block-body">
 	<button class="button">
@@ -178,19 +221,37 @@
 			<xf:foreach loop="$masterySlots" value="$masterySlot" key="$slotNum">
 				<xf:if is="$masterySlot.mastery_id == 'N/A'">
 					<xf:if is="$viewerIsUser">
-						<xf:macro name="mastery"
+						<xf:if is="$slotNum == 3">
+							<xf:macro name="mastery"
 								  	arg-is_empty="1"
 								  	arg-user="{$user}"
-								 	arg-mastery_slot="{$masterySlot}" />
+								 	arg-mastery_slot="{$masterySlot}"
+								  	arg-icon_url="{$masterySlot.Mastery.icon_url}"
+									arg-is_locked="{!$fourthSlotUnlocked}" />
+						<xf:elseif is="$slotNum == 4"/>
+							<xf:macro name="mastery"
+								  	arg-is_empty="1"
+								  	arg-user="{$user}"
+								 	arg-mastery_slot="{$masterySlot}"
+								  	arg-icon_url="{$masterySlot.Mastery.icon_url}"
+									arg-is_locked="{!$fifthSlotUnlocked}" />
+						<xf:else />
+							<xf:macro name="mastery"
+								  	arg-is_empty="1"
+								  	arg-user="{$user}"
+								 	arg-mastery_slot="{$masterySlot}"
+								  	arg-icon_url="{$masterySlot.Mastery.icon_url}" />
+						</xf:if>
 					</xf:if>
-				</xf:if>
-				<xf:else>
+				<xf:else />
 					<xf:macro name="mastery"
 							  	arg-is_empty="0"
 							  	arg-user="{$user}"
-								arg-mastery_slot="{$masterySlot}" />
-				</xf:else>
+								arg-mastery_slot="{$masterySlot}"
+							  	arg-icon_url="{$masterySlot.Mastery.icon_url}" />
+				</xf:if>
 			</xf:foreach>
+			
 		</div>
 	</div>
 	<div class="character-sheet-cell">
