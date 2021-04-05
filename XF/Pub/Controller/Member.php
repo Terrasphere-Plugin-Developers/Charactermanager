@@ -170,6 +170,7 @@ class Member extends XFCP_Member
             ->where('target_index', $params['target_index'])
             ->fetchOne();
 
+        //todo this probably changed, because Currency is now part of the rankSchema.
         $nextRank = $this->finder('Terrasphere\Core:Rank')
             ->with('Currency')
             ->where('rank_id', $mastery['rank_id']+1)
