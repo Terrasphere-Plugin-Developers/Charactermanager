@@ -222,6 +222,57 @@ class Member extends XFCP_Member
         return $this->view('Terrasphere\Charactermanager:MasteryUpgradeConfirm', 'terrasphere_cm_confirm_mastery_upgrade', $viewparams);
     }
 
+    public function actionUpgrade(ParameterBag $params)
+    {
+        $mastery = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
+            ->with('Mastery')
+            ->where('user_id', $params['user_id'])
+            ->where('target_index', $params['target_index'])
+            ->fetchOne();
+
+        $thisRank = $this->finder('Terrasphere\Core:Rank')
+            ->where('rank_id', $mastery['rank_id'])
+            ->fetchOne();
+
+        if($thisRank == null)
+            return $this->error('Nullrankerror.');
+
+        $masteryType = $this->finder('Terrasphere\Core:MasteryType')
+            ->where('mastery_type_id', $mastery->Mastery->mastery_type_id)
+            ->fetchOne();
+
+        if($masteryType == null)
+            return $this->error('Mastery type missing error. Mastery: ' . $mastery['display_name'] . '.');
+
+        $nextRank = $this->finder('Terrasphere\Core:Rank')
+            ->where('tier', $thisRank['tier']+1)
+            ->fetchOne();
+
+        if($nextRank == null)
+            return $this->error('Already at max rank.');
+
+        $rankSchema = $this->finder('Terrasphere\Core:RankSchema')
+            ->with('Currency')
+            ->where('rank_schema_id', $masteryType['rank_schema_id'])
+            ->fetchOne();
+
+        if($rankSchema == null)
+            return $this->error('No rank schema associated with this mastery type.');
+
+        $nxt = $this->finder('Terrasphere\Core:RankSchemaMap')
+            ->where('rank_schema_id', $masteryType['rank_schema_id'])
+            ->where('rank_id', $nextRank['rank_id'])
+            ->fetchOne();
+
+        if($nxt == null)
+            return $this->error('No rank schema cost entry for this mastery type and the next tier.');
+
+        $nextCost = $nxt['cost'];
+        $user = $this->finder('XF:User')->where('user_id', $params['user_id'])->fetchOne();
+
+        // TODO - Upgrade and AJAX ping.
+    }
+
 	public function canVisitorViewCharacterSheet(int $userID): bool {
         return true;
     }
