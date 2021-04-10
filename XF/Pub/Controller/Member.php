@@ -178,7 +178,7 @@ class Member extends XFCP_Member
             return $this->error('Nullrankerror.');
 
         $masteryType = $this->finder('Terrasphere\Core:MasteryType')
-            ->where('mastery_type_id', $mastery['mastery_type_id'])
+            ->where('mastery_type_id', $mastery->Mastery->mastery_type_id)
             ->fetchOne();
 
         if($masteryType == null)
@@ -215,7 +215,7 @@ class Member extends XFCP_Member
             'nextRank' => $nextRank,
             'nextCost' => $nextCost,
             'rankSchema' => $rankSchema,
-            'mastery' => $mastery,
+            'mastery' => $mastery->Mastery,
             'user' => $user,
             'userVal' => $user[$rankSchema->Currency->user_id_column],
         ];
