@@ -165,27 +165,59 @@ class Member extends XFCP_Member
     public function actionConfirmUpgrade(ParameterBag $params)
     {
         $mastery = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
-            ->with(['Rank', 'Mastery'])
+            ->with('Mastery')
             ->where('user_id', $params['user_id'])
             ->where('target_index', $params['target_index'])
             ->fetchOne();
 
-        //todo this probably changed, because Currency is now part of the rankSchema.
-        $nextRank = $this->finder('Terrasphere\Core:Rank')
-            ->with('Currency')
-            ->where('rank_id', $mastery['rank_id']+1)
+        $thisRank = $this->finder('Terrasphere\Core:Rank')
+            ->where('rank_id', $mastery['rank_id'])
             ->fetchOne();
 
-        $user = $this->finder('XF:User')->where('user_id', $params['user_id'])->fetchOne();
+        if($thisRank == null)
+            return $this->error('Nullrankerror.');
+
+        $masteryType = $this->finder('Terrasphere\Core:MasteryType')
+            ->where('mastery_type_id', $mastery['mastery_type_id'])
+            ->fetchOne();
+
+        if($masteryType == null)
+            return $this->error('Mastery type missing error. Mastery: ' . $mastery['display_name'] . '.');
+
+        $nextRank = $this->finder('Terrasphere\Core:Rank')
+            ->where('tier', $thisRank['tier']+1)
+            ->fetchOne();
 
         if($nextRank == null)
-            $this->error('Max rank.');
+            return $this->error('Already at max rank.');
+
+        $rankSchema = $this->finder('Terrasphere\Core:RankSchema')
+            ->with('Currency')
+            ->where('rank_schema_id', $masteryType['rank_schema_id'])
+            ->fetchOne();
+
+        if($rankSchema == null)
+            return $this->error('No rank schema associated with this mastery type.');
+
+        $nxt = $this->finder('Terrasphere\Core:RankSchemaMap')
+            ->where('rank_schema_id', $masteryType['rank_schema_id'])
+            ->where('rank_id', $nextRank['rank_id'])
+            ->fetchOne();
+
+        if($nxt == null)
+            return $this->error('No rank schema cost entry for this mastery type and the next tier.');
+
+        $nextCost = $nxt['cost'];
+        $user = $this->finder('XF:User')->where('user_id', $params['user_id'])->fetchOne();
 
         $viewparams = [
+            'thisRank' => $thisRank,
             'nextRank' => $nextRank,
+            'nextCost' => $nextCost,
+            'rankSchema' => $rankSchema,
             'mastery' => $mastery,
             'user' => $user,
-            'userVal' => $user[$nextRank->Currency->user_id_column],
+            'userVal' => $user[$rankSchema->Currency->user_id_column],
         ];
         return $this->view('Terrasphere\Charactermanager:MasteryUpgradeConfirm', 'terrasphere_cm_confirm_mastery_upgrade', $viewparams);
     }
