@@ -1,10 +1,15 @@
 <div class="block">
 	<div class="block-container">
 		<h1 style="text-align: center;">Mastery Upgrade</h1>
+		<hr>
 		<h2 style="text-align: center;">{$mastery.display_name} to Rank {$nextRank.name}</h2>
-		<p style="text-align: center;"><b>Cost:</b> {$nextCost} {$rankSchema.Currency.title}<br>
-		<b>Current:</b> {{$rankSchema.Currency.getValueFromUser($user)}} {$rankSchema.Currency.title}<br>
-		<b>After:</b> {{$rankSchema.Currency.getValueFromUser($user) - $nextCost}} {$rankSchema.Currency.title}</p>
+		<div style="max-width: 200px; margin:auto;">
+			<ul>
+				<li><b>Cost:</b> {$nextCost} {$rankSchema.Currency.title}</li>
+				<li><b>Current:</b> {$userVal} {$rankSchema.Currency.title}</li>
+				<li><b>After:</b> {$afterVal} {$rankSchema.Currency.title}</li>
+			</ul>
+		</div>
 			
 		<div class="mastery-upgrade-icon-container">
 			<div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
@@ -33,10 +38,17 @@
 			</div>
 		</div>
 		<div style="width:100%; padding:1.5rem; display:flex;">
-			<xf:button href="{{ link('members/cs/mastery/upgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
-					   style="margin:auto;">
-				Confirm
-			</xf:button>
+			<xf:form action="{{ link('members/cs/mastery/upgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index}) }}"
+			  			method="post"
+			  			ajax="true"
+						data-xf-init="upgrade-mastery"
+			  			data-reset-complete="true"
+			  			data-redirect="off"
+					 	style="margin:auto;">
+				<xf:submitrow sticky="true" icon="Confirm" />
+			</xf:form>
 		</div>
 	</div>
 </div>
+
+<xf:js src="Terrasphere/Charactermanager/upgrade_mastery.js" addon="Terrasphere/Charactermanager" />

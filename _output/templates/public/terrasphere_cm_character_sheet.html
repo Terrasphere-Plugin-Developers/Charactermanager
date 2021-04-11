@@ -146,8 +146,9 @@
 		  arg-is_empty="!"
 		  arg-user="!"
 		  arg-mastery_slot="!"
-		  arg-is_locked="0">
-	
+		  arg-is_locked="0"
+		  arg-can_buy_masteries="!"
+		  arg-max_rank="!">
 	<xf:if is="$is_empty">
 		<xf:set var="$masteryElementDisplay" value="none" />
 		<xf:if is="$is_locked">
@@ -162,31 +163,24 @@
 		<xf:set var="$lockElementDisplay" value="none" />
 		<xf:set var="$masteryElementDisplay" value="interit" />
 	</xf:if>
-	
 	<div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
 		<div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
-			<xf:if is="$viewerIsUser">
+			<xf:if is="$can_buy_masteries AND $mastery_slot.rank_id != $max_rank">
 				<a href="{{ link('members/cs/mastery/confirmUpgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
 			  		 class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.rank_id}"
-			   		 data-xf-click="overlay">
+			   		 data-xf-click="overlay"
+				   	 data-cache="false">
 					<img class="character-sheet-mastery-icon grid-overlap"
 					 		src="{$mastery_slot.Mastery.icon_url}"
 					 		alt="Mastery slot" />
 				</a>
 			<xf:else />
-				<div class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.rank_id}" data-xf-click="overlay">
+				<div class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.rank_id}">
 					<img class="character-sheet-mastery-icon grid-overlap"
 					 		src="{$mastery_slot.Mastery.icon_url}"
 					 		alt="Mastery slot" />
 				</div>
 			</xf:if>
-			<a href="{{ link('members/cs/mastery/confirmUpgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
-			   class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.rank_id}"
-			   data-xf-click="overlay">
-				<img class="character-sheet-mastery-icon grid-overlap"
-					 src="{$mastery_slot.Mastery.icon_url}"
-					 alt="Mastery slot" />
-			</a>
 			<svg class="character-sheet-mastery-title-container grid-overlap" viewbox="0, 0, 100, 100">
 				<defs>
 					<path id="mastery-title-path-{$mastery_slot.target_index}" d="M 0,60 C 0,60 50,-10 100,60" />
@@ -249,27 +243,33 @@
 		<div class="character-sheet-mastery-list">
 			<xf:foreach loop="$masterySlots" value="$masterySlot" key="$slotNum">
 				<xf:if is="$masterySlot.mastery_id == 'N/A'">
-					<xf:if is="$viewerIsUser">
+					<xf:if is="$canBuyMasteries">
 						<xf:if is="$slotNum == 3">
 							<xf:macro name="mastery"
 								  	arg-is_empty="1"
 								  	arg-user="{$user}"
 								 	arg-mastery_slot="{$masterySlot}"
 								  	arg-icon_url="{$masterySlot.Mastery.icon_url}"
-									arg-is_locked="{!$fourthSlotUnlocked}" />
+									arg-is_locked="{{!$fourthSlotUnlocked}}"
+									arg-can_buy_masteries="{$canBuyMasteries}"
+									arg-max_rank="{$maxRank}" />
 						<xf:elseif is="$slotNum == 4"/>
 							<xf:macro name="mastery"
 								  	arg-is_empty="1"
 								  	arg-user="{$user}"
 								 	arg-mastery_slot="{$masterySlot}"
 								  	arg-icon_url="{$masterySlot.Mastery.icon_url}"
-									arg-is_locked="{!$fifthSlotUnlocked}" />
+									arg-is_locked="{{!$fifthSlotUnlocked}}"
+									arg-can_buy_masteries="{$canBuyMasteries}"
+									arg-max_rank="{$maxRank}" />
 						<xf:else />
 							<xf:macro name="mastery"
 								  	arg-is_empty="1"
 								  	arg-user="{$user}"
 								 	arg-mastery_slot="{$masterySlot}"
-								  	arg-icon_url="{$masterySlot.Mastery.icon_url}" />
+								  	arg-icon_url="{$masterySlot.Mastery.icon_url}"
+									arg-can_buy_masteries="{$canBuyMasteries}"
+									arg-max_rank="{$maxRank}" />
 						</xf:if>
 					</xf:if>
 				<xf:else />
@@ -277,7 +277,9 @@
 							  	arg-is_empty="0"
 							  	arg-user="{$user}"
 								arg-mastery_slot="{$masterySlot}"
-							  	arg-icon_url="{$masterySlot.Mastery.icon_url}" />
+							  	arg-icon_url="{$masterySlot.Mastery.icon_url}"
+								arg-can_buy_masteries="{$canBuyMasteries}"
+								arg-max_rank="{$maxRank}" />
 				</xf:if>
 			</xf:foreach>
 			
