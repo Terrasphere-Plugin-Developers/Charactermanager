@@ -133,6 +133,7 @@ class Member extends XFCP_Member
             $slotEntity['mastery_id'] = $mastery['mastery_id'];
             $slotEntity['user_id'] = $params['user_id'];
             $slotEntity['target_index'] = $params['target_index'];
+            $slotEntity['rank_id'] = $this->finder('Terrasphere\Core:Rank')->where('tier', 1)->fetchOne()['rank_id'];
             $this->saveMasterySlot($slotEntity)->run();
 
             // Close overlay via redirect and setup AJAX parameters.
@@ -143,6 +144,8 @@ class Member extends XFCP_Member
             // TODO Add another for updating cost of upgrade...
             return $redirect;
         }
+
+        return $this->error('Post only operation.');
     }
 
     public function saveMasterySlot(CharacterMastery $masterySlot): \XF\Mvc\FormAction
