@@ -74,6 +74,7 @@ class CharacterMastery extends Entity
     public static function getCharacterMasterySlots(AbstractController $controller, int $userID): array
     {
         $masteries = self::getCharacterMasteries($controller, $userID);
+        $ret = [];
         for ($index = 0; $index < 5; $index++)
         {
             if(!array_key_exists($index, $masteries))
@@ -85,10 +86,14 @@ class CharacterMastery extends Entity
                 $dummy['rank_id'] = 0;
                 $dummy['target_index'] = $index;
                 $dummy['mastery_id'] = 'N/A';
-                $masteries[$index] = $dummy;
+                $ret[$index] = $dummy;
+            }
+            else
+            {
+                $ret[$index] = $masteries[$index];
             }
         }
 
-        return $masteries;
+        return $ret;
     }
 }
