@@ -14,7 +14,7 @@
 		<div class="mastery-upgrade-icon-container">
 			<div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
 				<div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
-					<div class="character-sheet-mastery-icon-container grid-overlap rank-{$thisRank.rank_id}">
+					<div class="character-sheet-mastery-icon-container grid-overlap rank-{$thisRank.tier}">
 						<img class="character-sheet-mastery-icon grid-overlap"
 					 		src="{$mastery.icon_url}"
 					 		alt="Mastery slot" />
@@ -29,7 +29,7 @@
 				
 			<div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
 				<div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
-					<div class="character-sheet-mastery-icon-container grid-overlap rank-{{$thisRank.rank_id+1}}">
+					<div class="character-sheet-mastery-icon-container grid-overlap rank-{{$thisRank.tier+1}}">
 						<img class="character-sheet-mastery-icon grid-overlap"
 					 		src="{$mastery.icon_url}"
 					 		alt="Mastery slot" />

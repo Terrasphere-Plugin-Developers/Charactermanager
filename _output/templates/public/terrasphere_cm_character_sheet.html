@@ -167,7 +167,7 @@
 		<div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
 			<xf:if is="$can_buy_masteries AND $mastery_slot.rank_id != $max_rank">
 				<a href="{{ link('members/cs/mastery/confirmUpgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
-			  		 class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.rank_id}"
+			  		 class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.tier}"
 			   		 data-xf-click="overlay"
 				   	 data-cache="false">
 					<img class="character-sheet-mastery-icon grid-overlap"
@@ -175,7 +175,7 @@
 					 		alt="Mastery slot" />
 				</a>
 			<xf:else />
-				<div class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.rank_id}">
+				<div class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.tier}">
 					<img class="character-sheet-mastery-icon grid-overlap"
 					 		src="{$mastery_slot.Mastery.icon_url}"
 					 		alt="Mastery slot" />
