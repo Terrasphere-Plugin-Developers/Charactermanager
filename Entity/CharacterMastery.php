@@ -53,7 +53,7 @@ class CharacterMastery extends Entity
     public static function getCharacterMasteries(AbstractController $controller, int $userID): array
     {
         $results = $controller->finder('Terrasphere\Charactermanager:CharacterMastery')
-            ->with('Mastery')
+            ->with(['Mastery', 'Rank'])
             ->where('user_id', $userID)
             ->order('target_index', 'ASC')
             ->fetch();
