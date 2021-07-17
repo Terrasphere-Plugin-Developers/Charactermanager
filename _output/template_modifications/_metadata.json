@@ -13,5 +13,8 @@
     },
     "public/terrasphere_cm_member_view_posts_panel_change.json": {
         "hash": "4c91924210ad68d07bc1c3f943270d32"
+    },
+    "public/ts_cm_member_moderator_cs_edit.json": {
+        "hash": "05cc402bd2b0963f7980efdd281de572"
     }
 }

@@ -6,6 +6,7 @@ namespace Terrasphere\Charactermanager\XF\Pub\Controller;
 
 use Terrasphere\Charactermanager\Entity\CharacterMastery;
 use Terrasphere\Core\Entity\Rank;
+use Terrasphere\Core\Util\PostProxyHelper;
 use XF\Entity\User;
 use XF\Mvc\ParameterBag;
 
@@ -25,12 +26,16 @@ class Member extends XFCP_Member
 		    'user' => $user,
 		    'masterySlots' => $masterySlots,
 		    'maxRank' => $maxRank['rank_id'],
+            'hasCS' => $user['ts_cm_character_sheet_post_id'] != -1,
             'canViewCS' => $this->canVisitorViewCharacterSheet($params->user_id),
             'canViewRevisions' => $this->canVisitorViewRevisions($params->user_id),
             'canBuyMasteries' => $this->canVisitorBuyMasteries($params->user_id),
             'fourthSlotUnlocked' => $this->fourthSlotUnlocked($params->user_id),
             'fifthSlotUnlocked' => $this->fifthSlotUnlocked($params->user_id),
         ];
+
+		if($viewParams['hasCS'])
+		    $viewParams = array_merge($viewParams, PostProxyHelper::getPostProxyParams($this, $user['ts_cm_character_sheet_post_id']));
 
 		return $this->view('XF:Member\CharacterSheet', 'terrasphere_cm_character_sheet', $viewParams);
 	}
@@ -128,12 +133,14 @@ class Member extends XFCP_Member
             if($params['target_index'] == 4 && !$this->fifthSlotUnlocked($params['user_id']))
                 return $this->error('Slot not unlocked.');
 
+            $rank = $this->finder('Terrasphere\Core:Rank')->where('tier', 1)->fetchOne();
+
             // Save entity to DB
             $slotEntity = $this->em()->create('Terrasphere\Charactermanager:CharacterMastery');
             $slotEntity['mastery_id'] = $mastery['mastery_id'];
             $slotEntity['user_id'] = $params['user_id'];
             $slotEntity['target_index'] = $params['target_index'];
-            $slotEntity['rank_id'] = $this->finder('Terrasphere\Core:Rank')->where('tier', 1)->fetchOne()['rank_id'];
+            $slotEntity['rank_id'] = $rank['rank_id'];
             $this->saveMasterySlot($slotEntity)->run();
 
             // Close overlay via redirect and setup AJAX parameters.
@@ -141,6 +148,8 @@ class Member extends XFCP_Member
             $redirect->setJsonParam('masterySlotIndex', $params['target_index']);
             $redirect->setJsonParam('newMasteryName', $mastery['display_name']);
             $redirect->setJsonParam('newMasteryIconURL', $mastery['icon_url']);
+            $redirect->setJsonParam('newMasteryColor', $mastery['color']);
+            $redirect->setJsonParam('rankTitle', $rank['name']);
             // TODO Add another for updating cost of upgrade...
             return $redirect;
         }
@@ -309,6 +318,7 @@ class Member extends XFCP_Member
             $redirect = $this->redirect($this->buildLink('members', null, ['user_id' => $params['user_id']]));
             $redirect->setJsonParam('masterySlotIndex', $params['target_index']);
             $redirect->setJsonParam('newRankTier', $nextRank['tier']);
+            $redirect->setJsonParam('newRankTitle', $nextRank['name']);
             $redirect->setJsonParam('max', $nextRank['tier'] == Rank::maxTier($this));
             $redirect->setJsonParam('fourthSlotWasUnlocked', $fourthSlotUnlockedPrev);
             $redirect->setJsonParam('fifthSlotWasUnlocked', $fifthSlotUnlockedPrev);

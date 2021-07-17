@@ -7,14 +7,11 @@
 	grid-row-start: 1;
 	grid-column-start: 1;
 }
-
-.character-sheet-cell {
-	flex-grow: 1;
-	flex-basis: 0px;
-	margin: 20px 7px 20px 7px;
-	padding: 10px;
-	box-shadow: 0px 1px 3px #00000077;
-   	border: 1px solid #00d6ff87;
+	
+.character-sheet
+{
+	margin: auto;
+	max-width: 1018px;
 }
 
 .character-sheet-title {
@@ -23,29 +20,17 @@
    	border-bottom: 1px solid #00d6ff87;
 }
 	
-.character-sheet-info-container {
-	display: flex;
-	justify-content: space-between;
-}
-	
-.character-sheet-picture-container {
-	max-height: 1200px;
-}
-	
-.character-sheet-pic {
-	
-}
-	
 .character-sheet-mastery-list {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
+	margin-bottom: 40px;
 }
 	
 .character-sheet-mastery-container {
-	width: 19vmin;
-    height: 19vmin;
-    margin: 4vmin;
+	width: 200px;
+    height: 200px;
+    margin: 50px;
 	display: grid;
 	grid-template-columns: 100%;
 	grid-template-rows: 100%;
@@ -59,12 +44,15 @@
 	grid-template-rows: 100%;
 }
 	
-.character-sheet-mastery-title-container {
-	display: none;
-	width: 200%;
-    height: 200%;
-    margin-left: -50%;
-    margin-top: -70%;
+.character-sheet-mastery-title {
+	width: 100%;
+    margin-top: 15px;
+	text-align: center;
+	font-size: x-large;
+}
+
+.m-title-rank {
+	font-size: smaller;
 }
 	
 .character-sheet-mastery-icon-container {
@@ -140,6 +128,34 @@
 .rank-5 {
 	background-color: {$xf.options.terrasphereCoreRankSColor};
 }
+	
+.rank-stars {
+	pointer-events: none;
+	width: 100%;
+	height: 100%;
+	transform: scale(1.25, 1.25);
+	background-size: 100% 100%;
+}
+	
+.rank-stars-1 {
+	background-image: url("{{ base_url('styles/default/Terrasphere/Charactermanager/rank1.png', true) }}");
+}
+	
+.rank-stars-2 {
+	background-image: url("{{ base_url('styles/default/Terrasphere/Charactermanager/rank2.png', true) }}");
+}
+	
+.rank-stars-3 {
+	background-image: url("{{ base_url('styles/default/Terrasphere/Charactermanager/rank3.png', true) }}");
+}
+	
+.rank-stars-4 {
+	background-image: url("{{ base_url('styles/default/Terrasphere/Charactermanager/rank4.png', true) }}");
+}
+	
+.rank-stars-5 {
+	background-image: url("{{ base_url('styles/default/Terrasphere/Charactermanager/rank5.png', true) }}");
+}
 </xf:css>
 
 <xf:macro name="mastery"
@@ -165,30 +181,29 @@
 	</xf:if>
 	<div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
 		<div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
+			<div class="rank-stars grid-overlap rank-stars-{$mastery_slot.Rank.tier}"></div>
 			<xf:if is="$can_buy_masteries AND $mastery_slot.rank_id != $max_rank">
 				<a href="{{ link('members/cs/mastery/confirmUpgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
 			  		 class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.Rank.tier}"
 			   		 data-xf-click="overlay"
-				   	 data-cache="false">
+				   	 data-cache="false"
+					 style="background-color: {$mastery_slot.Mastery.color};">
 					<img class="character-sheet-mastery-icon grid-overlap"
 					 		src="{$mastery_slot.Mastery.icon_url}"
 					 		alt="Mastery slot" />
 				</a>
 			<xf:else />
-				<div class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.Rank.tier}">
+				<div class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.Rank.tier}"
+					 style="background-color: {$mastery_slot.Mastery.color};">
 					<img class="character-sheet-mastery-icon grid-overlap"
 					 		src="{$mastery_slot.Mastery.icon_url}"
 					 		alt="Mastery slot" />
 				</div>
 			</xf:if>
-			<svg class="character-sheet-mastery-title-container grid-overlap" viewbox="0, 0, 100, 100">
-				<defs>
-					<path id="mastery-title-path-{$mastery_slot.target_index}" d="M 0,60 C 0,60 50,-10 100,60" />
-				</defs>
-				<text fill="red">
-    				<textPath xlink:href="#mastery-title-path-{$mastery_slot.target_index}" startOffset="50%" text-anchor="middle" class="character-sheet-mastery-title">{$mastery_slot.Mastery.display_name}</textPath>
-				</text>
-			</svg>
+			<div class="character-sheet-mastery-title">
+				{$mastery_slot.Mastery.display_name}<br>
+				<span class="m-title-rank">Rank {$mastery_slot.Rank.name}</span>
+			</div>
 		</div>
 		<div class="character-sheet-mastery-empty grid-overlap" style="display: {$emptyElementDisplay};">
 			<a href="{{ link('members/cs/mastery/selectNew', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
@@ -213,31 +228,17 @@
 </xf:macro>
 
 
-<div class="block" style="max-width: 1000px; margin: auto;"><div class="block-container"><div class="block-body">
-	<button class="button">
-		New revision
-	</button>
-	<div class="block character-sheet-info-container">
-		<div class="character-sheet-cell character-sheet-character-info">
-			<h2 class="character-sheet-title">Character</h2>
-			<div class="character-sheet-picture-container">
-				<img class="character-sheet-pic" src="data/assets/pic2.png" alt="character picture">
-			</div>
-			<div class="block">Nag Skys to put tabs here cause I hate making tabs</div>
-			Potential Tabs for each of these:<br>
-			-Basic info<br>
-			-Personality<br>
-			-Backstory/Bio<br>
-		</div>
-		<div class="character-sheet-cell character-sheet-player-info">
-			<h2 class="character-sheet-title">Player</h2>
-			<div class="character-sheet-picture-container">
-				<img class="character-sheet-pic" src="data/assets/pic3.png" alt="player picture">
-			</div>
-			<div class="block">Nag Skys to put tabs here cause I hate making tabs</div>
-			Lorem Ipsem and all that.
-		</div>
-	</div>
+<div class="block character-sheet" style="max-width: 1018px; margin: auto;"><div class="block-container"><div class="block-body">
+	<a href="{{ link('post-proxy', {'post_id': 1}) }}"
+	   	class="button"
+		data-xf-click="overlay">
+		Imma dev button!
+	</a>
+	
+	<xf:if is="$hasCS">
+		<xf:include template="terrasphere_core_post_proxy_page" />
+	</xf:if>
+	
 	<div class="character-sheet-cell">
 		<h2 class="character-sheet-title">Masteries</h2>
 		<div class="character-sheet-mastery-list">
@@ -283,12 +284,6 @@
 				</xf:if>
 			</xf:foreach>
 			
-		</div>
-	</div>
-	<div class="character-sheet-cell">
-		<h2 class="character-sheet-title">Biography</h2>
-		<div class="block">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis ultricies lorem, sed blandit purus. Sed porta purus eget urna suscipit, in pellentesque elit accumsan. Ut tincidunt porttitor massa, vel viverra purus semper et. Fusce a quam commodo turpis volutpat sagittis vel at orci. Morbi eget neque lorem. Vestibulum volutpat ante vel mauris tincidunt convallis. Aenean non velit eu leo rutrum elementum. Suspendisse convallis, dolor at venenatis feugiat, sem neque consequat purus, vel venenatis odio nulla vitae enim. Integer sit amet elit diam. Vestibulum ante enim, venenatis vel fermentum vitae, euismod nec nibh. Praesent finibus iaculis velit in pharetra.<br><br>Nam vel dapibus turpis. Mauris in aliquet lorem, a tincidunt massa. Mauris vulputate, magna sed porttitor suscipit, tellus ex tristique neque, consequat placerat quam quam eget tellus. Aenean nec justo vitae diam tempor vehicula. Pellentesque suscipit ultricies nibh sit amet varius. Nullam ac massa diam. Morbi commodo gravida felis, vel ultrices nulla malesuada ac. Aenean a suscipit elit. Fusce finibus eleifend ultrices. Fusce sed tempor est, quis feugiat leo. Fusce blandit, turpis non elementum semper, nisl nisl ultrices nibh, varius dignissim ante neque non nibh. Sed suscipit, massa eu pellentesque euismod, eros nibh maximus massa, vel condimentum quam lorem nec sapien.
 		</div>
 	</div>
 </div></div></div>

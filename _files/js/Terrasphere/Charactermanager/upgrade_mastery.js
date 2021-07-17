@@ -33,6 +33,8 @@
             var lastRankClass = "rank-"+(data.newRankTier-1);
             var newRankClass = "rank-"+(data.newRankTier);
             $("#mastery-container-" + data.masterySlotIndex + " ." + lastRankClass).removeClass(lastRankClass).addClass(newRankClass);
+            $("#mastery-container-" + data.masterySlotIndex + " .rank-stars").removeClass("rank-stars-" + (data.newRankTier-1)).addClass("rank-stars-" + data.newRankTier);
+            $("#mastery-container-" + data.masterySlotIndex + " .m-title-rank").text("Rank " + data.newRankTitle);
 
             // Reset flashy animation element by clone+delete.
             var elem = $("#mastery-container-" + data.masterySlotIndex + " .mastery-change-flash");

@@ -2,12 +2,17 @@
     "public/terrasphere_cm_character_sheet.html": {
         "version_id": 1000010,
         "version_string": "1.0.0 Alpha",
-        "hash": "1e4102d65155c653538aeaafdea8a420"
+        "hash": "d2b1f5813d42894ca23f7608beef07c8"
     },
     "public/terrasphere_cm_confirm_mastery_upgrade.html": {
         "version_id": 1000010,
         "version_string": "1.0.0 Alpha",
-        "hash": "8f34f723b4ba54e556caaa6c7fa3d3d7"
+        "hash": "473f7bd7f92dca041d4eb84229acdcf8"
+    },
+    "public/terrasphere_cm_cs_link_page.html": {
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "8a9a515d61ec32bfc96fddd5d4bba1ac"
     },
     "public/terrasphere_cm_mastery_selection.html": {
         "version_id": 1000010,

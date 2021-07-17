@@ -1,0 +1,9 @@
+{
+    "template": "member_tooltip",
+    "description": "Adds mastery icons to the user tooltip (if available).",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:if contentcheck=\"true\">\n\t\t\t\t\t\t<div class=\"memberTooltip-blurb\">\n\t\t\t\t\t\t\t<dl class=\"pairs pairs--inline\">\n\t\t\t\t\t\t\t\t<dt>{{ phrase('last_seen') }}</dt>\n\t\t\t\t\t\t\t\t<dd dir=\"auto\">\n\t\t\t\t\t\t\t\t\t<xf:contentcheck><xf:useractivity user=\"$user\" class=\"pairs--plainLabel\" /></xf:contentcheck>\n\t\t\t\t\t\t\t\t</dd>\n\t\t\t\t\t\t\t</dl>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</xf:if>",
+    "replace": "$0\n<div class=\"memberTooltip-blurb\">\n\t\n</div>"
+}
