@@ -1,10 +1,4 @@
 {
-    "admin_permission.terrasphereCM.txt": {
-        "global_cache": false,
-        "version_id": 1000010,
-        "version_string": "1.0.0 Alpha",
-        "hash": "80f0897de3767eae286e1af7e9ec0fcb"
-    },
     "character_sheet.txt": {
         "global_cache": false,
         "version_id": 1000010,
