@@ -25,7 +25,7 @@ class Setup extends AbstractSetup
         $this->installTables($this->schemaManager());
         $this->schemaManager()->alterTable('xf_user', function(Alter $table)
         {
-            $table->addColumn('ts_cm_character_sheet_post_id', 'int')->setDefault(-1);
+            $table->addColumn('ts_cm_character_sheet_post_id', 'int')->unsigned(false)->setDefault(-1);
         });
         $this->db();
     }
