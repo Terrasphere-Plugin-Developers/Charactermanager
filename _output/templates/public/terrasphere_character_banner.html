@@ -1,5 +1,7 @@
 <xf:css>
-.character-banner-container {}
+.character-banner-container {
+	margin-bottom: 30px;
+}
 
 .character-banner {
 	background-size: cover;
@@ -114,7 +116,9 @@
 											 background-position-y: {$xf.visitor.Profile.banner_position_y}%;">
 			<div class="character-banner-overlay">
 				<div class="character-banner-top">
-					<span class="character-banner-username">{$xf.visitor.username}</span>
+					<a href="{{ link('members/charactersheet', $xf.visitor, {}) }}"
+					   data-xf-click="overlay"
+					   class="character-banner-username">{$xf.visitor.username}</a>
 					<div class="character-banner-icons">
 						<div class="character-banner-masteries">
 							<xf:foreach loop="$xf.visitor.getMasteries()" key="$id" value="$masteryEntry">
