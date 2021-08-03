@@ -110,7 +110,8 @@
 </xf:macro>
 <xf:if is="$xf.visitor.user_id != 0">
 	<div class="character-banner-container">
-		<div class="character-banner" style="background-image: url('{{$xf.visitor.getCharacterBannerSrc()}}');">
+		<div class="character-banner" style="background-image: url('{{$xf.visitor.Profile.getBannerURL(null)}}');
+											 background-position-y: {$xf.visitor.Profile.banner_position_y}%;">
 			<div class="character-banner-overlay">
 				<div class="character-banner-top">
 					<span class="character-banner-username">{$xf.visitor.username}</span>

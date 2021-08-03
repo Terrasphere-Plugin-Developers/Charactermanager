@@ -76,11 +76,6 @@ class User extends XFCP_User
         return [ $weapon, $armor, $other ];
     }
 
-    public function getCharacterBannerSrc()
-    {
-        return "data/profile_banners/l/0/" . $this->user_id . ".jpg";
-    }
-
     /**
      * @throws XF\PrintableException
      */
