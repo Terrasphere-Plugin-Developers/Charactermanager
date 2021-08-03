@@ -1,0 +1,9 @@
+{
+    "template": "forum_list",
+    "description": "Adds a character banner to the forum list front page.",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:if is=\"$xf.options.forumsDefaultPage != 'forums' OR ($xf.options.indexRoute AND $xf.options.indexRoute != 'forums/')\">\n\t<xf:title>{{ phrase('forum_list') }}</xf:title>\n<xf:else />\n\t<xf:h1>{$xf.options.boardTitle}</xf:h1>\n</xf:if>",
+    "replace": "<xf:include template=\"terrasphere_character_banner\" />\n$0"
+}

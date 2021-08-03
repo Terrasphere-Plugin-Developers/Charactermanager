@@ -10,5 +10,6 @@ namespace Terrasphere\Charactermanager\XF\Entity
 
 namespace Terrasphere\Charactermanager\XF\Pub\Controller
 {
+	class XFCP_Index extends \XF\Pub\Controller\Index {}
 	class XFCP_Member extends \XF\Pub\Controller\Member {}
 }

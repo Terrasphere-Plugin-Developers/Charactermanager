@@ -50,9 +50,9 @@ class CharacterMastery extends Entity
     /**
      * Gets all masteries for the appropriate character.
      */
-    public static function getCharacterMasteries(AbstractController $controller, int $userID): array
+    public static function getCharacterMasteries($mustHaveFinderAndEM, int $userID): array
     {
-        $results = $controller->finder('Terrasphere\Charactermanager:CharacterMastery')
+        $results = $mustHaveFinderAndEM->finder('Terrasphere\Charactermanager:CharacterMastery')
             ->with(['Mastery', 'Rank'])
             ->where('user_id', $userID)
             ->order('target_index', 'ASC')
@@ -71,16 +71,16 @@ class CharacterMastery extends Entity
      * Similar to above, but always includes an entry for all 5 mastery slots, inserting dummies where a mastery has
      * yet to be selected.
      */
-    public static function getCharacterMasterySlots(AbstractController $controller, int $userID): array
+    public static function getCharacterMasterySlots($mustHaveFinderAndEM, int $userID): array
     {
-        $masteries = self::getCharacterMasteries($controller, $userID);
+        $masteries = self::getCharacterMasteries($mustHaveFinderAndEM, $userID);
         $ret = [];
         for ($index = 0; $index < 5; $index++)
         {
             if(!array_key_exists($index, $masteries))
             {
                 /** @var \Terrasphere\Charactermanager\Entity\CharacterMastery $dummy */
-                $dummy = $controller->em()->create('Terrasphere\Charactermanager:CharacterMastery');
+                $dummy = $mustHaveFinderAndEM->em()->create('Terrasphere\Charactermanager:CharacterMastery');
                 $dummy['user_id'] = $userID;
                 $dummy['mastery_id'] = 0;
                 $dummy['rank_id'] = 0;

@@ -1,0 +1,98 @@
+<xf:css>
+.character-banner-container {}
+
+.character-banner {
+	background-size: cover;
+	background-repeat: no-repeat;
+	display: flex;
+    flex-wrap: nowrap;
+	flex-direction: column;
+    justify-content: space-between;
+}
+
+.character-banner-top {
+	display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+	
+.character-banner-username {
+	color: white;
+	font-size: 2.5rem;
+	text-shadow: 0px 1px 5px black;
+	font-variant: small-caps;
+	padding-left: 5px;
+	font-weight: 600;
+}
+
+.character-banner-icons {
+	display: inline-block;
+}
+
+.character-banner-masteries {
+	display: flex;
+}
+
+.character-banner-small-icon-container {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+	margin: 10px;
+}
+	
+.character-banner-small-icon {
+	border-radius: 50%;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	height: 50px;
+    width: 50px;
+}
+
+.character-banner-small-icon-image {
+	width: 80%;
+	height: 80%;
+}
+
+.rank-letter-small {
+	color: white;
+	font-size: 1.5rem;
+	text-shadow: 0px 2px 3px black;
+}
+
+.character-banner-equips {}
+.character-banner-bottom {}
+</xf:css>
+
+<xf:form action="{{ link('index/characterBanner') }}" autocomplete="off" upload="true" class="block" ajax="true">
+   	<xf:upload name="upload" accept=".jpeg,.jpg,.png,.gif" />
+	<xf:submitrow icon="save" />
+</xf:form>
+
+<div class="character-banner-container">
+	<div class="character-banner" style="background-image: url('{{$xf.visitor.getCharacterBannerSrc()}}');">
+		<div class="character-banner-top">
+			<span class="character-banner-username">{$xf.visitor.username}</span>
+			<div class="character-banner-icons">
+				<div class="character-banner-masteries">
+					<xf:foreach loop="$xf.visitor.getMasteries()" key="$id" value="$masteryEntry">
+						<div class="character-banner-small-icon-container">
+							<div class="character-banner-small-icon" style="background-color: {$masteryEntry.Mastery.color};">
+								<img class="character-banner-small-icon-image"
+									 src="{$masteryEntry.Mastery.icon_url}"
+									 alt="{$masteryEntry.Mastery.display_name}">
+							</div>
+							<strong class="rank-letter-small">{$masteryEntry.Rank.name}</strong>
+						</div>
+					</xf:foreach>
+				</div>
+				<div class="character-banner-equips">
+
+				</div>
+			</div>
+		</div>
+		<div class="character-banner-bottom">
+			<xf:include template="dbtech_credits_member_stats" />
+		</div>
+	</div>
+</div>
