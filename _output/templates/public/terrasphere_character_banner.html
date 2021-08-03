@@ -11,6 +11,10 @@
     justify-content: space-between;
 }
 
+.character-banner-overlay {
+	background: rgba(19,20,25,0.4);
+}
+
 .character-banner-top {
 	display: flex;
     flex-wrap: nowrap;
@@ -39,7 +43,7 @@
 	display: flex;
     flex-direction: column;
     align-items: center;
-	margin: 10px;
+	margin: 7px;
 }
 	
 .character-banner-small-icon {
@@ -68,6 +72,7 @@
 }
 
 .character-banner-bottom {
+	padding: 7px;
 	display: flex;
     justify-content: space-between;
 	background-color: #000000cc;
@@ -77,6 +82,10 @@
 	
 .character-banner-currencies {
 	font-weight: 700;
+}
+.character-banner-currencies dl {
+	margin-right: 25px !important;
+	margin-left: 25px !important;
 }
 .character-banner-currencies dt {
 	color: white;
@@ -99,47 +108,45 @@
 		<strong class="rank-letter-small">{$rank}</strong>
 	</div>
 </xf:macro>
-
-<xf:form action="{{ link('index/characterBanner') }}" autocomplete="off" upload="true" class="block" ajax="true">
-   	<xf:upload name="upload" accept=".jpeg,.jpg,.png,.gif" />
-	<xf:submitrow icon="save" />
-</xf:form>
-
-<div class="character-banner-container">
-	<div class="character-banner" style="background-image: url('{{$xf.visitor.getCharacterBannerSrc()}}');">
-		<div class="character-banner-top">
-			<span class="character-banner-username">{$xf.visitor.username}</span>
-			<div class="character-banner-icons">
-				<div class="character-banner-masteries">
-					<xf:foreach loop="$xf.visitor.getMasteries()" key="$id" value="$masteryEntry">
-						<xf:macro name="icon"
-								  arg-src="{$masteryEntry.Mastery.icon_url}"
-		  						  arg-name="{$masteryEntry.Mastery.display_name}"
-		  						  arg-color="{$masteryEntry.Mastery.color}"
-		  						  arg-rank="{$masteryEntry.Rank.name}" />
-					</xf:foreach>
+<xf:if is="$xf.visitor.user_id != 0">
+	<div class="character-banner-container">
+		<div class="character-banner" style="background-image: url('{{$xf.visitor.getCharacterBannerSrc()}}');">
+			<div class="character-banner-overlay">
+				<div class="character-banner-top">
+					<span class="character-banner-username">{$xf.visitor.username}</span>
+					<div class="character-banner-icons">
+						<div class="character-banner-masteries">
+							<xf:foreach loop="$xf.visitor.getMasteries()" key="$id" value="$masteryEntry">
+								<xf:macro name="icon"
+										  arg-src="{$masteryEntry.Mastery.icon_url}"
+										  arg-name="{$masteryEntry.Mastery.display_name}"
+										  arg-color="{$masteryEntry.Mastery.color}"
+										  arg-rank="{$masteryEntry.Rank.name}" />
+							</xf:foreach>
+						</div>
+						<div class="character-banner-equips">
+							<xf:macro name="icon"
+									  arg-src="{{base_url('styles/default/Terrasphere/Charactermanager/weapon-icon.png', true)}}"
+									  arg-name="Weapon"
+									  arg-color="#B0B0B0"
+									  arg-rank="{{$xf.visitor.getWeapon().Rank.name}}" />
+							<xf:macro name="icon"
+									  arg-src="{{base_url('styles/default/Terrasphere/Charactermanager/armor-icon.png', true)}}"
+									  arg-name="Armor"
+									  arg-color="#B0B0B0"
+									  arg-rank="{{$xf.visitor.getArmor().Rank.name}}" />
+						</div>
+					</div>
 				</div>
-				<div class="character-banner-equips">
-					<xf:macro name="icon"
-							  arg-src="{{base_url('styles/default/Terrasphere/Charactermanager/weapon-icon.png', true)}}"
-		  					  arg-name="Weapon"
-		  					  arg-color="#B0B0B0"
-		  					  arg-rank="{{$xf.visitor.getWeapon().Rank.name}}" />
-					<xf:macro name="icon"
-							  arg-src="{{base_url('styles/default/Terrasphere/Charactermanager/armor-icon.png', true)}}"
-		  					  arg-name="Armor"
-		  					  arg-color="#B0B0B0"
-		  					  arg-rank="{{$xf.visitor.getArmor().Rank.name}}" />
+				<div class="character-banner-bottom">
+					<div class="character-banner-interface">
+
+					</div>
+					<div class="character-banner-currencies">
+						<xf:include template="dbtech_credits_member_stats" />
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="character-banner-bottom">
-			<div class="character-banner-interface">
-				
-			</div>
-			<div class="character-banner-currencies">
-				<xf:include template="dbtech_credits_member_stats" />
 			</div>
 		</div>
 	</div>
-</div>
+</xf:if>

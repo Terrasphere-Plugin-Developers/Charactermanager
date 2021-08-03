@@ -78,12 +78,7 @@ class User extends XFCP_User
 
     public function getCharacterBannerSrc()
     {
-        $files = glob(XF::getRootDirectory() . "/data/characterbanners/" . $this->user_id . "/banner.*");
-        if (!empty($files)) {
-            return "data/characterbanners/" . $this->user_id . "/" . basename($files[0]);
-        } else {
-            return "";
-        }
+        return "data/profile_banners/l/0/" . $this->user_id . ".jpg";
     }
 
     /**
