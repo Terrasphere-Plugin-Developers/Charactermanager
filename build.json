@@ -5,6 +5,8 @@
     "styles/default/Terrasphere/Charactermanager/plus_sign.png",
     "styles/default/Terrasphere/Charactermanager/missing_img.png",
     "styles/default/Terrasphere/Charactermanager/padlock.png",
-    "styles/default/Terrasphere/Charactermanager/upgrade_arrow.png"
+    "styles/default/Terrasphere/Charactermanager/upgrade_arrow.png",
+    "styles/default/Terrasphere/Charactermanager/weapon-icon.png",
+    "styles/default/Terrasphere/Charactermanager/armor-icon.png"
   ]
 }

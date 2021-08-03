@@ -4,7 +4,6 @@ namespace Terrasphere\Charactermanager\Entity;
 
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
-use XF\Pub\Controller\AbstractController;
 
 class CharacterMastery extends Entity
 {
