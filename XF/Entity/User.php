@@ -96,19 +96,22 @@ class User extends XFCP_User
             $equip['name'] = '';
             $equip['post_link'] = '';
 
-            try {
-                $equip->save();
-            } catch (XF\PrintableException $e) {
-                throw $e;
-            } catch (\Exception $e) {
-                throw $e;
-            }
+            if($this->exists() && $this->user_id != 0)
+            {
+                try {
+                    $equip->save();
+                } catch (XF\PrintableException $e) {
+                    throw $e;
+                } catch (\Exception $e) {
+                    throw $e;
+                }
 
-            $equip = $this->finder('Terrasphere\Charactermanager:Equipment')
-                ->with(['User', 'Rank'])
-                ->where('user_id', $this->user_id)
-                ->where('type', $typeID)
-                ->fetchOne();
+                $equip = $this->finder('Terrasphere\Charactermanager:Equipment')
+                    ->with(['User', 'Rank'])
+                    ->where('user_id', $this->user_id)
+                    ->where('type', $typeID)
+                    ->fetchOne();
+            }
         }
         return $equip;
     }
