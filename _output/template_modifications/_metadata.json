@@ -1,4 +1,7 @@
 {
+    "public/terrasphere_charactermanager_index_char_banne.json": {
+        "hash": "951355135f22f286ff05a6c3785c6fea"
+    },
     "public/terrasphere_charactermanager_member_view_add_cstab.json": {
         "hash": "96cd30f8a99e10ea2e6d890bf1f48789"
     },
@@ -15,6 +18,6 @@
         "hash": "4c91924210ad68d07bc1c3f943270d32"
     },
     "public/ts_cm_member_moderator_cs_edit.json": {
-        "hash": "05cc402bd2b0963f7980efdd281de572"
+        "hash": "2f060ceca623bd0bee3b5472f8d8ee96"
     }
 }

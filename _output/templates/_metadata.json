@@ -1,8 +1,18 @@
 {
+    "public/terrasphere_character_banner.html": {
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "6da64d154e3a962c9b16c7477d3ce3e0"
+    },
     "public/terrasphere_cm_character_sheet.html": {
         "version_id": 1000010,
         "version_string": "1.0.0 Alpha",
-        "hash": "d2b1f5813d42894ca23f7608beef07c8"
+        "hash": "6bc31fda5fb8ee379bf889402459347c"
+    },
+    "public/terrasphere_cm_confirm_equip_upgrade.html": {
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "243845efac91e5cc1d77fa15e1dd9b4b"
     },
     "public/terrasphere_cm_confirm_mastery_upgrade.html": {
         "version_id": 1000010,
@@ -12,7 +22,7 @@
     "public/terrasphere_cm_cs_link_page.html": {
         "version_id": 1000010,
         "version_string": "1.0.0 Alpha",
-        "hash": "8a9a515d61ec32bfc96fddd5d4bba1ac"
+        "hash": "7b9bd54fa1a32574b0a08b0dee716274"
     },
     "public/terrasphere_cm_mastery_selection.html": {
         "version_id": 1000010,

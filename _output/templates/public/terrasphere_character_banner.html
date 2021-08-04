@@ -1,0 +1,157 @@
+<xf:css>
+.character-banner-container {
+	margin-bottom: 30px;
+}
+
+.character-banner {
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center top;
+	display: flex;
+    flex-wrap: nowrap;
+	flex-direction: column;
+    justify-content: space-between;
+}
+
+.character-banner-overlay {
+	background: rgba(19,20,25,0.4);
+}
+
+.character-banner-top {
+	display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+	
+.character-banner-username {
+	color: white;
+	font-size: 2.5rem;
+	text-shadow: 0px 1px 5px black;
+	font-variant: small-caps;
+	padding-left: 13px;
+	font-weight: 600;
+}
+
+.character-banner-icons {
+	display: inline-block;
+}
+
+.character-banner-masteries {
+	display: flex;
+    justify-content: flex-end;
+}
+
+.character-banner-small-icon-container {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+	margin: 7px;
+}
+	
+.character-banner-small-icon {
+	border-radius: 50%;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	height: 50px;
+    width: 50px;
+}
+
+.character-banner-small-icon-image {
+	width: 80%;
+	height: 80%;
+}
+
+.rank-letter-small {
+	color: white;
+	font-size: 1.5rem;
+	text-shadow: 0px 2px 3px black;
+}
+
+.character-banner-equips {
+	display: flex;
+    justify-content: flex-end;
+}
+
+.character-banner-bottom {
+	padding: 7px;
+	display: flex;
+    justify-content: space-between;
+	background-color: #000000cc;
+}
+
+.character-banner-interface {}
+	
+.character-banner-currencies {
+	font-weight: 700;
+}
+.character-banner-currencies dl {
+	margin-right: 25px !important;
+	margin-left: 25px !important;
+}
+.character-banner-currencies dt {
+	color: white;
+}
+[title=MP] + dd { color: cyan !important; }
+[title=GP] + dd { color: gold !important; }
+</xf:css>
+
+<xf:macro name="icon"
+		  arg-src="!"
+		  arg-name="!"
+		  arg-color="!"
+		  arg-rank="!">
+	<div class="character-banner-small-icon-container">
+		<div class="character-banner-small-icon" style="background-color: {$color};">
+			<img class="character-banner-small-icon-image"
+				 src="{$src}"
+				 alt="{$name}">
+		</div>
+		<strong class="rank-letter-small">{$rank}</strong>
+	</div>
+</xf:macro>
+<xf:if is="$xf.visitor.user_id != 0">
+	<div class="character-banner-container">
+		<div class="character-banner" style="background-image: url('{{$xf.visitor.Profile.getBannerURL(null)}}');
+											 background-position-y: {$xf.visitor.Profile.banner_position_y}%;">
+			<div class="character-banner-overlay">
+				<div class="character-banner-top">
+					<a href="{{ link('members/charactersheet', $xf.visitor, {}) }}"
+					   data-xf-click="overlay"
+					   class="character-banner-username">{$xf.visitor.username}</a>
+					<div class="character-banner-icons">
+						<div class="character-banner-masteries">
+							<xf:foreach loop="$xf.visitor.getMasteries()" key="$id" value="$masteryEntry">
+								<xf:macro name="icon"
+										  arg-src="{$masteryEntry.Mastery.icon_url}"
+										  arg-name="{$masteryEntry.Mastery.display_name}"
+										  arg-color="{$masteryEntry.Mastery.color}"
+										  arg-rank="{$masteryEntry.Rank.name}" />
+							</xf:foreach>
+						</div>
+						<div class="character-banner-equips">
+							<xf:macro name="icon"
+									  arg-src="{{base_url($xf.visitor.getIconForEquip(0), true)}}"
+									  arg-name="Weapon"
+									  arg-color="#B0B0B0"
+									  arg-rank="{{$xf.visitor.getEquipRank(0).name}}" />
+							<xf:macro name="icon"
+									  arg-src="{{base_url($xf.visitor.getIconForBestArmor(), true)}}"
+									  arg-name="Armor"
+									  arg-color="#B0B0B0"
+									  arg-rank="{{$xf.visitor.getRankForBestArmor().name}}" />
+						</div>
+					</div>
+				</div>
+				<div class="character-banner-bottom">
+					<div class="character-banner-interface">
+
+					</div>
+					<div class="character-banner-currencies">
+						<xf:include template="dbtech_credits_member_stats" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</xf:if>
