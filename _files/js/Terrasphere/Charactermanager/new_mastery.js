@@ -27,7 +27,7 @@
             // Set up the new mastery's display...
             $("#mastery-container-" + data.masterySlotIndex + " .character-sheet-mastery-icon-container").css('background-color', data.newMasteryColor);
             $("#mastery-container-" + data.masterySlotIndex + " .character-sheet-mastery-icon").attr('src', data.newMasteryIconURL);
-            $("#mastery-container-" + data.masterySlotIndex + " .character-sheet-mastery-title").html(data.newMasteryName +'<br><span className="m-title-rank">Rank '+data.rankTitle+'</span>');
+            $("#mastery-container-" + data.masterySlotIndex + " .character-sheet-mastery-title").html(data.newMasteryName +'<br><span class="m-title-rank">Rank '+data.rankTitle+'</span>');
             $("#mastery-container-" + data.masterySlotIndex + " .rank-").removeClass('rank-').addClass("rank-1");
             $("#mastery-container-" + data.masterySlotIndex + " .rank-stars").removeClass('rank-stars-').addClass("rank-stars-1");
 

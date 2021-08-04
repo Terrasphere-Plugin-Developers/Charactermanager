@@ -131,15 +131,15 @@
 						</div>
 						<div class="character-banner-equips">
 							<xf:macro name="icon"
-									  arg-src="{{base_url('styles/default/Terrasphere/Charactermanager/weapon-icon.png', true)}}"
+									  arg-src="{{base_url($xf.visitor.getIconForEquip(0), true)}}"
 									  arg-name="Weapon"
 									  arg-color="#B0B0B0"
-									  arg-rank="{{$xf.visitor.getWeapon().Rank.name}}" />
+									  arg-rank="{{$xf.visitor.getEquipRank(0).name}}" />
 							<xf:macro name="icon"
-									  arg-src="{{base_url('styles/default/Terrasphere/Charactermanager/armor-icon.png', true)}}"
+									  arg-src="{{base_url($xf.visitor.getIconForBestArmor(), true)}}"
 									  arg-name="Armor"
 									  arg-color="#B0B0B0"
-									  arg-rank="{{$xf.visitor.getArmor().Rank.name}}" />
+									  arg-rank="{{$xf.visitor.getRankForBestArmor().name}}" />
 						</div>
 					</div>
 				</div>

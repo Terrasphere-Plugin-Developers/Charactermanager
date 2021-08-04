@@ -7,6 +7,9 @@
     "styles/default/Terrasphere/Charactermanager/padlock.png",
     "styles/default/Terrasphere/Charactermanager/upgrade_arrow.png",
     "styles/default/Terrasphere/Charactermanager/weapon-icon.png",
-    "styles/default/Terrasphere/Charactermanager/armor-icon.png"
+    "styles/default/Terrasphere/Charactermanager/armor-icon.png",
+    "styles/default/Terrasphere/Charactermanager/armor-light.png",
+    "styles/default/Terrasphere/Charactermanager/armor-medium.png",
+    "styles/default/Terrasphere/Charactermanager/armor-heavy.png",
   ]
 }
