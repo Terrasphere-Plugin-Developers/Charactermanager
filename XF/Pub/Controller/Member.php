@@ -14,13 +14,16 @@ use XF\Mvc\Reply\Exception;
 class Member extends XFCP_Member
 {
     //copied and changed from Member latestActivity
+    /**
+     * @throws Exception
+     */
     public function actionCharacterSheet(ParameterBag $params)
 	{
         try {
             /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
             $user = $this->assertViewableUser($params['user_id']);
         } catch (Exception $e) {
-            return $this->error("Non-viewable user error when accessing character sheet, please contact devs.");
+            throw $e;
         }
 
         $masterySlots = CharacterMastery::getCharacterMasterySlots($this, $params->user_id);
@@ -52,6 +55,43 @@ class Member extends XFCP_Member
 
 		return $this->view('XF:Member\CharacterSheet', 'terrasphere_cm_character_sheet', $viewParams);
 	}
+
+    /**
+     * @throws Exception
+     */
+    public function actionLinkCs(ParameterBag $params)
+    {
+        try {
+            /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
+            $user = $this->assertViewableUser($params['user_id']);
+        } catch (Exception $e) {
+            throw $e;
+        }
+
+        return $this->view('XF:Member\LinkCS', 'terrasphere_cm_cs_link_page', ['user' => $user]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function actionLinkCSConfirm(ParameterBag $params)
+    {
+        if($this->isPost())
+        {
+            $postID = $this->filter('post_id', 'int');
+
+            try {
+                /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
+                $user = $this->assertViewableUser($params['user_id']);
+            } catch (Exception $e) {
+                throw $e;
+            }
+
+            $user->fastUpdate('ts_cm_character_sheet_post_id', $postID);
+        }
+
+        return $this->redirect($this->buildLink('members', null, ['user_id' => $params['user_id']]));
+    }
 
     public function actionSelectNew(ParameterBag $params)
     {
