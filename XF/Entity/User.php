@@ -119,4 +119,38 @@ class User extends XFCP_User
     {
         return $this->getBestArmor()['rank'];
     }
+
+    public function getBuildEditorParamsString() : string
+    {
+        $masteryNames = "";
+        $masteryRanks = "";
+
+        $masteries = $this->getMasteries();
+
+        foreach ($masteries as $mastery)
+        {
+            // Make sure each mastery display name is formatted as expected, using single dashes as word separators.
+            $masteryString = strtolower($mastery->Mastery['display_name']);
+            $masteryString = str_replace(' ', '-', $masteryString);
+            $masteryString = str_replace('_', '-', $masteryString);
+
+            $masteryRanks .= $mastery->Rank['tier'];
+
+            // Add comma separators.
+            $masteryNames .= $masteryString . ',';
+            $masteryRanks .= ',';
+        }
+
+        // Remove last comma for both names and ranks.
+        $masteryNames = substr($masteryNames, 0, -1);
+        $masteryRanks = substr($masteryRanks, 0, -1);
+
+        return $masteryNames . '.' .
+            $masteryRanks .'..' .
+            $this->getEquipRank(0)['tier'] . '.' .
+            $this->getEquipRank(1)['tier'] . '.' .
+            $this->getEquipRank(2)['tier'] . '.' .
+            $this->getEquipRank(3)['tier'] . '.' .
+            str_replace(' ', '_', $this->username);
+    }
 }
