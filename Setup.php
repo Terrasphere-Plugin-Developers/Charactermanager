@@ -26,10 +26,6 @@ class Setup extends AbstractSetup
         $this->schemaManager()->alterTable('xf_user', function(Alter $table)
         {
             $table->addColumn('ts_cm_character_sheet_post_id', 'int')->unsigned(false)->setDefault(-1);
-            $table->addColumn('ts_cm_weapon_rank_id', 'int')->setDefault(1);
-            $table->addColumn('ts_cm_armor_light_rank_id', 'int')->setDefault(1);
-            $table->addColumn('ts_cm_armor_med_rank_id', 'int')->setDefault(1);
-            $table->addColumn('ts_cm_armor_heavy_rank_id', 'int')->setDefault(1);
         });
         $this->db();
     }
@@ -41,11 +37,20 @@ class Setup extends AbstractSetup
 
         $this->schemaManager()->alterTable('xf_user', function(Alter $table)
         {
-            $table->forgetColumn('ts_cm_character_sheet_post_id');
-            $table->forgetColumn('ts_cm_weapon_rank_id');
-            $table->forgetColumn('ts_cm_armor_light_rank_id');
-            $table->forgetColumn('ts_cm_armor_med_rank_id');
-            $table->forgetColumn('ts_cm_armor_heavy_rank_id');
+            $table->dropColumns('ts_cm_character_sheet_post_id');
+        });
+    }
+
+    ### UPDATE STUFF  VERSION 1.0.1###
+    public function upgrade1000100Step1(){
+        $this->schemaManager()->dropTable("xf_terrasphere_cm_equipment");
+        $this->characterEquipmentTable($this->schemaManager());
+        $this->schemaManager()->alterTable('xf_user', function(Alter $table)
+        {
+            $table->dropColumns('ts_cm_weapon_rank_id');
+            $table->dropColumns('ts_cm_armor_light_rank_id');
+            $table->dropColumns('ts_cm_armor_med_rank_id');
+            $table->dropColumns('ts_cm_armor_heavy_rank_id');
         });
     }
 }

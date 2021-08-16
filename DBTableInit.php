@@ -14,7 +14,7 @@ trait DBTableInit
         $this->characterSheetCellTable($sm);
         $this->characterSheetContentTable($sm);
         $this->equipmentTable($sm);
-
+        $this->characterEquipmentTable($sm);
         // etc...
     }
 
@@ -25,7 +25,7 @@ trait DBTableInit
         $sm->dropTable("xf_terrasphere_cm_cs");
         $sm->dropTable("xf_terrasphere_cm_cs_cell");
         $sm->dropTable("xf_terrasphere_cm_cs_content");
-        $sm->dropTable("xf_terrasphere_cm_equipment");
+        $sm->dropTable("xf_terrasphere_cm_character_equipment");
 
         // etc...
     }
@@ -93,6 +93,17 @@ trait DBTableInit
             $table->addColumn("type", "int");
             $table->addColumn("name", "varchar", 200)->nullable(true);
             $table->addColumn("post_link", "varchar", 999)->nullable(true);
+        }
+        );
+    }
+
+    private function characterEquipmentTable(SchemaManager $sm){
+        $sm->createTable(
+            "xf_terrasphere_cm_character_equipment", function (create $table) {
+            $table->addColumn("user_id", "int");
+            $table->addColumn("equipment_id", "int");
+            $table->addColumn("rank_id", "int");
+            $table->addPrimaryKey(['user_id', 'equipment_id']);
         }
         );
     }
