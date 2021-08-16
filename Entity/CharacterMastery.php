@@ -14,7 +14,7 @@ class CharacterMastery extends Entity
         $structure->primaryKey = 'id';
         $structure->columns = [
             'id' => ['type' => self::UINT, 'autoIncrement' => true],
-            'mastery_id' => ['type' => self::UINT, 'required' => true, 'api' => true],
+            'mastery_id' => ['type' => self::UINT, 'required' => true],
             'user_id' => ['type' => self::UINT, 'required' => true],
             'rank_id' => ['type' => self::UINT, 'required' => false],
             'target_index' => ['type' => self::UINT],
@@ -27,7 +27,7 @@ class CharacterMastery extends Entity
                 'entity' => 'Terrasphere\Core:Mastery',
                 'type' => SELF::TO_ONE,
                 'conditions' => 'mastery_id',
-                'primary' => true
+                'primary' => true,
             ],
             'User' => [
                 'entity' => 'XF:User',
