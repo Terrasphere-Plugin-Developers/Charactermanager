@@ -33,8 +33,24 @@ class CharacterEquipment extends Entity
                 'conditions' => 'rank_id',
                 'primary' => true
             ],
+            'Equipment' => [
+                'entity' => 'Terrasphere\Core:Equipment',
+                'type' => SELF::TO_ONE,
+                'conditions' => 'equipment_id',
+                'primary' => true
+            ]
         ];
 
         return $structure;
+    }
+
+    public static function getEquipment($mustHaveFinderAndEM, int $userId, int $equipId) : CharacterEquipment
+    {
+        return $mustHaveFinderAndEM->finder('Terrasphere\Charactermanager:CharacterEquipment')
+            ->where([
+                ['user_id', $userId],
+                ['equipment_id',$equipId],
+            ])
+            ->fetchOne();
     }
 }

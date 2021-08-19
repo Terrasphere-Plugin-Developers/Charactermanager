@@ -4,6 +4,7 @@
 
 namespace Terrasphere\Charactermanager\XF\Pub\Controller;
 
+use Terrasphere\Charactermanager\Entity\CharacterEquipment;
 use Terrasphere\Charactermanager\Entity\CharacterMastery;
 use Terrasphere\Core\Entity\Rank;
 use Terrasphere\Core\Util\PostProxyHelper;
@@ -27,20 +28,19 @@ class Member extends XFCP_Member
         }
 
         $masterySlots = CharacterMastery::getCharacterMasterySlots($this, $params->user_id);
-        $weaponRank = $user->getEquipRank(0);
-        $lightArmorRank = $user->getEquipRank(1);
-        $medArmorRank = $user->getEquipRank(2);
-        $heavyArmorRank = $user->getEquipRank(3);
+        $weapon = $user->getOrInitiateWeapon($this);
+
+        $armor = $user->getOrInitiateArmor($this);
 
         $maxRank = Rank::maxRank($this);
+
+
 
 		$viewParams = [
 		    'user' => $user,
 		    'masterySlots' => $masterySlots,
-            'weaponRank' => $weaponRank,
-            'lightArmorRank' => $lightArmorRank,
-            'medArmorRank' => $medArmorRank,
-            'heavyArmorRank' => $heavyArmorRank,
+            'weapon' => $weapon,
+            'armor' => $armor,
 		    'maxRank' => $maxRank['rank_id'],
             'hasCS' => $user['ts_cm_character_sheet_post_id'] != -1,
             'canViewCS' => $this->canVisitorViewCharacterSheet($params->user_id),
@@ -390,7 +390,8 @@ class Member extends XFCP_Member
     public function actionConfirmUpgradeEquip(ParameterBag $params)
     {
         $user_id = $this->filter('user_id', 'uint');
-        $type = $this->filter('type', 'uint');
+        $equipmentId = $this->filter('equipment_id', 'uint');
+
 
         try {
             /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
@@ -399,50 +400,44 @@ class Member extends XFCP_Member
             throw $e;
         }
 
-        $rank = $user->getEquipRank($type);
-
-        // Rank exists check.
-        if($rank == null)
-            return $this->error('NullRankError.');
+        $charEquip = CharacterEquipment::getEquipment($this,$user_id,$equipmentId);
+        $equipment = $charEquip->Equipment;
 
         // Get the next-highest rank.
-        $nextRank = $this->finder('Terrasphere\Core:Rank')
-            ->where('tier', $rank['tier']+1)
-            ->fetchOne();
+        $nextRank = $charEquip->Rank->getNextRank();
 
         // Next-highest rank check.
         if($nextRank == null)
             return $this->error('Already at max rank.');
 
         // Get rank schema (and the currency associated with it).
-        $rankSchema = $this->finder('Terrasphere\Core:RankSchema')
-            ->with('Currency')
-            ->whereId($this->options()->terrasphereCMEquipRankSchema)
-            ->fetchOne();
+        $rankSchema = $equipment->RankSchema;
 
         // Rank schema exists check.
         if($rankSchema == null)
-            return $this->error('No rank schema set. Make sure Terrasphere options are set in Admin controls.');
+            return $this->error('No rank schema set for equipment.');
 
         // Temporary variable to get the cost of the next rank.
         $nxt = $this->finder('Terrasphere\Core:RankSchemaMap')
-            ->where('rank_schema_id', $this->options()->terrasphereCMEquipRankSchema)
-            ->where('rank_id', $nextRank['rank_id'])
+            ->where([
+                ['rank_schema_id',$rankSchema->rank_schema_id],
+                ['rank_id',$nextRank->rank_id]
+            ])
             ->fetchOne();
 
         if($nxt == null)
             return $this->error('Next tier of upgrade has no cost associated in ranking schema.');
 
-        $nextCost = $nxt['cost'];
+        $nextCost = $nxt->cost;
         $userVal = $rankSchema->Currency->getValueFromUser($user, false);
 
         $viewparams = [
-            'name' => $user->getDisplayNameForEquip($type),
-            'iconSrc' => $user->getIconForEquip($type),
-            'thisRank' => $rank,
+            'name' => $equipment->display_name,
+            'iconSrc' => $equipment->icon_url,
+            'thisRank' => $charEquip->Rank,
             'nextRank' => $nextRank,
             'rankSchema' => $rankSchema,
-            'type' => $type,
+            'equipId' => $equipmentId,
             'user' => $user,
             'userVal' => $rankSchema->Currency->getFormattedValue($userVal),
             'nextCost' => $rankSchema->Currency->getFormattedValue($nextCost),
@@ -454,7 +449,8 @@ class Member extends XFCP_Member
     public function actionUpgradeEquip(ParameterBag $params)
     {
         $user_id = $this->filter('user_id', 'uint');
-        $type = $this->filter('type', 'uint');
+        $equipId = $this->filter('equip_id', 'uint');
+
 
         try {
             /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
@@ -463,55 +459,49 @@ class Member extends XFCP_Member
             throw $e;
         }
 
-        $rank = $user->getEquipRank($type);
-
-        // Rank exists check.
-        if($rank == null)
-            return $this->error('NullRankError.');
+        $charEquip = CharacterEquipment::getEquipment($this,$user_id,$equipId);
+        $equipment = $charEquip->Equipment;
 
         // Get the next-highest rank.
-        $nextRank = $this->finder('Terrasphere\Core:Rank')
-            ->where('tier', $rank['tier']+1)
-            ->fetchOne();
+        $nextRank = $charEquip->Rank->getNextRank();
 
         // Next-highest rank check.
         if($nextRank == null)
             return $this->error('Already at max rank.');
 
         // Get rank schema (and the currency associated with it).
-        $rankSchema = $this->finder('Terrasphere\Core:RankSchema')
-            ->with('Currency')
-            ->whereId($this->options()->terrasphereCMEquipRankSchema)
-            ->fetchOne();
+        $rankSchema = $equipment->RankSchema;
 
         // Rank schema exists check.
         if($rankSchema == null)
-            return $this->error('No rank schema set. Make sure Terrasphere options are set in Admin controls.');
+            return $this->error('No rank schema set for equipment.');
 
         // Temporary variable to get the cost of the next rank.
         $nxt = $this->finder('Terrasphere\Core:RankSchemaMap')
-            ->where('rank_schema_id', $this->options()->terrasphereCMEquipRankSchema)
-            ->where('rank_id', $nextRank['rank_id'])
+            ->where([
+                ['rank_schema_id',$rankSchema->rank_schema_id],
+                ['rank_id',$nextRank->rank_id]
+            ])
             ->fetchOne();
 
         if($nxt == null)
             return $this->error('Next tier of upgrade has no cost associated in ranking schema.');
 
-        $nextCost = $nxt['cost'];
+        $nextCost = $nxt->cost;
         $userVal = $rankSchema->Currency->getValueFromUser($user, false);
 
         if($nextCost > $userVal)
             return $this->error('Error: Insufficient Funds.');
 
-        if($this->adjustCurrency($user, $nextCost, "Equipment Upgrade (".$user->getDisplayNameForEquip($type)." Rank ".$nextRank['name'].")", $rankSchema->Currency->currency_id))
+        if($this->adjustCurrency($user, $nextCost, "Equipment Upgrade (".$equipment->display_name." Rank ".$nextRank->name.")", $rankSchema->Currency->currency_id))
         {
             // Update user's equipment data to next rank.
-            $user->fastUpdate($user->getColumnKeyForEquip($type), $nextRank['rank_id']);
+            $charEquip->fastUpdate("rank_id", $nextRank->rank_id);
 
             // Close overlay via redirect and setup AJAX parameters.
             $redirect = $this->redirect($this->buildLink('members', null, ['user_id' => $params['user_id']]));
 
-            $redirect->setJsonParam('equipType', (string) $type);
+            $redirect->setJsonParam('equipId',$equipment->equipment_id);
             $redirect->setJsonParam('newRankTier', $nextRank['tier']);
             $redirect->setJsonParam('newRankTitle', $nextRank['name']);
             $redirect->setJsonParam('isMaxRank', $nextRank['tier'] == Rank::maxTier($this));

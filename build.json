@@ -2,6 +2,7 @@
   "additional_files": [
     "js/Terrasphere/Charactermanager/new_mastery.js",
     "js/Terrasphere/Charactermanager/upgrade_mastery.js",
+    "js/Terrasphere/Charactermanager/upgrade_equip.js",
     "styles/default/Terrasphere/Charactermanager/plus_sign.png",
     "styles/default/Terrasphere/Charactermanager/missing_img.png",
     "styles/default/Terrasphere/Charactermanager/padlock.png",

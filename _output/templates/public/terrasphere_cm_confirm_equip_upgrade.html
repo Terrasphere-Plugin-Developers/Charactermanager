@@ -42,7 +42,7 @@
 			</div>
 		</div>
 		<div style="width:100%; padding:1.5rem; display:flex;">
-			<xf:form action="{{ link('members/cs/equipment/upgradeEquip', null, {'user_id': $user.user_id, 'type': $type}) }}"
+			<xf:form action="{{ link('members/cs/equipment/upgradeEquip', null, {'user_id': $user.user_id, 'equip_id': $equipId}) }}"
 			  			method="post"
 			  			ajax="true"
 						data-xf-init="upgrade-equip"
