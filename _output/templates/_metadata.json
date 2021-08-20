@@ -4,10 +4,15 @@
         "version_string": "1.0.0 Alpha",
         "hash": "0ad71cd09cd29870a6dec66f98926b78"
     },
+    "public/terrasphere_cm_armor_selection.html": {
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+    },
     "public/terrasphere_cm_character_sheet.html": {
         "version_id": 1000100,
         "version_string": "1.0.1",
-        "hash": "4a218f5ce8759f85380020ce602eaad2"
+        "hash": "5af6b3b3f697e29db636dfc2f4310385"
     },
     "public/terrasphere_cm_confirm_equip_upgrade.html": {
         "version_id": 1000100,

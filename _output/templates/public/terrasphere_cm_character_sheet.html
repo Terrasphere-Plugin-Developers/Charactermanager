@@ -166,6 +166,25 @@
     padding-left: 0px;
     margin: auto;
     }
+
+    #armor-popup {
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+
+    position: absolute;
+    z-index: 1;
+    }
+
+    .inline-armor {
+    display:inline-block;
+    }
+
+    #close-armor-dialog:hover{
+    cursor: pointer;
+    }
 </xf:css>
 
 <xf:macro name="mastery"
@@ -243,12 +262,10 @@
           arg-charEquipment="!"
           arg-can_make_changes="!"
           arg-max_rank="!">
-    <!--	is equip container id important?-->
     <div class="character-sheet-mastery-container" id="equip-container-{$equipId}">
         <div class="character-sheet-mastery grid-overlap">
             <div class="rank-stars grid-overlap rank-stars-{$charEquipment.Rank.tier}"></div>
             <xf:if is="$can_make_changes AND {$charEquipment.Rank.rank_id} != $max_rank">
-                <!--				rework this shit confirm dialogue later-->
                 <a href="{{ link('members/cs/equipment/confirmUpgradeEquip', null, {'user_id': $user.user_id, 'equipment_id': $charEquipment.equipment_id}) }}"
                    class="character-sheet-mastery-icon-container grid-overlap rank-{$charEquipment.Rank.tier}"
                    data-xf-click="overlay"
@@ -341,29 +358,71 @@
                               arg-charEquipment="{$weapon}"
                               arg-can_make_changes="{$canMakeChanges}"
                               arg-max_rank="{$maxRank}"/>
+                    <div class="character-sheet-mastery-container  armor" id="equip-container-{$armor.equipment_id}">
+                        <div class="character-sheet-mastery grid-overlap">
+                            <div class="rank-stars grid-overlap rank-stars-{$armor.Rank.tier}"></div>
+                            <xf:if is="$canMakeChanges AND {$armor.Rank.rank_id} != $maxRank">
+                                <div class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier}"
+                                     style="background-color: #B0B0B0;">
+                                    <img class="character-sheet-mastery-icon grid-overlap"
+                                         src="{{$armor.Equipment.icon_url}}"
+                                         alt="{{$armor.Equipment.display_name}} Slot"/>
+                                    <div id="armor-popup">
+                                        <xf:form class="inline-armor armor-upgrade-form" action="{{ link('members/cs/equipment/confirmUpgradeEquip', null, {'user_id': $user.user_id, 'equipment_id': $armor.equipment_id}) }}"
+                                              data-cache="false"
+                                              ajax="true"
+                                        >
+                                            <input class="armor-button" type="submit"  value="Upgrade">
+                                        </xf:form>
+                                        <xf:form class="inline-armor" action="{{ link('members/cs/equipment/confirmUpgradeEquip', null, {'user_id': $user.user_id, 'equipment_id': $armor.equipment_id}) }}"
+                                                 data-cache="false"
+                                                 ajax="true"
+                                        >
+                                            <input class="armor-button" type="submit"  value="Change Type">
+                                        </xf:form>
+                                    </div>
+                                </div>
+                                <xf:js src="Terrasphere/Charactermanager/armor_dialogue.js" addon="Terrasphere/Charactermanager" />
+                                <xf:else/>
+                                <div class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier}"
+                                     style="background-color: #B0B0B0;">
+                                    <img class="character-sheet-mastery-icon grid-overlap"
+                                         src="{{$armor.Equipment.icon_url}}"
+                                         alt="{{$armor.Equipment.display_name}} Slot"/>
 
-                    <xf:macro name="equip"
-                              arg-equipId="{$armor.equipment_id}"
-                              arg-user="{$user}"
-                              arg-charEquipment="{$armor}"
-                              arg-can_make_changes="{$canMakeChanges}"
-                              arg-max_rank="{$maxRank}"/>
+                                </div>
+                            </xf:if>
+                            <div class="character-sheet-mastery-title">
+                                {{$armor.Equipment.display_name}}<br>
+                                <span class="m-title-rank">Rank {$armor.Rank.name}</span>
+                            </div>
+                        </div>
+                        <div class="mastery-change-flash grid-overlap"></div>
+                    </div>
                     <xf:comment>
-                        <!--			<xf:macro name="equip"-->
-                        <!--						arg-type="2"-->
-                        <!--						arg-user="{$user}"-->
-                        <!--						arg-rank="{{$user.getEquipRank(2)}}"-->
-                        <!--						arg-can_make_changes="{$canMakeChanges}"-->
-                        <!--						arg-max_rank="{$maxRank}" />-->
-                        <!--			<xf:macro name="equip"-->
-                        <!--						arg-type="3"-->
-                        <!--						arg-user="{$user}"-->
-                        <!--						arg-rank="{{$user.getEquipRank(3)}}"-->
-                        <!--						arg-can_make_changes="{$canMakeChanges}"-->
-                        <!--						arg-max_rank="{$maxRank}" />-->
+<!--                    <xf:macro name="equip"-->
+<!--                              arg-equipId="{$armor.equipment_id}"-->
+<!--                              arg-user="{$user}"-->
+<!--                              arg-charEquipment="{$armor}"-->
+<!--                              arg-can_make_changes="{$canMakeChanges}"-->
+<!--                              arg-max_rank="{$maxRank}"/>-->
+<!--                        			<xf:macro name="equip"-->
+<!--                        						arg-type="2"-->
+<!--                        						arg-user="{$user}"-->
+<!--                        						arg-rank="{{$user.getEquipRank(2)}}"-->
+<!--                        						arg-can_make_changes="{$canMakeChanges}"-->
+<!--                        						arg-max_rank="{$maxRank}" />-->
+<!--                        			<xf:macro name="equip"-->
+<!--                        						arg-type="3"-->
+<!--                        						arg-user="{$user}"-->
+<!--                        						arg-rank="{{$user.getEquipRank(3)}}"-->
+<!--                        						arg-can_make_changes="{$canMakeChanges}"-->
+<!--                        						arg-max_rank="{$maxRank}" />-->
                     </xf:comment>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+

@@ -504,6 +504,7 @@ class Member extends XFCP_Member
             $redirect->setJsonParam('equipId',$equipment->equipment_id);
             $redirect->setJsonParam('newRankTier', $nextRank['tier']);
             $redirect->setJsonParam('newRankTitle', $nextRank['name']);
+            $redirect->setJsonParam('equipType', $equipment->equip_group);
             $redirect->setJsonParam('isMaxRank', $nextRank['tier'] == Rank::maxTier($this));
 
             return $redirect;

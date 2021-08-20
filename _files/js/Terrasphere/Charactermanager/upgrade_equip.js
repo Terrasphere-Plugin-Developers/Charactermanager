@@ -49,11 +49,17 @@
             // If rank is now maxed out, make it so we can't click on it anymore.
             if(data.isMaxRank)
             {
-                $("#equip-container-" + data.equipId + " .character-sheet-mastery-icon-container")
-                    .removeAttr('href')
-                    .removeAttr('data-xf-click')
-                    .removeAttr('data-cache')
-                    .changeElementType("div");
+                //removal for armor needs to be a tad different than weapon
+                if(data.equipType == "Armor"){
+                    console.log($('.armor-upgrade-form'));
+                    $('.armor-upgrade-form').remove();
+                }else {
+                    $("#equip-container-" + data.equipId + " .character-sheet-mastery-icon-container")
+                        .removeAttr('href')
+                        .removeAttr('data-xf-click')
+                        .removeAttr('data-cache')
+                        .changeElementType("div");
+                }
             }
         }
     });
