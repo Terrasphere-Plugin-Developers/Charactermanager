@@ -374,7 +374,7 @@
                                         >
                                             <input class="armor-button" type="submit"  value="Upgrade">
                                         </xf:form>
-                                        <xf:form class="inline-armor" action="{{ link('members/cs/equipment/confirmUpgradeEquip', null, {'user_id': $user.user_id, 'equipment_id': $armor.equipment_id}) }}"
+                                        <xf:form class="inline-armor" action="{{ link('members/cs/equipment/confirmChangeArmor', null, {'user_id': $user.user_id, 'equipment_id': $armor.equipment_id}) }}"
                                                  data-cache="false"
                                                  ajax="true"
                                         >
@@ -384,13 +384,16 @@
                                 </div>
                                 <xf:js src="Terrasphere/Charactermanager/armor_dialogue.js" addon="Terrasphere/Charactermanager" />
                                 <xf:else/>
-                                <div class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier}"
+                                <a href="{{ link('members/cs/equipment/confirmChangeArmor', null, {'user_id': $user.user_id, 'equipment_id': $armor.equipment_id}) }}"
+                                   data-xf-click="overlay"
+                                   data-chache="false"
+                                   class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier}"
                                      style="background-color: #B0B0B0;">
                                     <img class="character-sheet-mastery-icon grid-overlap"
                                          src="{{$armor.Equipment.icon_url}}"
                                          alt="{{$armor.Equipment.display_name}} Slot"/>
 
-                                </div>
+                                </a>
                             </xf:if>
                             <div class="character-sheet-mastery-title">
                                 {{$armor.Equipment.display_name}}<br>

@@ -31,7 +31,7 @@ class CharacterMastery extends Entity
             ],
             'User' => [
                 'entity' => 'XF:User',
-                'type' => SELF::TO_MANY,
+                'type' => SELF::TO_ONE,
                 'conditions' => 'user_id',
                 'primary' => true
             ],

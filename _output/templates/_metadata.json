@@ -4,15 +4,15 @@
         "version_string": "1.0.0 Alpha",
         "hash": "0ad71cd09cd29870a6dec66f98926b78"
     },
-    "public/terrasphere_cm_armor_selection.html": {
-        "version_id": 1000100,
-        "version_string": "1.0.1",
-        "hash": "d41d8cd98f00b204e9800998ecf8427e"
-    },
     "public/terrasphere_cm_character_sheet.html": {
         "version_id": 1000100,
         "version_string": "1.0.1",
-        "hash": "5af6b3b3f697e29db636dfc2f4310385"
+        "hash": "d21bb99f53c1e96f354c7645f6b98e80"
+    },
+    "public/terrasphere_cm_confirm_armor_selection.html": {
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "bd7e90dc8413bd49d9cd5ea6cbdca5d7"
     },
     "public/terrasphere_cm_confirm_equip_upgrade.html": {
         "version_id": 1000100,
@@ -32,6 +32,6 @@
     "public/terrasphere_cm_mastery_selection.html": {
         "version_id": 1000100,
         "version_string": "1.0.1",
-        "hash": "2ce147fb9b2cb274a9d9cf39cc224a74"
+        "hash": "5d2a1682cbfc8c0908a248cc751cbcc4"
     }
 }

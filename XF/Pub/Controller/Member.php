@@ -446,6 +446,60 @@ class Member extends XFCP_Member
         return $this->view('Terrasphere\Charactermanager:EquipUpgradeConfirm', 'terrasphere_cm_confirm_equip_upgrade', $viewparams);
     }
 
+    public function actionConfirmChangeArmor(ParameterBag $params){
+        $user_id = $this->filter('user_id', 'uint');
+        $equipId = $this->filter('equipment_id', 'uint');
+
+        try {
+            /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
+            $user = $this->assertViewableUser($user_id);
+        } catch (Exception $e) {
+            throw $e;
+        }
+
+        $charEquip = CharacterEquipment::getEquipment($this,$user_id,$equipId);
+        $equipment = $charEquip->Equipment;
+
+        $otherEquip = array_values($this->finder('Terrasphere\Core:Equipment')
+            ->where([
+                ['equip_group', $equipment->equip_group],
+                ['equipment_id', '!=', $equipment->equipment_id],
+            ])
+            ->fetch()->toArray());
+
+        $rankSchema = $equipment->RankSchema;
+
+        //Calculate armor refiting cost. Currently adding up the cost of all armor upgrades up
+        //to current rank and then 10% of it!
+        $rankSchemaCost=$this
+            ->finder('Terrasphere\Core:RankSchemaMap')
+            ->with('Rank')
+            ->where([
+                ['rank_schema_id', $rankSchema->rank_schema_id],
+                ['Rank.tier', '<=', $charEquip->Rank->tier],
+            ])
+            ->fetch()->toArray();
+        $muns = 0;
+        foreach($rankSchemaCost as $value){
+            $muns += $value->cost;
+        }
+        $muns = $muns * 0.1;
+
+        $userVal = $rankSchema->Currency->getValueFromUser($user, false);
+        $viewparams = [
+            'armor1' => $otherEquip[0],
+            'armor2' => $otherEquip[1],
+            'charEquip' => $charEquip,
+            'thisRank' => $charEquip->Rank,
+            'rankSchema' => $rankSchema,
+            'user' => $user,
+            'userVal' => $rankSchema->Currency->getFormattedValue($userVal),
+            'nextCost' => $rankSchema->Currency->getFormattedValue($muns),
+            'afterVal' => $rankSchema->Currency->getFormattedValue($userVal-$muns),
+        ];
+        return $this->view('Terrasphere\Charactermanager:EquipArmorChangeConfirm', 'terrasphere_cm_confirm_armor_selection', $viewparams);
+
+    }
     public function actionUpgradeEquip(ParameterBag $params)
     {
         $user_id = $this->filter('user_id', 'uint');

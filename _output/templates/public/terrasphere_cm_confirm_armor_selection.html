@@ -1,0 +1,60 @@
+<div class="block">
+    <div class="block-container">
+        <h1 style="text-align: center;">Armor Change</h1>
+        <hr>
+        <h2 style="text-align: center;">{$armor1->display_name} or {$armor2->display_name}</h2>
+        <div style="max-width: 200px; margin:auto;">
+            <ul>
+                <li><b>Cost:</b> {$nextCost} {$rankSchema.Currency.title}</li>
+                <li><b>Current:</b> {$userVal} {$rankSchema.Currency.title}</li>
+                <li><b>After:</b> {$afterVal} {$rankSchema.Currency.title}</li>
+            </ul>
+        </div>
+
+        <div class="mastery-upgrade-icon-container">
+            <div class="character-sheet-mastery-container">
+                <div class="character-sheet-mastery grid-overlap">
+                    <div class="rank-stars grid-overlap rank-stars-{$thisRank.tier}"></div>
+                    <div class="character-sheet-mastery-icon-container grid-overlap rank-{$thisRank.tier}"
+                         style="background-color: #B0B0B0">
+                        <img class="character-sheet-mastery-icon grid-overlap"
+                             src="{$armor1->icon_url}"
+                             alt="Equipment slot" />
+                    </div>
+                    <div class="character-sheet-mastery-title">
+                        {{$armor1->display_name}}<br>
+                        <span class="m-title-rank">Rank {$charEquip.Rank.name}</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="character-sheet-mastery-container">
+                <div class="character-sheet-mastery grid-overlap">
+                    <div class="rank-stars grid-overlap rank-stars-{{$thisRank.tier}}"></div>
+                    <div class="character-sheet-mastery-icon-container grid-overlap rank-{{$thisRank.tier}}"
+                         style="background-color: #B0B0B0">
+                        <img class="character-sheet-mastery-icon grid-overlap"
+                             src="{$armor2->icon_url}"
+                             alt="Equipment slot" />
+                    </div>
+                    <div class="character-sheet-mastery-title">
+                        {{$armor2->display_name}}<br>
+                        <span class="m-title-rank">Rank {$charEquip.Rank.name}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="width:100%; padding:1.5rem; display:flex;">
+            <xf:form action="{{ link('members/cs/equipment/upgradeEquip', null, {'user_id': $user.user_id, 'equip_id': $equipId}) }}"
+                     method="post"
+                     ajax="true"
+                     data-xf-init="upgrade-equip"
+                     data-reset-complete="true"
+                     data-redirect="off"
+                     style="margin:auto;">
+                <xf:submitrow sticky="true" icon="Confirm" />
+            </xf:form>
+        </div>
+    </div>
+</div>
