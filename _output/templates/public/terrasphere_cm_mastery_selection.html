@@ -91,21 +91,26 @@
 			</div>
 			<h3 class="mastery-option-title">{$mastery.display_name}</h3>
 			<div class="mastery-option-trait-container">
-				<xf:if is="$mastery.MasteryRole.icon_url != ''">
-					<img src="{$mastery.MasteryRole.icon_url}" class="mastery-trait-icon role-icon">
-				<xf:else />
-					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-trait-icon role-icon">
-				</xf:if>
-				<xf:if is="$mastery.MasteryExpertise.icon_url != ''">
-					<img src="{$mastery.MasteryExpertise.icon_url}" class="mastery-trait-icon expertise-icon">
-				<xf:else />
-					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-trait-icon expertise-icon">
-				</xf:if>
-				<xf:if is="$mastery.MasterySave.icon_url != ''">
-					<img src="{$mastery.MasterySave.icon_url}" class="mastery-trait-icon save-icon">
-				<xf:else />
-					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-trait-icon save-icon">
-				</xf:if>
+				<div class="mastery-trait-icon role-icon {$mastery.MasteryRole.css_classes}" style="color:{$mastery.MasteryRole.hex_color}"></div>
+				<div class="mastery-trait-icon expertise-icon {$mastery.MasteryExpertise.css_classes}"  style="color:{$mastery.MasteryExpertise.hex_color}"></div>
+				<div class="mastery-trait-icon save-icon {$mastery.MasterySave.css_classes}"  style="color:{$mastery.MasterySave.hex_color}"></div>
+				<xf:comment>
+<!--				<xf:if is="$mastery.MasteryRole.icon_url != ''">-->
+<!--					<img src="{$mastery.MasteryRole.icon_url}" class="mastery-trait-icon role-icon">-->
+<!--				<xf:else />-->
+<!--					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-trait-icon role-icon">-->
+<!--				</xf:if>-->
+<!--				<xf:if is="$mastery.MasteryExpertise.icon_url != ''">-->
+<!--					<img src="{$mastery.MasteryExpertise.icon_url}" class="mastery-trait-icon expertise-icon">-->
+<!--				<xf:else />-->
+<!--					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-trait-icon expertise-icon">-->
+<!--				</xf:if>-->
+<!--				<xf:if is="$mastery.MasterySave.icon_url != ''">-->
+<!--					<img src="{$mastery.MasterySave.icon_url}" class="mastery-trait-icon save-icon">-->
+<!--				<xf:else />-->
+<!--					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-trait-icon save-icon">-->
+<!--				</xf:if>-->
+				</xf:comment>
 			</div>
 		</div>
 	</label>
