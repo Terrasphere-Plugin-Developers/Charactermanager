@@ -1,116 +1,25 @@
-<xf:css>
-.mastery-category {
-	border: 1px solid cyan;
-}
-.mastery-category-list {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-around;
-}
-	
-.mastery-category-title {
-	border-bottom: 1px solid cyan;
-	margin: 1rem;
-	padding: 0.5rem;
-	text-align: center;
-}
-	
-.mastery-option-container {
-	margin: 2rem 0.5rem;
-    width: 10rem;
-    height: 10rem;
-	display: grid;
-	grid-row-template: 100%;
-	grid-coumn-template: 100%;
-}
-
-/* Hides default radio buttons */
-.mastery-option-container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-	
-.mastery-option-box {
-	height: 100%;
-	width: 100%;
-	padding: 0.5rem;
-	border-radius: 3%;
-	
-	border: 1px solid #555;
-	background-color: #eee;
-	box-shadow: 0px 1px 2px 0px black;
-	transition: transform 0.5s, border 0.5s, background-color 0.5s, box-shadow 0.5s;
-}
-	
-.mastery-option-container input:checked ~ .mastery-option-box {
-	transform: Scale(1.15);
-	border: 1px solid cyan;
-	background-color: #fff;
-	box-shadow: 0px 2px 7px 0px black;
-}
-	
-.mastery-option-icon-container {
-    width: 60%;
-    margin: auto;
-}
-	
-.mastery-option-title {
-	text-align: center;
-	margin-top: 0px;
-	margin-bottom: 0.25em;
-}
-
-.mastery-option-trait-container {
-	display: flex;
-	justify-content: space-around;
-}
-
-.mastery-trait-icon {
-	width: 1.5rem;
-}
-</xf:css>
-
 <xf:macro name="mastery"
 		  arg-mastery="!">
-	<label class="mastery-option-container">
+	<label class="character-sheet-mastery-container">
 		<input class="mastery-option grid-overlap"
 		   type="radio"
 		   id="mastery-{$mastery.mastery_id}"
 		   name="mastery"
 		   value="{$mastery.mastery_id}">
-		<div class="mastery-option-box grid-overlap">
-			<div class="mastery-option-icon-container">
+		<div class="character-sheet-mastery grid-overlap">
+			<div class="character-sheet-mastery-icon-container grid-overlap" style="background-color: {{$mastery.color}};">
 				<xf:if is="$mastery.icon_url != ''">
-					<img src="{$mastery.icon_url}" class="mastery-option-icon">
+					<img src="{$mastery.icon_url}" class="character-sheet-mastery-icon">
 				<xf:else />
-					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-option-icon">
+					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="character-sheet-mastery-icon">
 				</xf:if>
 			</div>
-			<h3 class="mastery-option-title">{$mastery.display_name}</h3>
+			<div class="mastery-unselect-overlay grid-overlap"></div>
+			<div class="character-sheet-mastery-title">{$mastery.display_name}</div>
 			<div class="mastery-option-trait-container">
 				<div class="mastery-trait-icon role-icon {$mastery.MasteryRole.css_classes}" style="color:{$mastery.MasteryRole.hex_color}"></div>
 				<div class="mastery-trait-icon expertise-icon {$mastery.MasteryExpertise.css_classes}"  style="color:{$mastery.MasteryExpertise.hex_color}"></div>
 				<div class="mastery-trait-icon save-icon {$mastery.MasterySave.css_classes}"  style="color:{$mastery.MasterySave.hex_color}"></div>
-				<xf:comment>
-<!--				<xf:if is="$mastery.MasteryRole.icon_url != ''">-->
-<!--					<img src="{$mastery.MasteryRole.icon_url}" class="mastery-trait-icon role-icon">-->
-<!--				<xf:else />-->
-<!--					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-trait-icon role-icon">-->
-<!--				</xf:if>-->
-<!--				<xf:if is="$mastery.MasteryExpertise.icon_url != ''">-->
-<!--					<img src="{$mastery.MasteryExpertise.icon_url}" class="mastery-trait-icon expertise-icon">-->
-<!--				<xf:else />-->
-<!--					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-trait-icon expertise-icon">-->
-<!--				</xf:if>-->
-<!--				<xf:if is="$mastery.MasterySave.icon_url != ''">-->
-<!--					<img src="{$mastery.MasterySave.icon_url}" class="mastery-trait-icon save-icon">-->
-<!--				<xf:else />-->
-<!--					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="mastery-trait-icon save-icon">-->
-<!--				</xf:if>-->
-				</xf:comment>
 			</div>
 		</div>
 	</label>
@@ -131,7 +40,7 @@
 <div class="block">
 	<div class="block-container">
 		<xf:form action="{{ link('members/cs/mastery/saveNewMastery', $masterySlot, {'user_id': $masterySlot.user_id, 'target_index': $masterySlot.target_index}) }}"
-			  	class="block"
+			  	class="block-container"
 			  	method="post"
 			  	ajax="true"
 				data-xf-init="new-mastery"
@@ -140,7 +49,7 @@
 			<xf:foreach loop="$masteries" value="$masteryCategory" key="$categoryIndex">
 				<xf:macro name="mastery_category" arg-category="{$masteryCategory}"></xf:macro>
 			</xf:foreach>
-			<xf:submitrow sticky="true" icon="save" />
+			<xf:submitrow icon="save" />
 		</xf:form>
 	</div>
 </div>

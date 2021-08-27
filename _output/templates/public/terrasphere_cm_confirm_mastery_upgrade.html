@@ -1,57 +1,55 @@
-<div class="block">
-	<div class="block-container">
-		<h1 style="text-align: center;">Mastery Upgrade</h1>
-		<hr>
-		<h2 style="text-align: center;">{$mastery.display_name} to Rank {$nextRank.name}</h2>
-		<div style="max-width: 200px; margin:auto;">
-			<ul>
-				<li><b>Cost:</b> {$nextCost} {$rankSchema.Currency.title}</li>
-				<li><b>Current:</b> {$userVal} {$rankSchema.Currency.title}</li>
-				<li><b>After:</b> {$afterVal} {$rankSchema.Currency.title}</li>
-			</ul>
-		</div>
-			
-		<div class="mastery-upgrade-icon-container">
-			<div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
-				<div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
-					<div class="rank-stars grid-overlap rank-stars-{$thisRank.tier}"></div>
-					<div class="character-sheet-mastery-icon-container grid-overlap rank-{$thisRank.tier}"
-						 style="background-color: {$mastery.color}">
-						<img class="character-sheet-mastery-icon grid-overlap"
-					 		src="{$mastery.icon_url}"
-					 		alt="Mastery slot" />
-					</div>
-				</div>
-			</div>
-			<div class="upgrade-arrow-container">
-				<img class="upgrade-arrow"
-					src="{{ base_url('styles/default/Terrasphere/Charactermanager/upgrade_arrow.png', true) }}"
-					alt="upgrade arrow"/>
-			</div>
-				
-			<div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
-				<div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
-					<div class="rank-stars grid-overlap rank-stars-{{$thisRank.tier+1}}"></div>
-					<div class="character-sheet-mastery-icon-container grid-overlap rank-{{$thisRank.tier+1}}"
-						 style="background-color: {$mastery.color}">
-						<img class="character-sheet-mastery-icon grid-overlap"
-					 		src="{$mastery.icon_url}"
-					 		alt="Mastery slot" />
-					</div>
+<div class="block-container">
+	<h1 style="text-align: center;">Mastery Upgrade</h1>
+	<hr>
+	<h2 style="text-align: center;">{$mastery.display_name} to Rank {$nextRank.name}</h2>
+	<div style="max-width: 200px; margin:auto;">
+		<ul>
+			<li><b>Cost:</b> {$nextCost} {$rankSchema.Currency.title}</li>
+			<li><b>Current:</b> {$userVal} {$rankSchema.Currency.title}</li>
+			<li><b>After:</b> {$afterVal} {$rankSchema.Currency.title}</li>
+		</ul>
+	</div>
+	
+	<div class="mastery-upgrade-icon-container">
+		<div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
+			<div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
+				<div class="rank-stars grid-overlap rank-stars-{$thisRank.tier}"></div>
+				<div class="character-sheet-mastery-icon-container grid-overlap rank-{$thisRank.tier}"
+					 style="background-color: {$mastery.color}">
+					<img class="character-sheet-mastery-icon grid-overlap"
+					 	 src="{$mastery.icon_url}"
+					 	 alt="Mastery slot" />
 				</div>
 			</div>
 		</div>
-		<div style="width:100%; padding:1.5rem; display:flex;">
-			<xf:form action="{{ link('members/cs/mastery/upgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index}) }}"
-			  			method="post"
-			  			ajax="true"
-						data-xf-init="upgrade-mastery"
-			  			data-reset-complete="true"
-			  			data-redirect="off"
-					 	style="margin:auto;">
-				<xf:submitrow sticky="true" icon="Confirm" />
-			</xf:form>
+		<div class="upgrade-arrow-container">
+			<img class="upgrade-arrow"
+				 src="{{ base_url('styles/default/Terrasphere/Charactermanager/upgrade_arrow.png', true) }}"
+				 alt="upgrade arrow"/>
 		</div>
+	
+		<div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
+			<div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
+				<div class="rank-stars grid-overlap rank-stars-{{$thisRank.tier+1}}"></div>
+				<div class="character-sheet-mastery-icon-container grid-overlap rank-{{$thisRank.tier+1}}"
+					 style="background-color: {$mastery.color}">
+					<img class="character-sheet-mastery-icon grid-overlap"
+					 	 src="{$mastery.icon_url}"
+					 	 alt="Mastery slot" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="width:100%; padding:1.5rem; display:flex;">
+		<xf:form action="{{ link('members/cs/mastery/upgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index}) }}"
+			  		method="post"
+			  		ajax="true"
+					data-xf-init="upgrade-mastery"
+			  		data-reset-complete="true"
+			  		data-redirect="off"
+					 style="margin:auto;">
+			<xf:submitrow sticky="true" icon="Confirm" />
+		</xf:form>
 	</div>
 </div>
 

@@ -123,13 +123,22 @@
 <xf:macro name="interface_button"
 		  arg-src="!"
 		  arg-alt="!"
-		  arg-link="!">
+		  arg-link="!"
+		  arg-behavior="!">
 	<div class="character-banner-interface-button-container">
-		<a href="{$link}"
-		   class="character-banner-interface-button"
-		   data-xf-click="overlay">
-			<img src="{$src}" alt="{$alt}}">
-		</a>
+		<xf:if is="{{$behavior == 0}}">
+			<a href="{$link}"
+		   	   class="character-banner-interface-button"
+		   	   data-xf-click="overlay">
+				<img src="{$src}" alt="{$alt}}">
+			</a>
+			
+		<xf:else />
+			<a href="{$link}"
+		       class="character-banner-interface-button">
+				<img src="{$src}" alt="{$alt}}">
+			</a>
+		</xf:if>
 	</div>
 </xf:macro>
 
@@ -154,36 +163,27 @@
 						</div>
 						<div class="character-banner-equips">
 							<xf:macro name="icon"
-									  arg-src="{{base_url($xf.visitor.getIconForEquip(0), true)}}"
-									  arg-name="Weapon"
+									  arg-src="{{base_url($xf.visitor.getOrInitiateWeapon().Equipment.icon_url, true)}}"
+									  arg-name="{{base_url($xf.visitor.getOrInitiateWeapon().Equipment.display_name, true)}}"
 									  arg-color="#B0B0B0"
-									  arg-rank="{{$xf.visitor.getEquipRank(0).name}}" />
+									  arg-rank="{{$xf.visitor.getOrInitiateWeapon().Rank.name}}" />
 							<xf:macro name="icon"
-									  arg-src="{{base_url($xf.visitor.getIconForBestArmor(), true)}}"
-									  arg-name="Armor"
+									  arg-src="{{base_url($xf.visitor.getOrInitiateArmor().Equipment.icon_url, true)}}"
+									  arg-name="{{base_url($xf.visitor.getOrInitiateArmor().Equipment.display_name, true)}}"
 									  arg-color="#B0B0B0"
-									  arg-rank="{{$xf.visitor.getRankForBestArmor().name}}" />
+									  arg-rank="{{$xf.visitor.getOrInitiateArmor().Rank.name}}" />
 						</div>
 					</div>
 				</div>
 				<div class="character-banner-bottom">
 					<div class="character-banner-interface">
-						<xf:macro name="interface_button"
-								  arg-src="{{base_url($xf.visitor.getIconForEquip(0), true)}}"
+						<xf:foreach loop="$xf.visitor.getBannerButtons()" value="$button">
+							<xf:macro name="interface_button"
+								  arg-src="{{base_url($button.icon_url, true)}}"
 								  arg-alt="Unanswered Threads"
-								  arg-link="{{ link('find-threads/unanswered', null, {}) }}"/>
-						<xf:macro name="interface_button"
-								  arg-src="{{base_url($xf.visitor.getIconForEquip(0), true)}}"
-								  arg-alt="Shop"
-								  arg-link="{{ link('dbtech-shop', null, {}) }}"/>
-						<xf:macro name="interface_button"
-								  arg-src="{{base_url($xf.visitor.getIconForEquip(0), true)}}"
-								  arg-alt="Inventory"
-								  arg-link="{{ link('dbtech-shop/inventory', null, {}) }}"/>
-						<xf:macro name="interface_button"
-								  arg-src="{{base_url($xf.visitor.getIconForEquip(0), true)}}"
-								  arg-alt="Build Editor"
-								  arg-link="https://e-foead.github.io/app.html#{{$xf.visitor.getBuildEditorParamsString()}}"/>
+								  arg-link="{{ $button.getParsedURL($xf.visitor) }}"
+								  arg-behavior="{$button.behavior}" />
+						</xf:foreach>
 					</div>
 					<div class="character-banner-currencies">
 						<xf:include template="dbtech_credits_member_stats" />

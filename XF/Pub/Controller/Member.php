@@ -34,8 +34,6 @@ class Member extends XFCP_Member
 
         $maxRank = Rank::maxRank($this);
 
-
-
 		$viewParams = [
 		    'user' => $user,
 		    'masterySlots' => $masterySlots,
@@ -446,7 +444,7 @@ class Member extends XFCP_Member
         return $this->view('Terrasphere\Charactermanager:EquipUpgradeConfirm', 'terrasphere_cm_confirm_equip_upgrade', $viewparams);
     }
 
-    public function actionConfirmChangeArmor(ParameterBag $params){
+    public function actionConfirmChangeArmor(ParameterBag $params) {
         $user_id = $this->filter('user_id', 'uint');
         $equipId = $this->filter('equipment_id', 'uint');
 
@@ -468,23 +466,7 @@ class Member extends XFCP_Member
             ->fetch()->toArray());
 
         $rankSchema = $equipment->RankSchema;
-
-        //Calculate armor refiting cost. Currently adding up the cost of all armor upgrades up
-        //to current rank and then 10% of it!
-        $rankSchemaCost=$this
-            ->finder('Terrasphere\Core:RankSchemaMap')
-            ->with('Rank')
-            ->where([
-                ['rank_schema_id', $rankSchema->rank_schema_id],
-                ['Rank.tier', '<=', $charEquip->Rank->tier],
-            ])
-            ->fetch()->toArray();
-        $muns = 0;
-        foreach($rankSchemaCost as $value){
-            $muns += $value->cost;
-        }
-        $muns = $muns * 0.1;
-
+        $muns = $this->getRetrofitCost($rankSchema, $charEquip);
         $userVal = $rankSchema->Currency->getValueFromUser($user, false);
         $viewparams = [
             'armor1' => $otherEquip[0],
@@ -498,8 +480,56 @@ class Member extends XFCP_Member
             'afterVal' => $rankSchema->Currency->getFormattedValue($userVal-$muns),
         ];
         return $this->view('Terrasphere\Charactermanager:EquipArmorChangeConfirm', 'terrasphere_cm_confirm_armor_selection', $viewparams);
-
     }
+
+    public function actionChangeArmor(ParameterBag $params)
+    {
+        $userId = $params['user_id'];
+        $equipId = $this->filter('equipment', 'uint');
+
+        try {
+            /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
+            $user = $this->assertViewableUser($userId);
+        } catch (Exception $e) {
+            return $this->error($e->getMessage());
+        }
+
+        $charEquip = $user->getOrInitiateArmor();
+        $equipment = $charEquip->Equipment;
+
+        if($charEquip == null || $equipment == null)
+            return $this->error("No current equipment found. This shouldn't happen. Please contact an admin for help.");
+
+        $targetArmor = $this->finder("Terrasphere\Core:Equipment")->whereId($equipId)->fetchOne();
+
+        if($targetArmor == null)
+            return $this->error("Target armor doesn't exist.");
+        if($targetArmor->equip_group != $equipment->equip_group)
+            return $this->error("Tried to switch from armor to non-armor equipment (or the opposite).");
+
+        $rankSchema = $equipment->RankSchema;
+
+        if($rankSchema == null)
+            return $this->error("No associated rank schema with current equipment when changing armor type.");
+
+        $cost = $this->getRetrofitCost($rankSchema, $charEquip);
+
+        if($this->adjustCurrency($user, $cost, "Armor Retrofit (".$targetArmor->display_name.")", $rankSchema->Currency->currency_id))
+        {
+            // Change type.
+            $charEquip->fastUpdate('equipment_id', $equipId);
+
+            // Close overlay via redirect and setup AJAX parameters.
+            $redirect = $this->redirect($this->buildLink('members', $user, ['user_id' => $params['user_id']]));
+            $redirect->setJsonParam('newIconURL', $targetArmor['icon_url']);
+            $redirect->setJsonParam('newName', $targetArmor['display_name']);
+
+            return $redirect;
+        }
+
+        return $this->error("Currency adjustment error...");
+    }
+
     public function actionUpgradeEquip(ParameterBag $params)
     {
         $user_id = $this->filter('user_id', 'uint');
@@ -567,7 +597,7 @@ class Member extends XFCP_Member
         return $this->error("Currency adjustment error...");
     }
 
-	public function canVisitorViewCharacterSheet(int $userID): bool {
+    public function canVisitorViewCharacterSheet(int $userID): bool {
         return true;
     }
 
@@ -698,5 +728,21 @@ class Member extends XFCP_Member
         ], $user);
 
         return true;
+    }
+
+    private function getRetrofitCost($rankSchema, $charEquip) : int
+    {
+        $rankSchemaCost = $this
+            ->finder('Terrasphere\Core:RankSchemaMap')
+            ->with('Rank')
+            ->where([
+                ['rank_schema_id', $rankSchema->rank_schema_id],
+                ['Rank.tier', '<=', $charEquip->Rank->tier],
+            ])
+            ->fetch()->toArray();
+
+        $cost = 0;
+        foreach($rankSchemaCost as $value) { $cost += $value->cost; }
+        return $cost * 0.1;
     }
 }

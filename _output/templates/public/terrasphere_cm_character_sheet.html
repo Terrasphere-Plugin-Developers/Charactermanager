@@ -1,34 +1,35 @@
+<!-- CHARACTER SHEET CSS CLASSES -->
 <xf:css>
-    .absolute {
+.absolute {
     position: absolute;
-    }
+}
 
-    .grid-overlap {
+.grid-overlap {
     grid-row-start: 1;
     grid-column-start: 1;
-    }
+}
 
-    .character-sheet
-    {
+.character-sheet
+{
     margin: auto;
     max-width: 1018px;
-    }
+}
 
-    .character-sheet-mastery-list {
+.character-sheet-mastery-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     margin-bottom: 40px;
-    }
+}
 
-    .character-sheet-equipment-list {
+.character-sheet-equipment-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     margin-bottom: 40px;
-    }
+}
 
-    .character-sheet-mastery-container {
+.character-sheet-mastery-container {
     width: 100px;
     height: 100px;
     margin: 20px;
@@ -36,28 +37,53 @@
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: 100%;
-    }
+}
 
-    .character-sheet-mastery {
+.character-sheet-mastery {
     width: 100%;
     height: 100%;
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: 100%;
-    }
+	border-radius: 50%;
+	border: 1px solid transparent;
+	transition: transform 0.5s, border 0.5s;
+}
+	
+.character-sheet-mastery-container input:checked ~ .character-sheet-mastery {
+	transform: Scale(1.3);
+	border: 1px solid black;
+}
+	
+.mastery-unselect-overlay {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	opacity: 50%;
+	background-color: black;
+	transition: background-color 0.5s, opacity 0.5s;
+}
 
-    .character-sheet-mastery-title {
+/* Selects mastery overlays
+	which are children of masteries
+	which are preceded by CHECKED inputs
+	that are children of mastery containers.*/
+.character-sheet-mastery-container input:checked ~ .character-sheet-mastery .mastery-unselect-overlay {
+	opacity: 0%;
+}
+
+.character-sheet-mastery-title {
     display: grid;
     width: 100%;
     margin-top: 5px;
     text-align: center;
-    }
+}
 
-    .m-title-rank {
+.m-title-rank {
     font-size: smaller;
-    }
+}
 
-    .character-sheet-mastery-icon-container {
+.character-sheet-mastery-icon-container {
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -67,28 +93,28 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    }
+}
 
-    .character-sheet-mastery-icon {
+.character-sheet-mastery-icon {
     width: 80%;
     height: 80%;
-    }
+}
 
-    .mastery-upgrade-icon-container {
+.mastery-upgrade-icon-container {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    }
+}
 
-    .upgrade-arrow-container {
+.upgrade-arrow-container {
     width: 15vmin;
     height: 15vmin;
     display: flex;
-    }
+}
 
-    .upgrade-arrow {}
+.upgrade-arrow {}
 
-    .mastery-change-flash {
+.mastery-change-flash {
     transform: scale(0,0);
     width: 100%;
     height: 100%;
@@ -97,77 +123,80 @@
     z-index: 2;
     animation: mastery-flash 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.01s 1 normal;
     animation-play-state: paused;
-    }
+}
 
-    @keyframes mastery-flash {
+@keyframes mastery-flash {
     0% {opacity: 100%; transform: scale(1,1);}
     100% {opacity: 0%; transform: scale(2,2);}
-    }
+}
 
-    .locked {
+.locked {
     background-color: #3c3c3c;
-    }
+}
 
-    /* 0 = unselected */
-    .rank-0 {}
+.rank-0 {}
 
-    .rank-1 {
+.rank-1 {
     background-color: {$xf.options.terrasphereCoreRankDColor};
-    }
+}
 
-    .rank-2 {
+.rank-2 {
     background-color: {$xf.options.terrasphereCoreRankCColor};
-    }
+}
 
-    .rank-3 {
+.rank-3 {
     background-color: {$xf.options.terrasphereCoreRankBColor};
-    }
+}
 
-    .rank-4 {
+.rank-4 {
     background-color: {$xf.options.terrasphereCoreRankAColor};
-    }
+}
 
-    .rank-5 {
+.rank-5 {
     background-color: {$xf.options.terrasphereCoreRankSColor};
-    }
+}
 
-    .rank-stars {
+.rank-stars {
     pointer-events: none;
     width: 100%;
     height: 100%;
     transform: scale(1.25, 1.25);
     background-size: 100% 100%;
-    }
+}
 
-    .rank-stars-1 {
+.rank-stars-1 {
     background-image: url("{{ base_url('styles/default/Terrasphere/Charactermanager/rank1.png', true) }}");
-    }
+}
 
-    .rank-stars-2 {
+.rank-stars-2 {
     background-image: url("{{ base_url('styles/default/Terrasphere/Charactermanager/rank2.png', true) }}");
-    }
+}
 
-    .rank-stars-3 {
+.rank-stars-3 {
     background-image: url("{{ base_url('styles/default/Terrasphere/Charactermanager/rank3.png', true) }}");
-    }
+}
 
-    .rank-stars-4 {
+.rank-stars-4 {
     background-image: url("{{ base_url('styles/default/Terrasphere/Charactermanager/rank4.png', true) }}");
-    }
+}
 
-    .rank-stars-5 {
+.rank-stars-5 {
     background-image: url("{{ base_url('styles/default/Terrasphere/Charactermanager/rank5.png', true) }}");
-    }
+}
 
-    .formSubmitRow-main {
+.formSubmitRow-main {
     display: flex;
-    }
-    .formSubmitRow-controls {
+}
+.formSubmitRow-controls {
     padding-left: 0px;
     margin: auto;
-    }
+}
 
-    #armor-popup {
+.armor {
+	cursor: pointer;
+}
+
+#armor-popup {
     background-color: black;
     color: #fff;
     text-align: center;
@@ -176,15 +205,62 @@
 
     position: absolute;
     z-index: 1;
-    }
+}
 
-    .inline-armor {
+.inline-armor {
     display:inline-block;
-    }
+}
 
-    #close-armor-dialog:hover{
+#close-armor-dialog:hover{
     cursor: pointer;
-    }
+}
+</xf:css>
+
+
+<!-- MODAL SELECTION VIEW CLASSES -->
+<xf:css>
+/* Hides default radio buttons */
+.character-sheet-mastery-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.mastery-category {
+	margin-bottom: 25px;
+    padding: 25px;
+}
+
+.mastery-category-list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+	
+.mastery-category-title {
+	border-bottom: 1px solid cyan;
+	margin: 1rem;
+	padding: 0.5rem;
+	text-align: center;
+}
+	
+.mastery-option-container {
+	margin: 2rem 0.5rem;
+    width: 10rem;
+    height: 10rem;
+	display: grid;
+	grid-row-template: 100%;
+	grid-coumn-template: 100%;
+}
+
+.mastery-option-trait-container {
+	display: flex;
+	justify-content: space-around;
+	font-size: 1.5rem;
+    text-shadow: 0 1px black;
+}
 </xf:css>
 
 <xf:macro name="mastery"
@@ -370,14 +446,12 @@
                                     <div id="armor-popup">
                                         <xf:form class="inline-armor armor-upgrade-form" action="{{ link('members/cs/equipment/confirmUpgradeEquip', null, {'user_id': $user.user_id, 'equipment_id': $armor.equipment_id}) }}"
                                               data-cache="false"
-                                              ajax="true"
-                                        >
+                                              ajax="true">
                                             <input class="armor-button" type="submit"  value="Upgrade">
                                         </xf:form>
                                         <xf:form class="inline-armor" action="{{ link('members/cs/equipment/confirmChangeArmor', null, {'user_id': $user.user_id, 'equipment_id': $armor.equipment_id}) }}"
                                                  data-cache="false"
-                                                 ajax="true"
-                                        >
+                                                 ajax="true">
                                             <input class="armor-button" type="submit"  value="Change Type">
                                         </xf:form>
                                     </div>
@@ -402,30 +476,8 @@
                         </div>
                         <div class="mastery-change-flash grid-overlap"></div>
                     </div>
-                    <xf:comment>
-<!--                    <xf:macro name="equip"-->
-<!--                              arg-equipId="{$armor.equipment_id}"-->
-<!--                              arg-user="{$user}"-->
-<!--                              arg-charEquipment="{$armor}"-->
-<!--                              arg-can_make_changes="{$canMakeChanges}"-->
-<!--                              arg-max_rank="{$maxRank}"/>-->
-<!--                        			<xf:macro name="equip"-->
-<!--                        						arg-type="2"-->
-<!--                        						arg-user="{$user}"-->
-<!--                        						arg-rank="{{$user.getEquipRank(2)}}"-->
-<!--                        						arg-can_make_changes="{$canMakeChanges}"-->
-<!--                        						arg-max_rank="{$maxRank}" />-->
-<!--                        			<xf:macro name="equip"-->
-<!--                        						arg-type="3"-->
-<!--                        						arg-user="{$user}"-->
-<!--                        						arg-rank="{{$user.getEquipRank(3)}}"-->
-<!--                        						arg-can_make_changes="{$canMakeChanges}"-->
-<!--                        						arg-max_rank="{$maxRank}" />-->
-                    </xf:comment>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-

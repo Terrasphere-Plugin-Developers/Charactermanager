@@ -5,29 +5,29 @@
         "hash": "de0834b20bf4ce301b3170242814dae1"
     },
     "public/terrasphere_character_banner.html": {
-        "version_id": 1000010,
-        "version_string": "1.0.0 Alpha",
-        "hash": "0ad71cd09cd29870a6dec66f98926b78"
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "bdedbf5071a00f981dc76588e6f1cde9"
     },
     "public/terrasphere_cm_character_sheet.html": {
         "version_id": 1000100,
         "version_string": "1.0.1",
-        "hash": "d21bb99f53c1e96f354c7645f6b98e80"
+        "hash": "6ec703526ecba163b38d4e4d6f1a35e1"
     },
     "public/terrasphere_cm_confirm_armor_selection.html": {
         "version_id": 1000100,
         "version_string": "1.0.1",
-        "hash": "bd7e90dc8413bd49d9cd5ea6cbdca5d7"
+        "hash": "844b1ae4f5b5e44245886c43ed0d4cd1"
     },
     "public/terrasphere_cm_confirm_equip_upgrade.html": {
         "version_id": 1000100,
         "version_string": "1.0.1",
-        "hash": "6ccb37a27435f143d9df453176aa2d43"
+        "hash": "937646a09e670f30ac2f8057ac31a303"
     },
     "public/terrasphere_cm_confirm_mastery_upgrade.html": {
         "version_id": 1000100,
         "version_string": "1.0.1",
-        "hash": "473f7bd7f92dca041d4eb84229acdcf8"
+        "hash": "7b582e5ba0ff37ad90d3b4fcea08ed86"
     },
     "public/terrasphere_cm_cs_link_page.html": {
         "version_id": 1000010,
@@ -37,6 +37,6 @@
     "public/terrasphere_cm_mastery_selection.html": {
         "version_id": 1000100,
         "version_string": "1.0.1",
-        "hash": "32aa1542421289488b92501eb19d9ac3"
+        "hash": "4707d7b5b6718f973dee056cc3e32ffe"
     }
 }

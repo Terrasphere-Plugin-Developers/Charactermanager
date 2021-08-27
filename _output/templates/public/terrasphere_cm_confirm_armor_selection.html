@@ -1,60 +1,50 @@
-<div class="block">
-    <div class="block-container">
-        <h1 style="text-align: center;">Armor Change</h1>
-        <hr>
-        <h2 style="text-align: center;">{$armor1->display_name} or {$armor2->display_name}</h2>
-        <div style="max-width: 200px; margin:auto;">
-            <ul>
-                <li><b>Cost:</b> {$nextCost} {$rankSchema.Currency.title}</li>
-                <li><b>Current:</b> {$userVal} {$rankSchema.Currency.title}</li>
-                <li><b>After:</b> {$afterVal} {$rankSchema.Currency.title}</li>
-            </ul>
-        </div>
+<xf:macro name="selection"
+		  arg-equipment="!">
+	<label class="character-sheet-mastery-container">
+		<input class="mastery-option grid-overlap"
+		   type="radio"
+		   id="armor-{$equipment.equipment_id}"
+		   name="equipment"
+		   value="{$equipment.equipment_id}">
+		<div class="character-sheet-mastery grid-overlap">
+			<div class="character-sheet-mastery-icon-container grid-overlap" style="background-color: #B0B0B0;">
+				<xf:if is="$equipment.icon_url != ''">
+					<img src="{$equipment.icon_url}" class="character-sheet-mastery-icon">
+				<xf:else />
+					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="character-sheet-mastery-icon">
+				</xf:if>
+			</div>
+			<div class="mastery-unselect-overlay grid-overlap"></div>
+			<div class="character-sheet-mastery-title">{$equipment.display_name}</div>
+		</div>
+	</label>
+</xf:macro>
 
-        <div class="mastery-upgrade-icon-container">
-            <div class="character-sheet-mastery-container">
-                <div class="character-sheet-mastery grid-overlap">
-                    <div class="rank-stars grid-overlap rank-stars-{$thisRank.tier}"></div>
-                    <div class="character-sheet-mastery-icon-container grid-overlap rank-{$thisRank.tier}"
-                         style="background-color: #B0B0B0">
-                        <img class="character-sheet-mastery-icon grid-overlap"
-                             src="{$armor1->icon_url}"
-                             alt="Equipment slot" />
-                    </div>
-                    <div class="character-sheet-mastery-title">
-                        {{$armor1->display_name}}<br>
-                        <span class="m-title-rank">Rank {$charEquip.Rank.name}</span>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="character-sheet-mastery-container">
-                <div class="character-sheet-mastery grid-overlap">
-                    <div class="rank-stars grid-overlap rank-stars-{{$thisRank.tier}}"></div>
-                    <div class="character-sheet-mastery-icon-container grid-overlap rank-{{$thisRank.tier}}"
-                         style="background-color: #B0B0B0">
-                        <img class="character-sheet-mastery-icon grid-overlap"
-                             src="{$armor2->icon_url}"
-                             alt="Equipment slot" />
-                    </div>
-                    <div class="character-sheet-mastery-title">
-                        {{$armor2->display_name}}<br>
-                        <span class="m-title-rank">Rank {$charEquip.Rank.name}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div style="width:100%; padding:1.5rem; display:flex;">
-            <xf:form action="{{ link('members/cs/equipment/upgradeEquip', null, {'user_id': $user.user_id, 'equip_id': $equipId}) }}"
-                     method="post"
-                     ajax="true"
-                     data-xf-init="upgrade-equip"
-                     data-reset-complete="true"
-                     data-redirect="off"
-                     style="margin:auto;">
-                <xf:submitrow sticky="true" icon="Confirm" />
-            </xf:form>
-        </div>
-    </div>
+<div class="block-container">
+	<h1 style="text-align: center;">Select New Armor Class</h1>
+	<hr>
+	<div style="max-width: 200px; margin:auto;">
+		<ul>
+			<li><b>Cost:</b> {$nextCost} {$rankSchema.Currency.title}</li>
+			<li><b>Current:</b> {$userVal} {$rankSchema.Currency.title}</li>
+			<li><b>After:</b> {$afterVal} {$rankSchema.Currency.title}</li>
+		</ul>
+	</div>
+	
+	<xf:form action="{{ link('members/cs/equipment/changeArmor', $user, {'user_id': $user.user_id}) }}"
+			  	method="post"
+			  	ajax="true"
+				data-xf-init="change-armor"
+			  	data-reset-complete="true"
+			  	data-redirect="off">
+		<div class="mastery-category">
+			<div class="mastery-category-list">
+				<xf:macro name="selection" arg-equipment="{$armor1}" />
+				<xf:macro name="selection" arg-equipment="{$armor2}" />
+			</div>
+		</div>
+		<xf:submitrow icon="Swap Armor" />
+	</xf:form>
 </div>
+
+<xf:js src="Terrasphere/Charactermanager/armor_change.js" addon="Terrasphere/Charactermanager" />
