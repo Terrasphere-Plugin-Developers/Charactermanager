@@ -28,9 +28,9 @@ class Member extends XFCP_Member
         }
 
         $masterySlots = CharacterMastery::getCharacterMasterySlots($this, $params->user_id);
-        $weapon = $user->getOrInitiateWeapon($this);
+        $weapon = $user->getOrInitiateWeapon();
 
-        $armor = $user->getOrInitiateArmor($this);
+        $armor = $user->getOrInitiateArmor();
 
         $maxRank = Rank::maxRank($this);
 

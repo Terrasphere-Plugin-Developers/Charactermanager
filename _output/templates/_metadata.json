@@ -1,4 +1,9 @@
 {
+    "admin/terrasphere_core_banner_button_edit.html": {
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "de0834b20bf4ce301b3170242814dae1"
+    },
     "public/terrasphere_character_banner.html": {
         "version_id": 1000010,
         "version_string": "1.0.0 Alpha",

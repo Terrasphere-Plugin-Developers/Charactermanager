@@ -23,8 +23,13 @@ class User extends XFCP_User
         return $masteries;
     }
 
-    public function getOrInitiateWeapon($controller) : CharacterEquipment{
+    public function getBannerButtons() : array
+    {
+        return $this->finder('Terrasphere\Core:BannerButton')->fetch()->toArray();
+    }
 
+    public function getOrInitiateWeapon() : CharacterEquipment
+    {
         $weaponEquiId = $this->finder('Terrasphere\Core:Equipment')
             ->where('display_name','Weapon')->fetchOne()->equipment_id;
 
@@ -34,11 +39,10 @@ class User extends XFCP_User
                 ['equipment_id', $weaponEquiId],
             ])
             ->fetchOne();
-
         if(!$weapon){
             $weapon = $this->em()->create('Terrasphere\Charactermanager:CharacterEquipment');
             $weapon->user_id = $this->user_id;
-            $weapon->rank_id = Rank::minRank($controller)->rank_id;
+            $weapon->rank_id = Rank::minRank($this)->rank_id;
             $weapon->equipment_id = $weaponEquiId;
             $weapon->save();
         }
@@ -46,8 +50,8 @@ class User extends XFCP_User
         return $weapon;
     }
 
-    public function getOrInitiateArmor($controller) :CharacterEquipment {
-        $armor = null;
+    public function getOrInitiateArmor() : CharacterEquipment
+    {
         $armor = $this->finder('Terrasphere\Charactermanager:CharacterEquipment')
             ->with('Equipment')
             ->where([
@@ -59,7 +63,7 @@ class User extends XFCP_User
         if(!$armor) {
             $armor = $this->em()->create('Terrasphere\Charactermanager:CharacterEquipment');
             $armor->user_id = $this->user_id;
-            $armor->rank_id = Rank::minRank($controller)->rank_id;
+            $armor->rank_id = Rank::minRank($this)->rank_id;
             $armor->equipment_id = $this->finder('Terrasphere\Core:Equipment')
                 ->where('display_name','Medium Armor')
                 ->fetchOne()->equipment_id;
@@ -68,40 +72,4 @@ class User extends XFCP_User
 
         return $armor;
     }
-
-
-
-//    public function getBuildEditorParamsString() : string
-//    {
-//        $masteryNames = "";
-//        $masteryRanks = "";
-//
-//        $masteries = $this->getMasteries();
-//
-//        foreach ($masteries as $mastery)
-//        {
-//            // Make sure each mastery display name is formatted as expected, using single dashes as word separators.
-//            $masteryString = strtolower($mastery->Mastery['display_name']);
-//            $masteryString = str_replace(' ', '-', $masteryString);
-//            $masteryString = str_replace('_', '-', $masteryString);
-//
-//            $masteryRanks .= $mastery->Rank['tier'];
-//
-//            // Add comma separators.
-//            $masteryNames .= $masteryString . ',';
-//            $masteryRanks .= ',';
-//        }
-//
-//        // Remove last comma for both names and ranks.
-//        $masteryNames = substr($masteryNames, 0, -1);
-//        $masteryRanks = substr($masteryRanks, 0, -1);
-//
-//        return $masteryNames . '.' .
-//            $masteryRanks .'..' .
-//            $this->getEquipRank(0)['tier'] . '.' .
-//            $this->getEquipRank(1)['tier'] . '.' .
-//            $this->getEquipRank(2)['tier'] . '.' .
-//            $this->getEquipRank(3)['tier'] . '.' .
-//            str_replace(' ', '_', $this->username);
-//    }
 }
