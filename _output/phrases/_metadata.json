@@ -5,18 +5,6 @@
         "version_string": "1.0.0 Alpha",
         "hash": "b17eb3bd9e1ab6caa2a278a4ca8a0a7c"
     },
-    "option.terrasphereCMEquipRankSchema.txt": {
-        "global_cache": false,
-        "version_id": 1000010,
-        "version_string": "1.0.0 Alpha",
-        "hash": "c9e6af1b78af190c1845d58f8378418b"
-    },
-    "option_explain.terrasphereCMEquipRankSchema.txt": {
-        "global_cache": false,
-        "version_id": 1000010,
-        "version_string": "1.0.0 Alpha",
-        "hash": "133b8b4ee63ea671dc6970423a4fe1a8"
-    },
     "permission.terrasphere_terrasphere_cm_review.txt": {
         "global_cache": false,
         "version_id": 1000010,
