@@ -12,12 +12,16 @@ $(document).ready(function(){
             armorPopup.hide();
         }
     })
-    function showArmorChooseDialog(){
-        armorPopup.show();
+
+    function showArmorChooseDialog(e){
+        //this check is so when you click the button and it hides the dialog again that it doesn't show again asap
+        //can't use propogationStop in hideArmorChooseDialog because it screws with the overlay ajax xenforo shenanigans
+        if(e.target.classList.contains('armor')){
+            armorPopup.show();
+        }
     }
 
-    function hideArmorChooseDialog(e){
-        e.stopPropagation()
+    function hideArmorChooseDialog(){
         armorPopup.hide();
     }
 })
