@@ -34,7 +34,13 @@
             // ...and show it.
             $("#mastery-container-" + data.masterySlotIndex + " .character-sheet-mastery").show();
 
-            // ...also play the flashy animation thingy.
+            // Reset flashy animation element by clone+delete (necessary if it already flashed for slot unlock).
+            var elem = $("#equip-container-" + data.equipId + " .mastery-change-flash");
+            var copy = elem.clone(true);
+            elem.before(copy);
+            $("#equip-container-" + data.equipId + " .mastery-change-flash:last-child").remove();
+
+            // ...and play it.
             $("#mastery-container-" + data.masterySlotIndex + " .mastery-change-flash").css("animation-play-state", "running");
         }
     });

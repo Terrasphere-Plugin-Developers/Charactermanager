@@ -184,7 +184,7 @@ class Member extends XFCP_Member
             if($params['target_index'] == 4 && !$this->fifthSlotUnlocked($params['user_id']))
                 return $this->error('Slot not unlocked.');
 
-            $rank = $this->finder('Terrasphere\Core:Rank')->where('tier', 1)->fetchOne();
+            $rank = Rank::minRank($this);
 
             // Save entity to DB
             $slotEntity = $this->em()->create('Terrasphere\Charactermanager:CharacterMastery');
