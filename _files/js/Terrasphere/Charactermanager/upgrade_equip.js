@@ -35,7 +35,7 @@
 
             $("#equip-container-" + data.equipId + " ." + lastRankClass).removeClass(lastRankClass).addClass(newRankClass);
             $("#equip-container-" + data.equipId + " .rank-stars").removeClass("rank-stars-" + (data.newRankTier-1)).addClass("rank-stars-" + data.newRankTier);
-            $("#equip-container-" + data.equipId + " .m-title-rank").text("Rank " + data.newRankTitle);
+            $("#equip-container-" + data.equipId + " .m-title-rank").text("" + data.newRankTitle);
 
             // Reset flashy animation element by clone+delete.
             var elem = $("#equip-container-" + data.equipId + " .mastery-change-flash");

@@ -3,19 +3,22 @@
         "hash": "951355135f22f286ff05a6c3785c6fea"
     },
     "public/terrasphere_charactermanager_member_view_add_cstab.json": {
-        "hash": "96cd30f8a99e10ea2e6d890bf1f48789"
+        "hash": "bc025d521d6bce25c6e0bca6b81a6b40"
+    },
+    "public/terrasphere_charactermanager_thread_view_banner.json": {
+        "hash": "3152e12c20635b4e5eded96aa740ecdd"
     },
     "public/terrasphere_cm_member_tooltip_cs.json": {
-        "hash": "e8886c92af1ce48d87a7c3423b159e71"
+        "hash": "619d482237ca84247fa28278c761a0e8"
     },
     "public/terrasphere_cm_member_tooltip_masteries.json": {
         "hash": "756c43d2806af44b825a93c2562efaa2"
     },
     "public/terrasphere_cm_member_view_cs_panel_add.json": {
-        "hash": "0518fb24c7ec4b887936f1e726920b85"
+        "hash": "7361f2dd68afa03a1eb752dc386f7b47"
     },
     "public/terrasphere_cm_member_view_posts_panel_change.json": {
-        "hash": "4c91924210ad68d07bc1c3f943270d32"
+        "hash": "1c8647920dd3f9bd5fbd5de08d19eda3"
     },
     "public/ts_cm_member_moderator_cs_edit.json": {
         "hash": "2f060ceca623bd0bee3b5472f8d8ee96"

@@ -14,6 +14,11 @@ class User extends XFCP_User
         return (int) XF::visitor()->hasPermission('terrasphere', 'terrasphere_cm_review');
     }
 
+    public function canShowCharacterElements() : int
+    {
+        return (int) $this->hasPermission('terrasphere', 'terrasphere_cm_showcs');
+    }
+
     /**
      * Gets all masteries for the character/user.
      */

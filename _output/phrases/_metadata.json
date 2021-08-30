@@ -11,6 +11,12 @@
         "version_string": "1.0.0 Alpha",
         "hash": "f199df056c09e5c8cb32abcc6ae54782"
     },
+    "permission.terrasphere_terrasphere_cm_showcs.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "da284db84f6bd106afdffc6f8158c2a7"
+    },
     "permission_interface.terrasphere.txt": {
         "global_cache": false,
         "version_id": 1000010,

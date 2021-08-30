@@ -1,0 +1,9 @@
+{
+    "template": "thread_view",
+    "description": "Adds character banner to thread view.",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<!--[XF:content_top]-->",
+    "replace": "$0\n<xf:include template=\"terrasphere_character_banner\" />"
+}

@@ -142,7 +142,7 @@
 	</div>
 </xf:macro>
 
-<xf:if is="$xf.visitor.user_id != 0">
+<xf:if is="$xf.visitor.user_id != 0"> <xf:if is="$xf.visitor.canShowCharacterElements()">
 	<div class="character-banner-container">
 		<div class="character-banner" style="background-image: url('{{$xf.visitor.Profile.getBannerURL(null)}}');
 											 background-position-y: {$xf.visitor.Profile.banner_position_y}%;">
@@ -192,4 +192,4 @@
 			</div>
 		</div>
 	</div>
-</xf:if>
+</xf:if> </xf:if>

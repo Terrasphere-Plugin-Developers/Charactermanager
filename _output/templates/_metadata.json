@@ -7,12 +7,12 @@
     "public/terrasphere_character_banner.html": {
         "version_id": 1000100,
         "version_string": "1.0.1",
-        "hash": "bdedbf5071a00f981dc76588e6f1cde9"
+        "hash": "85f573f16ca0db8cba054ea5cf8e6ccb"
     },
     "public/terrasphere_cm_character_sheet.html": {
         "version_id": 1000100,
         "version_string": "1.0.1",
-        "hash": "6198cc6f42dc5fe9f261cc2fe14e74c5"
+        "hash": "c157cd18f823d3d559ad66a2bab86396"
     },
     "public/terrasphere_cm_confirm_armor_selection.html": {
         "version_id": 1000100,

@@ -5,5 +5,5 @@
     "enabled": true,
     "action": "str_replace",
     "find": "<li class=\"is-active\" role=\"tabpanel\" id=\"profile-posts\">",
-    "replace": "<li role=\"tabpanel\" id=\"profile-posts\" aria-labelledby=\"profile-posts\">"
+    "replace": "<xf:if is=\"$user.canShowCharacterElements()\">\n\t<li role=\"tabpanel\" id=\"profile-posts\" aria-labelledby=\"profile-posts\">\n</xf:if>"
 }

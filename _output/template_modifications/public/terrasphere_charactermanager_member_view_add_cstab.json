@@ -5,5 +5,5 @@
     "enabled": true,
     "action": "str_replace",
     "find": "<!--[XF:tabs:start]-->",
-    "replace": "$0     \n\t<a href=\"{{ link('members/CharacterSheet', $user)  }}\"\n\t\t\t\t\tclass=\"tabs-tab is-active\"\n\t\t\t\t\tid=\"CharacterSheet\"\n\t\t\t\t\trole=\"tab\">{{ phrase('Character Sheet') }}</a>"
+    "replace": "$0\n<xf:if is=\"$user.canShowCharacterElements()\">\n\t\t<a href=\"{{ link('members/CharacterSheet', $user)  }}\"\n\t\t\t\t\tclass=\"tabs-tab is-active\"\n\t\t\t\t\tid=\"CharacterSheet\"\n\t\t\t\t\trole=\"tab\">{{ phrase('Character Sheet') }}</a>\n</xf:if>\n\t"
 }
