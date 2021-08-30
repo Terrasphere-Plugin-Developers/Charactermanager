@@ -452,7 +452,7 @@ class Member extends XFCP_Member
             /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
             $user = $this->assertViewableUser($user_id);
         } catch (Exception $e) {
-            throw $e;
+            return $this->error($e->getMessage());
         }
 
         $charEquip = CharacterEquipment::getEquipment($this,$user_id,$equipId);

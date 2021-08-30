@@ -471,7 +471,7 @@
                                         </a>
                                         <a href="{{ link('members/cs/equipment/confirmChangeArmor', null, {'user_id': $user.user_id, 'equipment_id': $armor.equipment_id}) }}"
                                            data-xf-click="overlay"
-                                           data-chache="false"
+                                           data-cache="false"
                                            class="inline-armor armor-upgrade-form">
                                             <div class="armor-button">Change Type</div>
                                         </a>
@@ -479,10 +479,10 @@
                                 </div>
                                 <xf:js src="Terrasphere/Charactermanager/armor_dialogue.js"
                                        addon="Terrasphere/Charactermanager"/>
-                                <xf:else/>
+                            <xf:else/>
                                 <a href="{{ link('members/cs/equipment/confirmChangeArmor', null, {'user_id': $user.user_id, 'equipment_id': $armor.equipment_id}) }}"
                                    data-xf-click="overlay"
-                                   data-chache="false"
+                                   data-cache="false"
                                    class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier} armor"
                                    style="background-color: #B0B0B0;">
                                     <img class="character-sheet-mastery-icon grid-overlap"
