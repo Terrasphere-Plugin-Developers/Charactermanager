@@ -14,25 +14,25 @@ class Character extends AbstractController{
      * @param ParameterBag $params
      * @return ApiResult
      */
-    public function actionGet(ParameterBag $params): ApiResult
+    public function actionGet(): ApiResult
     {
 
         ///Check if the user ID is numeric or a name, if numeric it's the user id, if name it is the user name
         /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
-        $userId = $params->user_id;
-        if(is_numeric($userId)){
-            $user=$this->finder('XF:User')->where('user_id',$userId)->fetchOne();
+          $account = $this->filter("id","string");
+        if(is_numeric($account)){
+            $user=$this->finder('XF:User')->where('user_id',$account)->fetchOne();
         }else{
-            $user=$this->finder('XF:User')->where('username',$userId)->fetchOne();
+            $user=$this->finder('XF:User')->where('username',$account)->fetchOne();
         }
 
 
         //Build proper equipment array to return apiresult
         //TODO: Need to refactor how equipment works for this to work
-        $equipments = $this->finder('Terrasphere\Charactermanager:Equipment')->where('user_id', $user->user_id);
+        $equipments = $this->finder('Terrasphere\Charactermanager:CharacterEquipment')->where('user_id', $user->user_id);
         $equipResult = array();
         foreach($equipments as $equipment){
-            $equipName = $user->getDisplayNameForEquip($equipment->type);
+            $equipName = $equipment->Equipment->display_name;
             $equipRank = $equipment->Rank->name;
             $equipResult[] = [$equipName => $equipRank];
         }
@@ -47,7 +47,8 @@ class Character extends AbstractController{
         }
 
         return $this->apiResult([
-            'user' => $user->user_id,
+            'username' => $user->username,
+            'user_id' => $user->user_id,
             'masteries' => $masteryResult,
             'equipment' => $equipResult,
         ]);
