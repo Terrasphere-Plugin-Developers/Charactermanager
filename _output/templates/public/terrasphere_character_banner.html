@@ -133,9 +133,14 @@
 				<img src="{$src}" alt="{$alt}}">
 			</a>
 			
-		<xf:else />
+		<xf:elseif is="{{$behavior == 1}}" />
 			<a href="{$link}"
 		       class="character-banner-interface-button">
+				<img src="{$src}" alt="{$alt}}">
+			</a>
+		<xf:else />
+			<a href="{$link}" target="_blank"
+			   class="character-banner-interface-button">
 				<img src="{$src}" alt="{$alt}}">
 			</a>
 		</xf:if>

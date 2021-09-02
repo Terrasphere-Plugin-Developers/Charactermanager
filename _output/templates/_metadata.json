@@ -1,13 +1,13 @@
 {
     "admin/terrasphere_core_banner_button_edit.html": {
-        "version_id": 1000100,
-        "version_string": "1.0.1",
-        "hash": "de0834b20bf4ce301b3170242814dae1"
+        "version_id": 1000200,
+        "version_string": "1.0.2",
+        "hash": "5fed62da3fb89363e6536dd7ce6d3e7d"
     },
     "public/terrasphere_character_banner.html": {
-        "version_id": 1000100,
-        "version_string": "1.0.1",
-        "hash": "85f573f16ca0db8cba054ea5cf8e6ccb"
+        "version_id": 1000200,
+        "version_string": "1.0.2",
+        "hash": "45b5f1d572c9ad9040693b55193278d3"
     },
     "public/terrasphere_cm_character_sheet.html": {
         "version_id": 1000100,
