@@ -16,18 +16,19 @@
         ajaxResponse: function(e, data)
         {
             // Update armor icon.
-            $(".armor .character-sheet-mastery-icon").attr('src', data.newIconURL);
+            $(".armor-icon").attr('src', data.newIconURL);
 
             // Update armor name.
-            $(".armor .character-sheet-mastery-title").html(function(i, oldhtml) {
+            $(".armor-name").html(function(i, oldhtml) {
                 return data.newName + oldhtml.substr(oldhtml.indexOf("<br>"));
             });
 
             // Reset flashing animation element by clone+delete (may not be necessary, but could be).
-            var elem = $(".armor .mastery-change-flash");
+            var elem = $(".armor-flash");
             var copy = elem.clone(true);
             elem.before(copy);
-            $(".armor .mastery-change-flash:last-child").remove();
+            $(".armor-flash:last-child").remove();
+
 
             // Play reset animation.
             copy.css("animation-play-state", "running");

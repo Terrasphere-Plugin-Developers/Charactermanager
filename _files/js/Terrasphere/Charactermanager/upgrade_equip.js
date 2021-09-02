@@ -33,15 +33,15 @@
             var lastRankClass = "rank-"+(data.newRankTier-1);
             var newRankClass = "rank-"+(data.newRankTier);
 
-            $("#equip-container-" + data.equipId + " ." + lastRankClass).removeClass(lastRankClass).addClass(newRankClass);
-            $("#equip-container-" + data.equipId + " .rank-stars").removeClass("rank-stars-" + (data.newRankTier-1)).addClass("rank-stars-" + data.newRankTier);
-            $("#equip-container-" + data.equipId + " .m-title-rank").text("" + data.newRankTitle);
+            $("#equip-container-" + data.equipGroup + " ." + lastRankClass).removeClass(lastRankClass).addClass(newRankClass);
+            $("#equip-container-" + data.equipGroup + " .rank-stars").removeClass("rank-stars-" + (data.newRankTier-1)).addClass("rank-stars-" + data.newRankTier);
+            $("#equip-container-" + data.equipGroup + " .m-title-rank").text("" + data.newRankTitle);
 
             // Reset flashy animation element by clone+delete.
-            var elem = $("#equip-container-" + data.equipId + " .mastery-change-flash");
+            var elem = $("#equip-container-" + data.equipGroup + " .mastery-change-flash");
             var copy = elem.clone(true);
             elem.before(copy);
-            $("#equip-container-" + data.equipId + " .mastery-change-flash:last-child").remove();
+            $("#equip-container-" + data.equipGroup + " .mastery-change-flash:last-child").remove();
 
             // Play reset animation.
             copy.css("animation-play-state", "running");
@@ -54,7 +54,7 @@
                     console.log($('.armor-upgrade-form'));
                     $('.armor-upgrade-form').remove();
                 }else {
-                    $("#equip-container-" + data.equipId + " .character-sheet-mastery-icon-container")
+                    $("#equip-container-" + data.equipGroup + " .character-sheet-mastery-icon-container")
                         .removeAttr('href')
                         .removeAttr('data-xf-click')
                         .removeAttr('data-cache')

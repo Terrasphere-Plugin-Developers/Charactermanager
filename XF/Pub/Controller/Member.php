@@ -388,7 +388,7 @@ class Member extends XFCP_Member
     public function actionConfirmUpgradeEquip(ParameterBag $params)
     {
         $user_id = $this->filter('user_id', 'uint');
-        $equipmentId = $this->filter('equipment_id', 'uint');
+        $equipGroup = $this->filter('equipment_group', 'str');
 
 
         try {
@@ -398,7 +398,7 @@ class Member extends XFCP_Member
             throw $e;
         }
 
-        $charEquip = CharacterEquipment::getEquipment($this,$user_id,$equipmentId);
+        $charEquip = CharacterEquipment::getEquipmentByGroup($this,$user_id,$equipGroup);
         $equipment = $charEquip->Equipment;
 
         // Get the next-highest rank.
@@ -435,7 +435,7 @@ class Member extends XFCP_Member
             'thisRank' => $charEquip->Rank,
             'nextRank' => $nextRank,
             'rankSchema' => $rankSchema,
-            'equipId' => $equipmentId,
+            'equipId' => $equipment->equipment_id,
             'user' => $user,
             'userVal' => $rankSchema->Currency->getFormattedValue($userVal),
             'nextCost' => $rankSchema->Currency->getFormattedValue($nextCost),
@@ -446,7 +446,7 @@ class Member extends XFCP_Member
 
     public function actionConfirmChangeArmor(ParameterBag $params) {
         $user_id = $this->filter('user_id', 'uint');
-        $equipId = $this->filter('equipment_id', 'uint');
+        $equipGroup = $this->filter('equipment_group', 'str');
 
         try {
             /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
@@ -455,7 +455,7 @@ class Member extends XFCP_Member
             return $this->error($e->getMessage());
         }
 
-        $charEquip = CharacterEquipment::getEquipment($this,$user_id,$equipId);
+        $charEquip = CharacterEquipment::getEquipmentByGroup($this,$user_id,$equipGroup);
         $equipment = $charEquip->Equipment;
 
         $otherEquip = array_values($this->finder('Terrasphere\Core:Equipment')
@@ -513,6 +513,10 @@ class Member extends XFCP_Member
             return $this->error("No associated rank schema with current equipment when changing armor type.");
 
         $cost = $this->getRetrofitCost($rankSchema, $charEquip);
+        $userVal = $rankSchema->Currency->getValueFromUser($user, false);
+
+        if($cost > $userVal)
+            return $this->error('Error: Insufficient Funds.');
 
         if($this->adjustCurrency($user, $cost, "Armor Retrofit (".$targetArmor->display_name.")", $rankSchema->Currency->currency_id))
         {
@@ -590,6 +594,7 @@ class Member extends XFCP_Member
             $redirect->setJsonParam('newRankTitle', $nextRank['name']);
             $redirect->setJsonParam('equipType', $equipment->equip_group);
             $redirect->setJsonParam('isMaxRank', $nextRank['tier'] == Rank::maxTier($this));
+            $redirect->setJsonParam('equipGroup', $equipment->equip_group);
 
             return $redirect;
         }

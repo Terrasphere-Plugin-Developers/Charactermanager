@@ -357,11 +357,11 @@
           arg-charEquipment="!"
           arg-can_make_changes="!"
           arg-max_rank="!">
-    <div class="character-sheet-mastery-container" id="equip-container-{$equipId}">
+    <div class="character-sheet-mastery-container" id="equip-container-{$charEquipment.Equipment.equip_group}">
         <div class="character-sheet-mastery grid-overlap">
             <div class="rank-stars grid-overlap rank-stars-{$charEquipment.Rank.tier}"></div>
             <xf:if is="$can_make_changes AND {$charEquipment.Rank.rank_id} != $max_rank">
-                <a href="{{ link('members/cs/equipment/confirmUpgradeEquip', null, {'user_id': $user.user_id, 'equipment_id': $charEquipment.equipment_id}) }}"
+                <a href="{{ link('members/cs/equipment/confirmUpgradeEquip', null, {'user_id': $user.user_id, 'equipment_group': $charEquipment.Equipment.equip_group}) }}"
                    class="character-sheet-mastery-icon-container grid-overlap rank-{$charEquipment.Rank.tier}"
                    data-xf-click="overlay"
                    data-cache="false"
@@ -453,26 +453,26 @@
                               arg-charEquipment="{$weapon}"
                               arg-can_make_changes="{$canMakeChanges}"
                               arg-max_rank="{$maxRank}"/>
-                    <div class="character-sheet-mastery-container" id="equip-container-{$armor.equipment_id}">
+                    <div class="character-sheet-mastery-container" id="equip-container-{$armor.Equipment.equip_group}">
                         <div class="character-sheet-mastery grid-overlap">
                             <div class="rank-stars grid-overlap rank-stars-{$armor.Rank.tier}"></div>
                             <xf:if is="$canMakeChanges AND {$armor.Rank.rank_id} != $maxRank">
                                 <div class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier} armor"
                                      style="background-color: #B0B0B0;">
-                                    <img class="character-sheet-mastery-icon grid-overlap armor"
+                                    <img class="character-sheet-mastery-icon grid-overlap armor armor-icon"
                                          src="{{$armor.Equipment.icon_url}}"
                                          alt="{{$armor.Equipment.display_name}} Slot"/>
                                     <div id="armor-popup">
-                                        <a href="{{ link('members/cs/equipment/confirmUpgradeEquip', null, {'user_id': $user.user_id, 'equipment_id': $armor.equipment_id}) }}"
+                                        <a href="{{ link('members/cs/equipment/confirmUpgradeEquip', null, {'user_id': $user.user_id, 'equipment_group': $armor.Equipment.equip_group}) }}"
                                             data-cache="false"
                                             data-xf-click="overlay"
                                             class="inline-armor armor-upgrade-form">
                                             <div class="armor-button">Upgrade</div>
                                         </a>
-                                        <a href="{{ link('members/cs/equipment/confirmChangeArmor', null, {'user_id': $user.user_id, 'equipment_id': $armor.equipment_id}) }}"
+                                        <a href="{{ link('members/cs/equipment/confirmChangeArmor', null, {'user_id': $user.user_id, 'equipment_group': $armor.Equipment.equip_group}) }}"
                                            data-xf-click="overlay"
                                            data-cache="false"
-                                           class="inline-armor armor-upgrade-form">
+                                           class="inline-armor armor-change-type-form">
                                             <div class="armor-button">Change Type</div>
                                         </a>
                                     </div>
@@ -480,10 +480,10 @@
                                 <xf:js src="Terrasphere/Charactermanager/armor_dialogue.js"
                                        addon="Terrasphere/Charactermanager"/>
                             <xf:else/>
-                                <a href="{{ link('members/cs/equipment/confirmChangeArmor', null, {'user_id': $user.user_id, 'equipment_id': $armor.equipment_id}) }}"
+                                <a href="{{ link('members/cs/equipment/confirmChangeArmor', null, {'user_id': $user.user_id, 'equipment_group': $armor.Equipment.equip_group}) }}"
                                    data-xf-click="overlay"
                                    data-cache="false"
-                                   class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier} armor"
+                                   class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier} armor armor-icon"
                                    style="background-color: #B0B0B0;">
                                     <img class="character-sheet-mastery-icon grid-overlap"
                                          src="{{$armor.Equipment.icon_url}}"
@@ -491,12 +491,12 @@
 
                                 </a>
                             </xf:if>
-                            <div class="character-sheet-mastery-title">
+                            <div class="character-sheet-mastery-title armor-name">
                                 {{$armor.Equipment.display_name}}<br>
                                 <span class="m-title-rank">{$armor.Rank.name}</span>
                             </div>
                         </div>
-                        <div class="mastery-change-flash grid-overlap"></div>
+                        <div class="mastery-change-flash armor-flash grid-overlap"></div>
                     </div>
                 </div>
             </div>

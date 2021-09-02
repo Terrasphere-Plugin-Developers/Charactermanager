@@ -53,4 +53,15 @@ class CharacterEquipment extends Entity
             ])
             ->fetchOne();
     }
+
+    public static function getEquipmentByGroup($mustHaveFinderAndEM, int $userId, string $equipGroup) : CharacterEquipment
+    {
+        return $mustHaveFinderAndEM->finder('Terrasphere\Charactermanager:CharacterEquipment')
+            ->with('Equipment')
+            ->where([
+                ['user_id', $userId],
+                ['Equipment.equip_group',$equipGroup],
+            ])
+            ->fetchOne();
+    }
 }
