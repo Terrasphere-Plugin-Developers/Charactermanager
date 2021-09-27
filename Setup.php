@@ -42,7 +42,8 @@ class Setup extends AbstractSetup
     }
 
     ### UPDATE STUFF  VERSION 1.0.1###
-    public function upgrade1000100Step1(){
+    public function upgrade1000100Step1()
+    {
         $this->schemaManager()->dropTable("xf_terrasphere_cm_equipment");
         $this->characterEquipmentTable($this->schemaManager());
         $this->schemaManager()->alterTable('xf_user', function(Alter $table)
@@ -52,5 +53,13 @@ class Setup extends AbstractSetup
             $table->dropColumns('ts_cm_armor_med_rank_id');
             $table->dropColumns('ts_cm_armor_heavy_rank_id');
         });
+    }
+
+
+    ### UPDATE STUFF  VERSION 1.0.6###
+    public function upgrade1000600Step1()
+    {
+        $this->raceTraitTable($this->schemaManager());
+        $this->raceTraitGroupAccessTable($this->schemaManager());
     }
 }
