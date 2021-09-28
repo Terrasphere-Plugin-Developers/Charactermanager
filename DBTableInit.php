@@ -121,6 +121,9 @@ trait DBTableInit
             $table->addColumn("race_trait_id", "int")->primaryKey()->autoIncrement();
             $table->addColumn("name", "varchar", 999);
             $table->addColumn("icon_url", "varchar", 999);
+            $table->addColumn("wiki_url", "varchar", 999);
+            $table->addColumn("tooltip", "varchar", 999)->setDefault('');
+            $table->addColumn("cached_group_id", "int")->unsigned(false);
         }
         );
     }

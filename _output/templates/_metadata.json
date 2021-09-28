@@ -1,4 +1,14 @@
 {
+    "admin/terrasphere_cm_racial_traits.html": {
+        "version_id": 1000600,
+        "version_string": "1.0.6",
+        "hash": "d4746700313fdce7281c24e623338abc"
+    },
+    "admin/terrasphere_cm_racial_traits_edit.html": {
+        "version_id": 1000600,
+        "version_string": "1.0.6",
+        "hash": "9bf77eea24684e1ec13fbb26cb436d66"
+    },
     "admin/terrasphere_core_banner_button_edit.html": {
         "version_id": 1000200,
         "version_string": "1.0.2",

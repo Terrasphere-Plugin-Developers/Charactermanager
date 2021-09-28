@@ -1,0 +1,11 @@
+{
+    "route_type": "admin",
+    "route_prefix": "terrasphere-cm",
+    "sub_name": "racial-traits",
+    "format": "racial-traits/:int<race_trait_id>",
+    "build_class": "",
+    "build_method": "",
+    "controller": "Terrasphere\\CharacterManager:RacialTraits",
+    "context": "",
+    "action_prefix": ""
+}

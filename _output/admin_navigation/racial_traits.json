@@ -1,0 +1,10 @@
+{
+    "parent_navigation_id": "terrasphereCore",
+    "display_order": 400,
+    "link": "terrasphere-cm/racial-traits",
+    "icon": "",
+    "admin_permission_id": "terrasphereCore",
+    "debug_only": false,
+    "development_only": false,
+    "hide_no_children": false
+}

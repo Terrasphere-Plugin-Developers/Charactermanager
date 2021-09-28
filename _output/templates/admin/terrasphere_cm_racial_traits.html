@@ -1,0 +1,25 @@
+<xf:title>Racial Traits</xf:title>
+
+<xf:pageaction>
+	<xf:button href="{{ link('terrasphere-cm/racial-traits/add') }}" icon="add">{{ phrase('add') }}</xf:button>
+</xf:pageaction>
+
+<div class="block">
+	<div class="block-container">
+		<xf:foreach loop="$racialTraits" value="$racialTraitCategory">
+			<h2 class="block-header">{$racialTraitCategory.name}</h2>
+			<div class="block-body">
+				<xf:datalist>
+					<xf:foreach loop="{$racialTraitCategory.racialTraits}" value="$trait">
+						<xf:datarow
+								hash="{$trait.race_trait_id}"
+								href="{{ link('terrasphere-cm/racial-traits/edit', $trait) }}"
+								label="{$trait.name}"
+								delete="{{link('terrasphere-cm/racial-traits/delete', $trait)}}"
+								/>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+		</xf:foreach>
+	</div>
+</div>

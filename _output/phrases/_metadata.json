@@ -1,4 +1,10 @@
 {
+    "admin_navigation.racial_traits.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "3497d9f7365c5f65353effab785e4c65"
+    },
     "character_sheet.txt": {
         "global_cache": false,
         "version_id": 1000010,
