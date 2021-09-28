@@ -1,0 +1,36 @@
+<xf:if is="$trait.isInsert()">
+	<xf:title>New Racial Trait</xf:title>
+<xf:else />
+	<xf:title>Edit ({$trait.name})</xf:title>
+</xf:if>
+
+<xf:form action="{{ link('terrasphere-cm/racial-traits/save', $trait) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow name="name" value="{$trait.name}"
+				label="{{ phrase('name') }}" />
+			
+			<xf:formrow label="Icon Image" hint="Trait icon">
+				<div class="inputGroup inputGroup--joined" data-xf-init="asset-upload" data-asset="{{'RacialTrait-icon_url-' . $trait.race_trait_id}}">
+					<input type="text" class="input js-assetPath " name="icon_url" value="{{$trait.icon_url}}" dir="ltr" id="stilldontknowwhythisexists">
+					<label class="inputGroup-text inputUploadButton" data-xf-init="tooltip" data-original-title="Upload file" id="stilldontknowwhythisexistseither">
+						<input type="file" class="js-uploadAsset" accept=".gif,.jpeg,.jpg,.jpe,.png">
+					</label>
+				</div>
+			</xf:formrow>
+			
+			<xf:textboxrow name="wiki_url" value="{$trait.wiki_url}"
+						   label="{{ phrase('wiki_url') }}" />
+
+			<xf:textboxrow name="tooltip" value="{$trait.tooltip}"
+						   label="Tooltip" />
+			
+			<xf:checkboxrow label="Available Races" hint="Which groups can select this racial triat?">
+				<xf:foreach loop="$userGroups" value="$usergroup">
+					<xf:option name="usergroup{$usergroup.user_group_id}" label="{$usergroup.title}" checked="{$usergroup.user_title}" />
+				</xf:foreach>
+			</xf:checkboxrow>
+		</div>
+		<xf:submitrow sticky="true" icon="save" />
+	</div>
+</xf:form>
