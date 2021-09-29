@@ -17,6 +17,7 @@ trait DBTableInit
         $this->characterEquipmentTable($sm);
         $this->raceTraitTable($sm);
         $this->raceTraitGroupAccessTable($sm);
+        $this->characterRaceTraitTable($sm);
         // etc...
     }
 
@@ -30,6 +31,7 @@ trait DBTableInit
         $sm->dropTable("xf_terrasphere_cm_character_equipment");
         $sm->dropTable("xf_terrasphere_cm_racial_trait");
         $sm->dropTable("xf_terrasphere_cm_racial_trait_group_access");
+        $sm->dropTable("xf_terrasphere_cm_character_race_traits");
 
         // etc...
     }
@@ -135,6 +137,18 @@ trait DBTableInit
             $table->addColumn("race_trait_id", "int");
             $table->addColumn("group_id", "int");
             $table->addPrimaryKey(['race_trait_id', 'group_id']);
+        }
+        );
+    }
+
+    public function characterRaceTraitTable(SchemaManager $sm)
+    {
+        $sm->createTable(
+            "xf_terrasphere_cm_character_race_traits", function (create $table) {
+            $table->addColumn("id","int")->primaryKey()->autoIncrement(true);
+            $table->addColumn("user_id", "int");
+            $table->addColumn("race_trait_id", "int");
+            $table->addColumn("slot_index", "int");
         }
         );
     }

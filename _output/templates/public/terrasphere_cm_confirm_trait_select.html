@@ -1,0 +1,40 @@
+<xf:macro name="trait"
+		  arg-trait="!">
+	<label class="character-sheet-race-trait-container">
+		<input class="race-trait-option grid-overlap"
+		   type="radio"
+		   id="trait-{$trait.race_trait_id}"
+		   name="trait"
+		   value="{$trait.race_trait_id}">
+		<div class="character-sheet-race-trait grid-overlap">
+			<div class="character-sheet-race-trait-icon-container grid-overlap" style="background-color: {{$mastery.color}};">
+				<xf:if is="$trait.icon_url != ''">
+					<img src="{$trait.icon_url}" class="character-sheet-race-trait-icon">
+				<xf:else />
+					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="character-sheet-race-trait-icon">
+				</xf:if>
+			</div>
+			<div class="race-trait-unselect-overlay grid-overlap"></div>
+			<div class="character-sheet-race-trait-title">{$trait.name}</div>
+		</div>
+	</label>
+</xf:macro>
+
+<div class="block">
+	<div class="block-container">
+		<xf:form action="{{ link('members/cs/mastery/saveNewTrait', $slot, {'user_id': $slot.user_id, 'slot_index': $slot.slot_index}) }}"
+			  	class="block-container"
+			  	method="post"
+			  	ajax="true"
+				data-xf-init="new-trait"
+			  	data-reset-complete="true"
+			  	data-redirect="off">
+			<xf:foreach loop="$traits" value="$trait" key="$traitKey">
+				<xf:macro name="trait" arg-trait="{$trait}"></xf:macro>
+			</xf:foreach>
+			<xf:submitrow icon="save" />
+		</xf:form>
+	</div>
+</div>
+
+<xf:js src="Terrasphere/Charactermanager/new_trait.js" addon="Terrasphere/Charactermanager" />

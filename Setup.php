@@ -61,5 +61,6 @@ class Setup extends AbstractSetup
     {
         $this->raceTraitTable($this->schemaManager());
         $this->raceTraitGroupAccessTable($this->schemaManager());
+        $this->characterRaceTraitTable($this->schemaManager());
     }
 }

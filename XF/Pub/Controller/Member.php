@@ -1,7 +1,5 @@
 <?php
 
-//extends the Member Controller since Character Sheet shenanigans are supposed to happen individually for each profile.
-
 namespace Terrasphere\Charactermanager\XF\Pub\Controller;
 
 use Terrasphere\Charactermanager\Entity\CharacterEquipment;
@@ -14,23 +12,21 @@ use XF\Mvc\Reply\Exception;
 
 class Member extends XFCP_Member
 {
-    //copied and changed from Member latestActivity
     /**
      * @throws Exception
      */
     public function actionCharacterSheet(ParameterBag $params)
 	{
-        try {
-            /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
-            $user = $this->assertViewableUser($params['user_id']);
-        } catch (Exception $e) {
-            throw $e;
-        }
+        /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
+        $user = $this->assertViewableUser($params['user_id']);
 
         $masterySlots = CharacterMastery::getCharacterMasterySlots($this, $params->user_id);
         $weapon = $user->getOrInitiateWeapon();
 
         $armor = $user->getOrInitiateArmor();
+
+        /** @var \Terrasphere\Charactermanager\Repository\RacialTraits $raceTraitRepo */
+        $raceTraitRepo = $this->repository('Terrasphere\CharacterManager:RacialTraits');
 
         $maxRank = Rank::maxRank($this);
 
@@ -39,6 +35,7 @@ class Member extends XFCP_Member
 		    'masterySlots' => $masterySlots,
             'weapon' => $weapon,
             'armor' => $armor,
+            'raceTraitSlots' => $raceTraitRepo->getRacialTraitSlotsForUser($user),
 		    'maxRank' => $maxRank['rank_id'],
             'hasCS' => $user['ts_cm_character_sheet_post_id'] != -1,
             'canViewCS' => $this->canVisitorViewCharacterSheet($params->user_id),
@@ -59,12 +56,8 @@ class Member extends XFCP_Member
      */
     public function actionLinkCs(ParameterBag $params)
     {
-        try {
-            /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
-            $user = $this->assertViewableUser($params['user_id']);
-        } catch (Exception $e) {
-            throw $e;
-        }
+        /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
+        $user = $this->assertViewableUser($params['user_id']);
 
         return $this->view('XF:Member\LinkCS', 'terrasphere_cm_cs_link_page', ['user' => $user]);
     }
@@ -125,6 +118,118 @@ class Member extends XFCP_Member
     }
 
     public function actionSaveNewMastery(ParameterBag $params)
+    {
+        if($this->isPost())
+        {
+            // Permission check
+            if(!$this->canVisitorEditCharacterSheet($params['user_id']))
+                return $this->error("You don't have permission to edit this character.");
+
+            // Mastery slot index bounds check
+            if($params['target_index'] < 0 || $params['target_index'] > 4)
+                return $this->error('Invalid Mastery index for new mastery selection.');
+
+            $entry = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
+                ->where('user_id', $params['user_id'])
+                ->where('target_index', $params['target_index'])
+                ->fetchOne();
+
+            // Slot already filled check
+            if($entry != null)
+                return $this->error('Mastery slot is already filled.');
+
+            $input = $this->filter([
+                'mastery' => 'uint'
+            ]);
+
+            /** @var \Terrasphere\Core\Repository\Mastery $masteryRepo */
+            $masteryRepo = $this->repository('Terrasphere\Core:Mastery');
+            $mastery = $masteryRepo->getMasteryWithTraitsByID($input['mastery']);
+
+            // Mastery selection existence check
+            if($mastery == null)
+                return $this->error('Mastery is missing from database; try reloading.');
+
+            $entry = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
+                ->where('user_id', $params['user_id'])
+                ->where('mastery_id', $input['mastery'])
+                ->fetchOne();
+
+            // Mastery already owned check
+            if($entry != null)
+                return $this->error('Character already has this mastery!');
+
+            $sameTypeMasteries = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
+                ->with('Mastery')
+                ->where('user_id', $params['user_id'])
+                ->where('Mastery.mastery_type_id', $mastery['mastery_type_id'])
+                ->total();
+
+            // Mastery type limit check
+            if($sameTypeMasteries >= $mastery->MasteryType->cap_per_character)
+                return $this->error('You already have the maximum amount of ' . $mastery->MasteryType->name . ' masteries. ('.$sameTypeMasteries.' vs '.$mastery->MasteryType->cap_per_character.')');
+
+            // 4th slot restriction check
+            if($params['target_index'] == 3 && !$this->fourthSlotUnlocked($params['user_id']))
+                return $this->error('Slot not unlocked.');
+
+            // 5th slot restriction check
+            if($params['target_index'] == 4 && !$this->fifthSlotUnlocked($params['user_id']))
+                return $this->error('Slot not unlocked.');
+
+            $rank = Rank::minRank($this);
+
+            // Save entity to DB
+            $slotEntity = $this->em()->create('Terrasphere\Charactermanager:CharacterMastery');
+            $slotEntity['mastery_id'] = $mastery['mastery_id'];
+            $slotEntity['user_id'] = $params['user_id'];
+            $slotEntity['target_index'] = $params['target_index'];
+            $slotEntity['rank_id'] = $rank['rank_id'];
+            $this->saveMasterySlot($slotEntity)->run();
+
+            // Close overlay via redirect and setup AJAX parameters.
+            $redirect = $this->redirect($this->buildLink('members', null, ['user_id' => $params['user_id']]));
+            $redirect->setJsonParam('masterySlotIndex', $params['target_index']);
+            $redirect->setJsonParam('newMasteryName', $mastery['display_name']);
+            $redirect->setJsonParam('newMasteryIconURL', $mastery['icon_url']);
+            $redirect->setJsonParam('newMasteryColor', $mastery['color']);
+            $redirect->setJsonParam('rankTitle', $rank['name']);
+            // TODO Add another for updating cost of upgrade...
+            return $redirect;
+        }
+
+        return $this->error('Post only operation.');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function actionSelectNewTrait(ParameterBag $params)
+    {
+        $userID = $this->filter('user_id', 'uint');
+        $slotIndex = $this->filter('slot_index', 'uint');
+
+        /** @var \Terrasphere\Charactermanager\Repository\RacialTraits $repo */
+        $repo = $this->repository('Terrasphere\CharacterManager:RacialTraits');
+
+        /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
+        $user = $this->assertViewableUser($userID);
+
+        $traits = $repo->getTraitSelectionsAvailableForUser($user);
+
+        $dummySlot = $this->em()->create('Terrasphere\Charactermanager:CharacterRaceTrait');
+        $dummySlot['user_id'] = $userID;
+        $dummySlot['slot_index'] = $slotIndex;
+
+        $viewparams = [
+            'traits' => $traits,
+            'slot' => $dummySlot,
+        ];
+
+        return $this->view('Terrasphere\Charactermanager:TraitSelection', 'terrasphere_cm_confirm_trait_select', $viewparams);
+    }
+
+    public function actionSaveNewTrait(ParameterBag $params)
     {
         if($this->isPost())
         {

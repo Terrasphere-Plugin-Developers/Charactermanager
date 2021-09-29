@@ -1,0 +1,147 @@
+<xf:macro name="mastery"
+          arg-is_empty="!"
+          arg-user="!"
+          arg-mastery_slot="!"
+          arg-is_locked="0"
+          arg-can_make_changes="!"
+          arg-max_rank="!">
+    <xf:if is="$is_empty">
+        <xf:set var="$masteryElementDisplay" value="none"/>
+        <xf:if is="$is_locked">
+            <xf:set var="$emptyElementDisplay" value="none"/>
+            <xf:set var="$lockElementDisplay" value="inherit"/>
+            <xf:else/>
+            <xf:set var="$emptyElementDisplay" value="inherit"/>
+            <xf:set var="$lockElementDisplay" value="none"/>
+        </xf:if>
+        <xf:else/>
+        <xf:set var="$emptyElementDisplay" value="none"/>
+        <xf:set var="$lockElementDisplay" value="none"/>
+        <xf:set var="$masteryElementDisplay" value="interit"/>
+    </xf:if>
+    <div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
+        <div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
+            <div class="rank-stars grid-overlap rank-stars-{$mastery_slot.Rank.tier}"></div>
+            <xf:if is="$can_make_changes AND $mastery_slot.rank_id != $max_rank">
+                <a href="{{ link('members/cs/mastery/confirmUpgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
+                   class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.Rank.tier}"
+                   data-xf-click="overlay"
+                   data-cache="false"
+                   style="background-color: {$mastery_slot.Mastery.color};">
+                    <img class="character-sheet-mastery-icon grid-overlap"
+                         src="{$mastery_slot.Mastery.icon_url}"
+                         alt="Mastery slot"/>
+                </a>
+            <xf:else/>
+                <div class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.Rank.tier}"
+                     style="background-color: {$mastery_slot.Mastery.color};">
+                    <img class="character-sheet-mastery-icon grid-overlap"
+                         src="{$mastery_slot.Mastery.icon_url}"
+                         alt="Mastery slot"/>
+                </div>
+            </xf:if>
+            <div class="character-sheet-mastery-title">
+                {$mastery_slot.Mastery.display_name}<br>
+                <span class="m-title-rank">{$mastery_slot.Rank.name}</span>
+            </div>
+        </div>
+        <div class="character-sheet-mastery-empty grid-overlap" style="display: {$emptyElementDisplay};">
+            <a href="{{ link('members/cs/mastery/selectNew', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
+               class="character-sheet-mastery-icon-container grid-overlap"
+               data-xf-click="overlay">
+                <img class="character-sheet-mastery-icon grid-overlap"
+                     src="{{ base_url('styles/default/Terrasphere/Charactermanager/plus_sign.png', true) }}"
+                     alt="Mastery slot"
+                     style="width:50%;height:50%;"/>
+            </a>
+        </div>
+        <div class="character-sheet-mastery-lock grid-overlap" style="display: {$lockElementDisplay};">
+            <div class="character-sheet-mastery-icon-container grid-overlap locked">
+                <img class="character-sheet-mastery-icon grid-overlap"
+                     src="{{ base_url('styles/default/Terrasphere/Charactermanager/padlock.png', true) }}"
+                     alt="Locked mastery slot"
+                     style="width:50%;height:50%;"/>
+            </div>
+        </div>
+        <div class="mastery-change-flash grid-overlap"></div>
+    </div>
+</xf:macro>
+
+<xf:macro name="equip"
+          arg-equipId="!"
+          arg-user="!"
+          arg-charEquipment="!"
+          arg-can_make_changes="!"
+          arg-max_rank="!">
+    <div class="character-sheet-mastery-container" id="equip-container-{$charEquipment.Equipment.equip_group}">
+        <div class="character-sheet-mastery grid-overlap">
+            <div class="rank-stars grid-overlap rank-stars-{$charEquipment.Rank.tier}"></div>
+            <xf:if is="$can_make_changes AND {$charEquipment.Rank.rank_id} != $max_rank">
+                <a href="{{ link('members/cs/equipment/confirmUpgradeEquip', null, {'user_id': $user.user_id, 'equipment_group': $charEquipment.Equipment.equip_group}) }}"
+                   class="character-sheet-mastery-icon-container grid-overlap rank-{$charEquipment.Rank.tier}"
+                   data-xf-click="overlay"
+                   data-cache="false"
+                   style="background-color: #B0B0B0;">
+                    <img class="character-sheet-mastery-icon grid-overlap"
+                         src="{{$charEquipment.Equipment.icon_url}}"
+                         alt="{{$charEquipment.Equipment.display_name}} Slot"/>
+                </a>
+                <xf:else/>
+                <div class="character-sheet-mastery-icon-container grid-overlap rank-{$charEquipment.Rank.tier}"
+                     style="background-color: #B0B0B0;">
+                    <img class="character-sheet-mastery-icon grid-overlap"
+                         src="{{$charEquipment.Equipment.icon_url}}"
+                         alt="{{$charEquipment.Equipment.display_name}} Slot"/>
+                </div>
+            </xf:if>
+            <div class="character-sheet-mastery-title">
+                {{$charEquipment.Equipment.display_name}}<br>
+                <span class="m-title-rank">{$charEquipment.Rank.name}</span>
+            </div>
+        </div>
+        <div class="mastery-change-flash grid-overlap"></div>
+    </div>
+</xf:macro>
+
+
+<xf:macro name="trait"
+          arg-trait="!"
+          arg-user="!"
+          arg-isEmpty="!"
+          arg-slotIndex="!"
+          arg-traitSlot="!"
+          arg-can_make_changes="!">
+	
+	<xf:set var="$displayFull" value=""/>
+	<xf:set var="$displaySelect" value=""/>
+	<xf:if is="$isEmpty == 1">
+		<xf:set var="$displayFull" value="display: none;"/>
+	<xf:elseif is="$isEmpty == 0"/>
+		<xf:set var="$displaySelect" value="display: none;"/>
+    </xf:if>
+	
+	<div class="character-sheet-race-trait-container" id="race-trait-container-{$slotIndex}" style="{$displayFull}">
+        <div class="character-sheet-race-trait grid-overlap">
+            <div class="character-sheet-race-trait-icon-container grid-overlap"
+                 style="background-color: #B0B0B0;">
+                <img class="character-sheet-mastery-icon grid-overlap"
+                     src="{{$charEquipment.Equipment.icon_url}}"
+                     alt="{{$charEquipment.Equipment.display_name}} Slot"/>
+            </div>
+            <div class="character-sheet-race-trait-title">
+				<span class="rt-title">{{$trait.RacialTrait.name}}</span>
+            </div>
+        </div>
+		<div class="character-sheet-race-trait-empty grid-overlap" style="{$displaySelect};">
+            <a href="{{ link('members/cs/race-trait/selectNewTrait', $traitSlot, {'user_id': $user.user_id, 'slot_index': $slotIndex})}}"
+               class="character-sheet-race-trait-icon-container grid-overlap"
+               data-xf-click="overlay">
+                <img class="character-sheet-race-trait-icon grid-overlap"
+                     src="{{ base_url('styles/default/Terrasphere/Charactermanager/plus_sign.png', true) }}"
+                     alt="Race trait slot"
+                     style="width:50%;height:50%;"/>
+            </a>
+        </div>
+        <div class="race-trait-change-flash grid-overlap"></div>
+    </div>
+</xf:macro>
