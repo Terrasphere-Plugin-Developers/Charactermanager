@@ -23,15 +23,18 @@
 <div class="block-container">
 	<h1 class="character-sheet-overlay-title">Select a race trait</h1>
 	<div class="character-sheet-overlay-stats">
-		<ul>
-			<li><b>Cost:</b> {$currencyCost} {$currencyName}</li>
-			<li><b>Current:</b> {$currencyCurrent} {$currencyName}</li>
-			<li><b>After:</b> {$currencyAfter} {$currencyName}</li>
-		</ul>
+		<xf:if is="$currencyCost != 0">
+			<ul>
+				<li><b>Cost:</b> {$currencyCost} {$currencyName}</li>
+				<li><b>Current:</b> {$currencyCurrent} {$currencyName}</li>
+				<li><b>After:</b> {$currencyAfter} {$currencyName}</li>
+			</ul>
+		</xf:if>
+		
 	</div>
 	
 	<xf:form action="{{ link('members/cs/race-trait/saveNewTrait', $slot, {'user_id': $slot.user_id, 'slot_index': $slot.slot_index}) }}"
-			  class="block-container"
+			  
 			  method="post">
 		<div class="character-sheet-race-trait-option-list">
 			<xf:foreach loop="$traits" value="$trait" key="$traitKey">

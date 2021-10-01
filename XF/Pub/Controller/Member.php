@@ -259,14 +259,24 @@ class Member extends XFCP_Member
         /** @var Currency $currency */
         $currency = $this->assertRecordExists('DBTech\Credits:Currency', $this->options()['terrasphereRaceTraitCurrency'], null, null);
         $currentVal = $currency->getValueFromUser($user, false);
+        $traitCost = 0;
+
+        foreach ($repo->getRacialTraitSlotsForUser($user) as $slot)
+        {
+            if(!$slot['isEmpty'])
+            {
+                $traitCost = $this->options()['terrasphereRaceTraitCost'];
+                break;
+            }
+        }
 
         $viewparams = [
             'traits' => $traits,
             'slot' => $dummySlot,
             'currencyName' => $currency->title,
-            'currencyCost' => (int) $this->options()['terrasphereRaceTraitCost'],
+            'currencyCost' => (int) $traitCost,
             'currencyCurrent' => (int) $currentVal,
-            'currencyAfter' => (int) $currentVal - (int) $this->options()['terrasphereRaceTraitCost'],
+            'currencyAfter' => (int) $currentVal - (int) $traitCost,
         ];
 
         return $this->view('Terrasphere\Charactermanager:TraitSelection', 'terrasphere_cm_confirm_trait_select', $viewparams);
