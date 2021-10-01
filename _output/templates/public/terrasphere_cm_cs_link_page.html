@@ -7,8 +7,12 @@
 		  			data-redirect="off">
 			<xf:textboxrow name="post_id"
 						   value="{{$user.ts_cm_character_sheet_post_id}}"
-						   label="Post ID"
-						   hint="ID of the post to link as this user's CS. Click the number on the top-right of the post, then copy the number at the END of the URL." />
+						   label="Image Post ID"
+						   hint="ID of the post to link as this user's top CS portion. Click the number on the top-right of the post, then copy the number at the END of the URL." />
+			<xf:textboxrow name="desc_post_id"
+						   value="{{$user.ts_cm_character_sheet_build_post_id}}"
+						   label="Build Description Post ID"
+						   hint="ID of the post to link as this user's build description. See above for post ID." />
 			<xf:submitrow sticky="true" icon="Confirm" />
 		</xf:form>
 	</div>

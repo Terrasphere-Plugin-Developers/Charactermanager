@@ -22,7 +22,7 @@
     "public/terrasphere_cm_character_sheet.html": {
         "version_id": 1000600,
         "version_string": "1.0.6",
-        "hash": "c9935e584e3a5d33d230f3bf13df6f81"
+        "hash": "bd312226d549a079d4ff3ff1533bd317"
     },
     "public/terrasphere_cm_character_sheet_cell_mastery_equip.html": {
         "version_id": 1000600,
@@ -37,7 +37,7 @@
     "public/terrasphere_cm_character_sheet_css.html": {
         "version_id": 1000600,
         "version_string": "1.0.6",
-        "hash": "7645c3c18a42e8fe4ae6f139ce2e789a"
+        "hash": "d3bec71569e5310eba5af18e43c67a8f"
     },
     "public/terrasphere_cm_character_sheet_macros.html": {
         "version_id": 1000600,
@@ -65,9 +65,9 @@
         "hash": "98ec04c1950c279debbf5a9746c9ff8b"
     },
     "public/terrasphere_cm_cs_link_page.html": {
-        "version_id": 1000010,
-        "version_string": "1.0.0 Alpha",
-        "hash": "7b9bd54fa1a32574b0a08b0dee716274"
+        "version_id": 1000600,
+        "version_string": "1.0.6",
+        "hash": "175deb3eebab7842654e01da217135e1"
     },
     "public/terrasphere_cm_mastery_selection.html": {
         "version_id": 1000600,

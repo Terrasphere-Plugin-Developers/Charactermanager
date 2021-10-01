@@ -26,6 +26,7 @@ class Setup extends AbstractSetup
         $this->schemaManager()->alterTable('xf_user', function(Alter $table)
         {
             $table->addColumn('ts_cm_character_sheet_post_id', 'int')->unsigned(false)->setDefault(-1);
+            $table->addColumn('ts_cm_character_sheet_build_post_id', 'int')->unsigned(false)->setDefault(-1);
         });
         $this->db();
     }
@@ -38,6 +39,10 @@ class Setup extends AbstractSetup
         $this->schemaManager()->alterTable('xf_user', function(Alter $table)
         {
             $table->dropColumns('ts_cm_character_sheet_post_id');
+        });
+        $this->schemaManager()->alterTable('xf_user', function(Alter $table)
+        {
+            $table->dropColumns('ts_cm_character_sheet_build_post_id');
         });
     }
 
@@ -62,5 +67,10 @@ class Setup extends AbstractSetup
         $this->raceTraitTable($this->schemaManager());
         $this->raceTraitGroupAccessTable($this->schemaManager());
         $this->characterRaceTraitTable($this->schemaManager());
+
+        $this->schemaManager()->alterTable('xf_user', function(Alter $table)
+        {
+            $table->addColumn('ts_cm_character_sheet_build_post_id', 'int')->unsigned(false)->setDefault(-1);
+        });
     }
 }

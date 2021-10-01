@@ -3,13 +3,25 @@
 <div class="block character-sheet" style="max-width: 1018px; margin: auto;">
     <div class="block-container">
         <div class="block-body">
+            <xf:if is="$hasCS">
+				<div class="character-sheet-cell">
+					<xf:set var="$post" value="{{$csPost.post}}" />
+					<xf:set var="$thread" value="{{$csPost.thread}}" />
+                	<xf:include template="terrasphere_core_post_proxy_page"/>
+				</div>
+            </xf:if>
 			
 			<xf:include template="terrasphere_cm_character_sheet_cell_race_traits" />
-            <xf:if is="$hasCS">
-                <xf:include template="terrasphere_core_post_proxy_page"/>
-            </xf:if>
 
             <xf:include template="terrasphere_cm_character_sheet_cell_mastery_equip" />
+			
+			<xf:if is="$hasBuildDesc">
+				<div class="character-sheet-cell">
+					<xf:set var="$post" value="{{$csBuildDesc.post}}" />
+					<xf:set var="$thread" value="{{$csBuildDesc.thread}}" />
+					<xf:include template="terrasphere_core_post_proxy_page"/>
+				</div>
+			</xf:if>
         </div>
     </div>
 </div>

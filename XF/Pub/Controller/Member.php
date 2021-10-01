@@ -8,6 +8,7 @@ use Terrasphere\Charactermanager\Entity\CharacterMastery;
 use Terrasphere\Charactermanager\Entity\CharacterRaceTrait;
 use Terrasphere\Charactermanager\Repository\RacialTraits;
 use Terrasphere\Core\Entity\Rank;
+use Terrasphere\Core\Repository\Mastery;
 use Terrasphere\Core\Util\PostProxyHelper;
 use XF\Entity\User;
 use XF\Mvc\ParameterBag;
@@ -55,6 +56,7 @@ class Member extends XFCP_Member
             'raceTraitSlots' => $raceTraitRepo->getRacialTraitSlotsForUser($user),
 		    'maxRank' => $maxRank['rank_id'],
             'hasCS' => $user['ts_cm_character_sheet_post_id'] != -1,
+            'hasBuildDesc' => $user['ts_cm_character_sheet_build_post_id'] != -1,
             'canViewCS' => $this->canVisitorViewCharacterSheet($params->user_id),
             'canViewRevisions' => $this->canVisitorViewRevisions($params->user_id),
             'canMakeChanges' => $this->canVisitorMakeChanges($params->user_id),
@@ -66,7 +68,10 @@ class Member extends XFCP_Member
         ];
 
 		if($viewParams['hasCS'])
-		    $viewParams = array_merge($viewParams, PostProxyHelper::getPostProxyParams($this, $user['ts_cm_character_sheet_post_id']));
+		    $viewParams = array_merge($viewParams, ['csPost' => PostProxyHelper::getPostProxyParams($this, $user['ts_cm_character_sheet_post_id'])] );
+
+        if($viewParams['hasBuildDesc'])
+            $viewParams = array_merge($viewParams, ['csBuildDesc' => PostProxyHelper::getPostProxyParams($this, $user['ts_cm_character_sheet_build_post_id'])] );
 
 		return $this->view('XF:Member\CharacterSheet', 'terrasphere_cm_character_sheet', $viewParams);
 	}
@@ -89,16 +94,16 @@ class Member extends XFCP_Member
     {
         if($this->isPost())
         {
-            $postID = $this->filter('post_id', 'int');
+            $vals = $this->filter([
+                'post_id' => 'int',
+                'desc_post_id' => 'int',
+            ]);
 
-            try {
-                /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
-                $user = $this->assertViewableUser($params['user_id']);
-            } catch (Exception $e) {
-                throw $e;
-            }
+            /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
+            $user = $this->assertViewableUser($params['user_id']);
 
-            $user->fastUpdate('ts_cm_character_sheet_post_id', $postID);
+            $user->fastUpdate('ts_cm_character_sheet_post_id', $vals['post_id']);
+            $user->fastUpdate('ts_cm_character_sheet_build_post_id', $vals['desc_post_id']);
         }
 
         return $this->redirect($this->buildLink('members', null, ['user_id' => $params['user_id']]));
@@ -106,7 +111,7 @@ class Member extends XFCP_Member
 
     public function actionSelectNew(ParameterBag $params)
     {
-        /** @var \Terrasphere\Core\Repository\Mastery $masteryRepo */
+        /** @var Mastery $masteryRepo */
         $masteryRepo = $this->repository('Terrasphere\Core:Mastery');
 
         $allMasteries = $masteryRepo->getMasteryListGroupedByClassification();
@@ -162,7 +167,7 @@ class Member extends XFCP_Member
                 'mastery' => 'uint'
             ]);
 
-            /** @var \Terrasphere\Core\Repository\Mastery $masteryRepo */
+            /** @var Mastery $masteryRepo */
             $masteryRepo = $this->repository('Terrasphere\Core:Mastery');
             $mastery = $masteryRepo->getMasteryWithTraitsByID($input['mastery']);
 
