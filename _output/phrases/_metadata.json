@@ -11,6 +11,30 @@
         "version_string": "1.0.0 Alpha",
         "hash": "b17eb3bd9e1ab6caa2a278a4ca8a0a7c"
     },
+    "option.terrasphereRaceTraitCost.txt": {
+        "global_cache": false,
+        "version_id": 1000600,
+        "version_string": "1.0.6",
+        "hash": "0b9a321d19f0bea005205a6833b7b366"
+    },
+    "option.terrasphereRaceTraitCurrency.txt": {
+        "global_cache": false,
+        "version_id": 1000600,
+        "version_string": "1.0.6",
+        "hash": "a47bf66e9e29789cc3df1d1ac293b0c6"
+    },
+    "option_explain.terrasphereRaceTraitCost.txt": {
+        "global_cache": false,
+        "version_id": 1000600,
+        "version_string": "1.0.6",
+        "hash": "21ce0ed9fea6606f1be3cc06781a77ab"
+    },
+    "option_explain.terrasphereRaceTraitCurrency.txt": {
+        "global_cache": false,
+        "version_id": 1000600,
+        "version_string": "1.0.6",
+        "hash": "33ee89c334ee2737d071ac679221e1ae"
+    },
     "permission.terrasphere_terrasphere_cm_review.txt": {
         "global_cache": false,
         "version_id": 1000010,

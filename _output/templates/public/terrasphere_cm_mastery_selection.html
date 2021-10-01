@@ -1,3 +1,5 @@
+<xf:title>New Mastery Selection</xf:title>
+
 <xf:macro name="mastery"
 		  arg-mastery="!">
 	<label class="character-sheet-mastery-container">
@@ -37,21 +39,19 @@
 	</div>
 </xf:macro>
 
-<div class="block">
-	<div class="block-container">
-		<xf:form action="{{ link('members/cs/mastery/saveNewMastery', $masterySlot, {'user_id': $masterySlot.user_id, 'target_index': $masterySlot.target_index}) }}"
-			  	class="block-container"
-			  	method="post"
-			  	ajax="true"
-				data-xf-init="new-mastery"
-			  	data-reset-complete="true"
-			  	data-redirect="off">
-			<xf:foreach loop="$masteries" value="$masteryCategory" key="$categoryIndex">
-				<xf:macro name="mastery_category" arg-category="{$masteryCategory}"></xf:macro>
-			</xf:foreach>
-			<xf:submitrow icon="save" />
-		</xf:form>
-	</div>
+<div class="block-container">
+	<xf:form action="{{ link('members/cs/mastery/saveNewMastery', $masterySlot, {'user_id': $masterySlot.user_id, 'target_index': $masterySlot.target_index}) }}"
+		  	class="block-container"
+		  	method="post"
+		  	ajax="true"
+			data-xf-init="new-mastery"
+		  	data-reset-complete="true"
+		  	data-redirect="off">
+		<xf:foreach loop="$masteries" value="$masteryCategory" key="$categoryIndex">
+			<xf:macro name="mastery_category" arg-category="{$masteryCategory}"></xf:macro>
+		</xf:foreach>
+		<xf:submitrow icon="save" />
+	</xf:form>
 </div>
 
 <xf:js src="Terrasphere/Charactermanager/new_mastery.js" addon="Terrasphere/Charactermanager" />

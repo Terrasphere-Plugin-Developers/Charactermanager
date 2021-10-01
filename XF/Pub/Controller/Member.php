@@ -2,8 +2,11 @@
 
 namespace Terrasphere\Charactermanager\XF\Pub\Controller;
 
+use DBTech\Credits\Entity\Currency;
 use Terrasphere\Charactermanager\Entity\CharacterEquipment;
 use Terrasphere\Charactermanager\Entity\CharacterMastery;
+use Terrasphere\Charactermanager\Entity\CharacterRaceTrait;
+use Terrasphere\Charactermanager\Repository\RacialTraits;
 use Terrasphere\Core\Entity\Rank;
 use Terrasphere\Core\Util\PostProxyHelper;
 use XF\Entity\User;
@@ -25,8 +28,22 @@ class Member extends XFCP_Member
 
         $armor = $user->getOrInitiateArmor();
 
-        /** @var \Terrasphere\Charactermanager\Repository\RacialTraits $raceTraitRepo */
+        /** @var RacialTraits $raceTraitRepo */
         $raceTraitRepo = $this->repository('Terrasphere\CharacterManager:RacialTraits');
+
+        /** @var Currency $raceTraitCurrency */
+        $raceTraitCurrency = $this->assertRecordExists('DBTech\Credits:Currency', $this->options()['terrasphereRaceTraitCurrency'], null, null);
+        $traitCurrencyVal = $raceTraitCurrency->getValueFromUser($user, false);
+        $traitCost = 0;
+
+        foreach ($raceTraitRepo->getRacialTraitSlotsForUser($user) as $slot)
+        {
+            if(!$slot['isEmpty'])
+            {
+                $traitCost = $this->options()['terrasphereRaceTraitCost'];
+                break;
+            }
+        }
 
         $maxRank = Rank::maxRank($this);
 
@@ -43,6 +60,9 @@ class Member extends XFCP_Member
             'canMakeChanges' => $this->canVisitorMakeChanges($params->user_id),
             'fourthSlotUnlocked' => $this->fourthSlotUnlocked($params->user_id),
             'fifthSlotUnlocked' => $this->fifthSlotUnlocked($params->user_id),
+            'hasFundsForRacialTrait' => ($traitCurrencyVal >= $traitCost),
+            'amountForRacial' => $traitCost,
+            'racialCurrencyName' => $raceTraitCurrency->title,
         ];
 
 		if($viewParams['hasCS'])
@@ -201,118 +221,6 @@ class Member extends XFCP_Member
         return $this->error('Post only operation.');
     }
 
-    /**
-     * @throws Exception
-     */
-    public function actionSelectNewTrait(ParameterBag $params)
-    {
-        $userID = $this->filter('user_id', 'uint');
-        $slotIndex = $this->filter('slot_index', 'uint');
-
-        /** @var \Terrasphere\Charactermanager\Repository\RacialTraits $repo */
-        $repo = $this->repository('Terrasphere\CharacterManager:RacialTraits');
-
-        /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
-        $user = $this->assertViewableUser($userID);
-
-        $traits = $repo->getTraitSelectionsAvailableForUser($user);
-
-        $dummySlot = $this->em()->create('Terrasphere\Charactermanager:CharacterRaceTrait');
-        $dummySlot['user_id'] = $userID;
-        $dummySlot['slot_index'] = $slotIndex;
-
-        $viewparams = [
-            'traits' => $traits,
-            'slot' => $dummySlot,
-        ];
-
-        return $this->view('Terrasphere\Charactermanager:TraitSelection', 'terrasphere_cm_confirm_trait_select', $viewparams);
-    }
-
-    public function actionSaveNewTrait(ParameterBag $params)
-    {
-        if($this->isPost())
-        {
-            // Permission check
-            if(!$this->canVisitorEditCharacterSheet($params['user_id']))
-                return $this->error("You don't have permission to edit this character.");
-
-            // Mastery slot index bounds check
-            if($params['target_index'] < 0 || $params['target_index'] > 4)
-                return $this->error('Invalid Mastery index for new mastery selection.');
-
-            $entry = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
-                ->where('user_id', $params['user_id'])
-                ->where('target_index', $params['target_index'])
-                ->fetchOne();
-
-            // Slot already filled check
-            if($entry != null)
-                return $this->error('Mastery slot is already filled.');
-
-            $input = $this->filter([
-                'mastery' => 'uint'
-            ]);
-
-            /** @var \Terrasphere\Core\Repository\Mastery $masteryRepo */
-            $masteryRepo = $this->repository('Terrasphere\Core:Mastery');
-            $mastery = $masteryRepo->getMasteryWithTraitsByID($input['mastery']);
-
-            // Mastery selection existence check
-            if($mastery == null)
-                return $this->error('Mastery is missing from database; try reloading.');
-
-            $entry = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
-                ->where('user_id', $params['user_id'])
-                ->where('mastery_id', $input['mastery'])
-                ->fetchOne();
-
-            // Mastery already owned check
-            if($entry != null)
-                return $this->error('Character already has this mastery!');
-
-            $sameTypeMasteries = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
-                ->with('Mastery')
-                ->where('user_id', $params['user_id'])
-                ->where('Mastery.mastery_type_id', $mastery['mastery_type_id'])
-                ->total();
-
-            // Mastery type limit check
-            if($sameTypeMasteries >= $mastery->MasteryType->cap_per_character)
-                return $this->error('You already have the maximum amount of ' . $mastery->MasteryType->name . ' masteries. ('.$sameTypeMasteries.' vs '.$mastery->MasteryType->cap_per_character.')');
-
-            // 4th slot restriction check
-            if($params['target_index'] == 3 && !$this->fourthSlotUnlocked($params['user_id']))
-                return $this->error('Slot not unlocked.');
-
-            // 5th slot restriction check
-            if($params['target_index'] == 4 && !$this->fifthSlotUnlocked($params['user_id']))
-                return $this->error('Slot not unlocked.');
-
-            $rank = Rank::minRank($this);
-
-            // Save entity to DB
-            $slotEntity = $this->em()->create('Terrasphere\Charactermanager:CharacterMastery');
-            $slotEntity['mastery_id'] = $mastery['mastery_id'];
-            $slotEntity['user_id'] = $params['user_id'];
-            $slotEntity['target_index'] = $params['target_index'];
-            $slotEntity['rank_id'] = $rank['rank_id'];
-            $this->saveMasterySlot($slotEntity)->run();
-
-            // Close overlay via redirect and setup AJAX parameters.
-            $redirect = $this->redirect($this->buildLink('members', null, ['user_id' => $params['user_id']]));
-            $redirect->setJsonParam('masterySlotIndex', $params['target_index']);
-            $redirect->setJsonParam('newMasteryName', $mastery['display_name']);
-            $redirect->setJsonParam('newMasteryIconURL', $mastery['icon_url']);
-            $redirect->setJsonParam('newMasteryColor', $mastery['color']);
-            $redirect->setJsonParam('rankTitle', $rank['name']);
-            // TODO Add another for updating cost of upgrade...
-            return $redirect;
-        }
-
-        return $this->error('Post only operation.');
-    }
-
     public function saveMasterySlot(CharacterMastery $masterySlot): \XF\Mvc\FormAction
     {
         $form = $this->formAction();
@@ -324,6 +232,131 @@ class Member extends XFCP_Member
         ];
 
         $form->basicEntitySave($masterySlot, $input);
+
+        return $form;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function actionSelectNewTrait(ParameterBag $params): \XF\Mvc\Reply\View
+    {
+        $userID = $this->filter('user_id', 'uint');
+        $slotIndex = $this->filter('slot_index', 'uint');
+
+        /** @var RacialTraits $repo */
+        $repo = $this->repository('Terrasphere\CharacterManager:RacialTraits');
+
+        /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
+        $user = $this->assertViewableUser($userID);
+
+        $traits = $repo->getTraitSelectionsAvailableForUser($user);
+
+        $dummySlot = $this->em()->create('Terrasphere\Charactermanager:CharacterRaceTrait');
+        $dummySlot['user_id'] = $userID;
+        $dummySlot['slot_index'] = $slotIndex;
+
+        /** @var Currency $currency */
+        $currency = $this->assertRecordExists('DBTech\Credits:Currency', $this->options()['terrasphereRaceTraitCurrency'], null, null);
+        $currentVal = $currency->getValueFromUser($user, false);
+
+        $viewparams = [
+            'traits' => $traits,
+            'slot' => $dummySlot,
+            'currencyName' => $currency->title,
+            'currencyCost' => (int) $this->options()['terrasphereRaceTraitCost'],
+            'currencyCurrent' => (int) $currentVal,
+            'currencyAfter' => (int) $currentVal - (int) $this->options()['terrasphereRaceTraitCost'],
+        ];
+
+        return $this->view('Terrasphere\Charactermanager:TraitSelection', 'terrasphere_cm_confirm_trait_select', $viewparams);
+    }
+
+    public function actionSaveNewTrait(ParameterBag $params)
+    {
+        if($this->isPost())
+        {
+            /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
+            $user = $this->assertViewableUser($params['user_id']);
+
+            // Permission check
+            if(!$this->canVisitorEditCharacterSheet($params['user_id']))
+                return $this->error("You don't have permission to edit this character.");
+
+            // Mastery slot index bounds check
+            if($params['slot_index'] < 0 || $params['slot_index'] > 4)
+                return $this->error('Invalid slot index.');
+
+            $input = $this->filter([
+                'trait' => 'uint'
+            ]);
+
+            $entry = $this->finder('Terrasphere\Charactermanager:CharacterRaceTrait')
+                ->where('user_id', $params['user_id'])
+                ->whereOr([['slot_index', $params['slot_index']], ['race_trait_id', $input['trait']]])
+                ->fetchOne();
+
+            // Slot already filled or trait already chosen check.
+            if($entry != null)
+                return $this->error('Slot is already filled or trait is already chosen.');
+
+            /** @var RacialTraits $repo */
+            $repo = $this->repository('Terrasphere\Charactermanager:RacialTraits');
+            $traitsAvailable = $repo->getTraitSelectionsAvailableForUser($user);
+
+            $trait = null;
+            foreach ($traitsAvailable as $t)
+            {
+                if($t['race_trait_id'] == $input['trait'])
+                {
+                    $trait = $t;
+                    break;
+                }
+            }
+
+            if($trait == null)
+            {
+                $str = "";
+                foreach ($traitsAvailable as $t) $str = $str . " {" . $t['name'] . " - " . $t['race_trait_id'] . "}";
+                return $this->error("Trait missing from database (or user groups may be broken). IDs:".$str);
+            }
+
+            $traitCost = $params['slot_index'] == 0 ? 0 : $this->options()['terrasphereRaceTraitCost'];
+            if($traitCost > 0)
+            {
+                $this->adjustCurrency($user, $traitCost, "Purchased Race Trait: ".$trait['name'], $this->options()['terrasphereRaceTraitCurrency']);
+            }
+
+            // Save entity to DB
+            $slotEntity = $this->em()->create('Terrasphere\Charactermanager:CharacterRaceTrait');
+            $slotEntity['race_trait_id'] = $trait['race_trait_id'];
+            $slotEntity['user_id'] = $user['user_id'];
+            $slotEntity['slot_index'] = $params['slot_index'];
+            /** @var CharacterRaceTrait $slotEntity */
+            $this->saveTraitSlot($slotEntity)->run();
+
+            // Close overlay via redirect and setup AJAX parameters.
+            $redirect = $this->redirect($this->buildLink('members', $user, ['user_id' => $params['user_id']]));
+            $redirect->setJsonParam('slotIndex', $params['slot_index']);
+            $redirect->setJsonParam('newName', $trait['name']);
+            $redirect->setJsonParam('newIconURL', $trait['icon_url']);
+            return $redirect;
+        }
+
+        return $this->error('Post only operation.');
+    }
+
+    public function saveTraitSlot(CharacterRaceTrait $slot): \XF\Mvc\FormAction
+    {
+        $form = $this->formAction();
+
+        $input = [
+            'race_trait_id' => $slot['race_trait_id'],
+            'user_id' => $slot['user_id'],
+            'slot_index' => $slot['slot_index'],
+        ];
+
+        $form->basicEntitySave($slot, $input);
 
         return $form;
     }
@@ -798,7 +831,7 @@ class Member extends XFCP_Member
     {
         $this->assertPostOnly();
 
-        /** @var \DBTech\Credits\Entity\Currency $currency */
+        /** @var Currency $currency */
         $currency = $this->assertRecordExists('DBTech\Credits:Currency', $currencyID, null, null);
 
         $input = [

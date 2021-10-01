@@ -1,8 +1,10 @@
+<xf:title>Upgrade Equipment</xf:title>
+
 <div class="block-container">
-	<h1 style="text-align: center;">Equipment Upgrade</h1>
+	<h1 class="character-sheet-overlay-title">Equipment Upgrade</h1>
 	<hr>
-	<h2 style="text-align: center;">{$name} to Rank {$nextRank.name}</h2>
-	<div style="max-width: 200px; margin:auto;">
+	<h2 class="character-sheet-overlay-subtitle">{$name} to Rank {$nextRank.name}</h2>
+	<div class="character-sheet-overlay-stats">
 		<ul>
 			<li><b>Cost:</b> {$nextCost} {$rankSchema.Currency.title}</li>
 			<li><b>Current:</b> {$userVal} {$rankSchema.Currency.title}</li>

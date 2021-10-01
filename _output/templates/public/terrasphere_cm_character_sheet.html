@@ -3,135 +3,13 @@
 <div class="block character-sheet" style="max-width: 1018px; margin: auto;">
     <div class="block-container">
         <div class="block-body">
-            <!--<a href="{{ link('post-proxy', {'post_id': 1}) }}"
-                   class="button"
-                data-xf-click="overlay">
-                Imma dev button!
-            </a>-->
-
+			
+			<xf:include template="terrasphere_cm_character_sheet_cell_race_traits" />
             <xf:if is="$hasCS">
                 <xf:include template="terrasphere_core_post_proxy_page"/>
             </xf:if>
 
-            <div class="character-sheet-cell">
-                <div class="character-sheet-mastery-list">
-                    <xf:foreach loop="$masterySlots" value="$masterySlot" key="$slotNum">
-                        <xf:if is="$masterySlot.mastery_id == 'N/A'">
-                            <xf:if is="$canMakeChanges">
-                                <xf:if is="$slotNum == 3">
-                                    <xf:macro template="terrasphere_cm_character_sheet_macros"
-											  name="mastery"
-                                              arg-is_empty="1"
-                                              arg-user="{$user}"
-                                              arg-mastery_slot="{$masterySlot}"
-                                              arg-icon_url="{$masterySlot.Mastery.icon_url}"
-                                              arg-is_locked="{{!$fourthSlotUnlocked}}"
-                                              arg-can_make_changes="{$canMakeChanges}"
-                                              arg-max_rank="{$maxRank}"/>
-                                    <xf:elseif is="$slotNum == 4"/>
-                                    <xf:macro template="terrasphere_cm_character_sheet_macros"
-											  name="mastery"
-                                              arg-is_empty="1"
-                                              arg-user="{$user}"
-                                              arg-mastery_slot="{$masterySlot}"
-                                              arg-icon_url="{$masterySlot.Mastery.icon_url}"
-                                              arg-is_locked="{{!$fifthSlotUnlocked}}"
-                                              arg-can_make_changes="{$canMakeChanges}"
-                                              arg-max_rank="{$maxRank}"/>
-                                    <xf:else/>
-                                    <xf:macro template="terrasphere_cm_character_sheet_macros"
-											  name="mastery"
-                                              arg-is_empty="1"
-                                              arg-user="{$user}"
-                                              arg-mastery_slot="{$masterySlot}"
-                                              arg-icon_url="{$masterySlot.Mastery.icon_url}"
-                                              arg-can_make_changes="{$canMakeChanges}"
-                                              arg-max_rank="{$maxRank}"/>
-                                </xf:if>
-                            </xf:if>
-                            <xf:else/>
-                            <xf:macro template="terrasphere_cm_character_sheet_macros"
-									  name="mastery"
-                                      arg-is_empty="0"
-                                      arg-user="{$user}"
-                                      arg-mastery_slot="{$masterySlot}"
-                                      arg-icon_url="{$masterySlot.Mastery.icon_url}"
-                                      arg-can_make_changes="{$canMakeChanges}"
-                                      arg-max_rank="{$maxRank}"/>
-                        </xf:if>
-                    </xf:foreach>
-
-                </div>
-                <div class="character-sheet-equipment-list">
-                    <xf:macro template="terrasphere_cm_character_sheet_macros"
-							  name="equip"
-                              arg-equipId="{$weapon.equipment_id}"
-                              arg-user="{$user}"
-                              arg-charEquipment="{$weapon}"
-                              arg-can_make_changes="{$canMakeChanges}"
-                              arg-max_rank="{$maxRank}"/>
-                    <div class="character-sheet-mastery-container" id="equip-container-{$armor.Equipment.equip_group}">
-                        <div class="character-sheet-mastery grid-overlap">
-                            <div class="rank-stars grid-overlap rank-stars-{$armor.Rank.tier}"></div>
-                            <xf:if is="$canMakeChanges AND {$armor.Rank.rank_id} != $maxRank">
-                                <div class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier} armor"
-                                     style="background-color: #B0B0B0;">
-                                    <img class="character-sheet-mastery-icon grid-overlap armor armor-icon"
-                                         src="{{$armor.Equipment.icon_url}}"
-                                         alt="{{$armor.Equipment.display_name}} Slot"/>
-                                    <div id="armor-popup">
-                                        <a href="{{ link('members/cs/equipment/confirmUpgradeEquip', null, {'user_id': $user.user_id, 'equipment_group': $armor.Equipment.equip_group}) }}"
-                                            data-cache="false"
-                                            data-xf-click="overlay"
-                                            class="inline-armor armor-upgrade-form">
-                                            <div class="armor-button">Upgrade</div>
-                                        </a>
-                                        <a href="{{ link('members/cs/equipment/confirmChangeArmor', null, {'user_id': $user.user_id, 'equipment_group': $armor.Equipment.equip_group}) }}"
-                                           data-xf-click="overlay"
-                                           data-cache="false"
-                                           class="inline-armor armor-change-type-form">
-                                            <div class="armor-button">Change Type</div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <xf:js src="Terrasphere/Charactermanager/armor_dialogue.js"
-                                       addon="Terrasphere/Charactermanager"/>
-                            <xf:else/>
-                                <a href="{{ link('members/cs/equipment/confirmChangeArmor', null, {'user_id': $user.user_id, 'equipment_group': $armor.Equipment.equip_group}) }}"
-                                   data-xf-click="overlay"
-                                   data-cache="false"
-                                   class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier} armor armor-icon"
-                                   style="background-color: #B0B0B0;">
-                                    <img class="character-sheet-mastery-icon grid-overlap"
-                                         src="{{$armor.Equipment.icon_url}}"
-                                         alt="{{$armor.Equipment.display_name}} Slot"/>
-
-                                </a>
-                            </xf:if>
-                            <div class="character-sheet-mastery-title armor-name">
-                                {{$armor.Equipment.display_name}}<br>
-                                <span class="m-title-rank">{$armor.Rank.name}</span>
-                            </div>
-                        </div>
-                        <div class="mastery-change-flash armor-flash grid-overlap"></div>
-                    </div>
-                </div>
-            </div>
-			
-			<div class="character-sheet-cell">
-				<div class="character-sheet-trait-list">
-					<xf:foreach loop="$raceTraitSlots" value="$raceTraitSlot" key="$slotNum">
-						<xf:macro template="terrasphere_cm_character_sheet_macros"
-								  name="trait"
-								  arg-trait="{$raceTraitSlot.trait}"
-								  arg-user="{$user}"
-								  arg-isEmpty="{$raceTraitSlot.isEmpty}"
-								  arg-slotIndex="{$raceTraitSlot.slotIndex}"
-								  arg-traitSlot="{$raceTraitSlot}"
-								  arg-can_make_changes="{$canMakeChanges}" />
-					</xf:foreach>
-				</div>
-			</div>
+            <xf:include template="terrasphere_cm_character_sheet_cell_mastery_equip" />
         </div>
     </div>
 </div>

@@ -50,29 +50,6 @@
     transition: transform 0.5s, border 0.5s;
 }
 
-.character-sheet-mastery-container input:checked ~ .character-sheet-mastery {
-    transform: Scale(1.3);
-    border: 1px solid black;
-}
-
-.mastery-unselect-overlay {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    opacity: 50%;
-    background-color: black;
-    transition: background-color 0.5s, opacity 0.5s;
-}
-
-/* Selects mastery overlays
-    which are children of masteries
-    which are preceded by CHECKED inputs
-    that are children of mastery containers.
-*/
-.character-sheet-mastery-container input:checked ~ .character-sheet-mastery .mastery-unselect-overlay {
-    opacity: 0%;
-}
-
 .character-sheet-mastery-title {
     display: grid;
     width: 100%;
@@ -99,6 +76,53 @@
 .character-sheet-mastery-icon {
     width: 80%;
     height: 80%;
+}
+	
+.character-sheet-trait-list {
+	display: flex;
+	flex-direction: row;
+    justify-content: center;
+	flex-wrap: wrap;
+    margin: 15px 0px;
+}
+	
+.character-sheet-race-trait-container {
+	width: 180px;
+	height: 30px;
+	display: grid;
+	box-shadow: 0px 3px 2px black;
+    margin: 3px;
+	border: 1px solid #5551;
+	border-radius: 3px;
+	justify-content: start;
+	grid-template-columns: 30px 150px;
+	background: linear-gradient(0deg, rgb(92 92 92) 0%, rgb(131 131 131) 100%);
+}
+	
+.character-sheet-race-trait-icon {
+	width: 80%;
+	height: 80%;
+}
+	
+.character-sheet-race-trait-icon-container {
+	height: 100%;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+	
+.character-sheet-race-trait-title {
+	grid-row-start: 1;
+    grid-column-start: 2;
+	display: flex;
+    align-items: center;
+	
+    padding-left: 5px;
+	color: white;
+}
+	
+.race-trait-change-flash {
+	grid-column-end: 3;
 }
 
 .mastery-upgrade-icon-container {
@@ -133,28 +157,6 @@
 
 .locked {
     background-color: #3c3c3c;
-}
-
-.rank-0 {}
-
-.rank-1 {
-    background-color: {$xf.options.terrasphereCoreRankDColor};
-}
-
-.rank-2 {
-    background-color: {$xf.options.terrasphereCoreRankCColor};
-}
-
-.rank-3 {
-    background-color: {$xf.options.terrasphereCoreRankBColor};
-}
-
-.rank-4 {
-    background-color: {$xf.options.terrasphereCoreRankAColor};
-}
-
-.rank-5 {
-    background-color: {$xf.options.terrasphereCoreRankSColor};
 }
 
 .rank-stars {
@@ -241,13 +243,83 @@
 <xf:css>
 
 /* Hides default radio buttons */
-.character-sheet-mastery-container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
+.character-sheet-mastery-container input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+.character-sheet-race-trait-option-container input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+
+.character-sheet-mastery-container input:checked ~ .character-sheet-mastery {
+    transform: Scale(1.3);
+    border: 1px solid black;
 }
+
+.mastery-unselect-overlay {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    opacity: 50%;
+    background-color: black;
+    transition: background-color 0.5s, opacity 0.5s;
+} .character-sheet-mastery-container input:checked ~ .character-sheet-mastery .mastery-unselect-overlay {
+    opacity: 0%;
+}
+
+
+	
+.character-sheet-race-trait-option-list {
+    margin-bottom: 30px;
+    margin-top: 30px;
+    padding: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.character-sheet-race-trait-option-container {
+    border-radius: 2px;
+    border: 1px solid transparent;
+    transition: transform 0.5s, border 0.5s;
+}
+
+.character-sheet-race-trait-option {
+	display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
+	width: 200px;
+	height: 200px;
+	border-radius: 20px;
+	background-color: #ccc;
+    transition: transform 0.5s, border 0.5s;
+} .character-sheet-race-trait-option-container input:checked ~ .character-sheet-race-trait-option {
+    transform: Scale(1.3);
+}
+
+.race-trait-option-unselect-veil {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    opacity: 50%;
+    background-color: black;
+    transition: background-color 0.5s, opacity 0.5s;
+} .character-sheet-race-trait-option-container input:checked ~ .character-sheet-race-trait-option .race-trait-option-unselect-veil {
+    opacity: 0%;
+}
+
+.character-sheet-race-trait-option-content {
+	display: flex;
+	flex-direction: column;
+}
+
+.character-sheet-race-trait-option-content-title {
+	text-align: center;
+	font-weight: bolder;
+    font-size: larger;
+	margin: 12px;
+}
+
+.character-sheet-race-trait-option-content-desc {
+    margin: 6px;
+	text-align: center;
+}
+
 .mastery-category {
     margin-bottom: 25px;
     padding: 25px;
@@ -281,5 +353,9 @@
     font-size: 1.5rem;
     text-shadow: 0 1px black;
 }
+
+.character-sheet-overlay-title { text-align: center; }
+.character-sheet-overlay-subtitle { text-align: center; }
+.character-sheet-overlay-stats { max-width: 200px; margin:auto; }
 
 </xf:css>

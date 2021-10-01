@@ -82,14 +82,14 @@ class RacialTraits extends Repository
                 }
             }
 
-            // Break if selected already.
+            // Skip if selected already.
             if($exists)
-                break;
+                continue;
 
 
-            // If this is a shared trait, break if our user doesn't have one of the appropriate user groups.
+            // For shared traits, skip if our user doesn't have one of the appropriate user groups.
             if(!$this->canUserChooseRacialTrait($user, $option['race_trait_id']))
-                break;
+                continue;
 
             // If we make it to here, we're good to push it to the return array of valid options.
             array_push($ret, $option);
@@ -117,15 +117,20 @@ class RacialTraits extends Repository
         $ret = [];
         for($i = 0; $i < 5; $i++)
         {
-            if(!array_key_exists($i, $userTraits))
+            $found = false;
+            foreach ($userTraits as $t)
             {
-                $ret[$i] = ['isEmpty' => ($firstEmptySlotMarked ? 1 : 2), 'slotIndex' => $i, 'trait' => 0];
-                $firstEmptySlotMarked = true;
+                if($t['slot_index'] == $i)
+                {
+                    array_push($ret, ['isEmpty' => 0, 'slotIndex' => $i, 'trait' => $t]);
+                    $found = true;
+                    break;
+                }
             }
-            else
-            {
-                $ret[$i] = ['isEmpty' => 0, 'slotIndex' => $i, 'trait' => $userTraits[$i]];
-            }
+            if($found) continue;
+
+            array_push($ret, ['isEmpty' => ($firstEmptySlotMarked ? 1 : 2), 'slotIndex' => $i, 'trait' => 0]);
+            $firstEmptySlotMarked = true;
         }
 
         return $ret;

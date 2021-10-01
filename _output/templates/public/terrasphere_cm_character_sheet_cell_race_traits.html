@@ -1,0 +1,17 @@
+<div class="character-sheet-cell">
+	<div class="character-sheet-trait-list">
+		<xf:foreach loop="$raceTraitSlots" value="$raceTraitSlot" key="$slotNum">
+						<xf:macro template="terrasphere_cm_character_sheet_macros"
+								  name="trait"
+								  arg-trait="{$raceTraitSlot.trait.RacialTrait}"
+								  arg-user="{$user}"
+								  arg-isEmpty="{$raceTraitSlot.isEmpty}"
+								  arg-slotIndex="{$raceTraitSlot.slotIndex}"
+								  arg-traitSlot="{$raceTraitSlot}"
+								  arg-hasFundsForRacialTrait="{$hasFundsForRacialTrait}"
+								  arg-amountForRacial="{$amountForRacial}"
+								  arg-racialCurrencyName="{$racialCurrencyName}"
+								  arg-can_make_changes="{$canMakeChanges}" />
+		</xf:foreach>
+	</div>
+</div>

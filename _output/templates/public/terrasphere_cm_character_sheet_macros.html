@@ -104,44 +104,105 @@
 </xf:macro>
 
 
+<xf:macro name="trait_inner"
+		  arg-isEmpty="!"
+		  arg-trait="!"
+		  arg-hasFundsForRacialTrait="!"
+		  arg-amountForRacial="!"
+		  arg-racialCurrencyName="!">
+	
+	<xf:set var="$addSignDisplay" value="" />
+	<xf:set var="$iconDisplay" value="" />
+	<xf:set var="$title" value="Buy race trait..." />
+	
+	<xf:if is="$isEmpty">
+		<xf:set var="$iconDisplay" value="display: none;" />
+	<xf:else />
+		<xf:set var="$addSignDisplay" value="display: none;" />
+		<xf:set var="$title" value="{$trait.name}" />
+	</xf:if>
+	
+	<xf:if is="!$hasFundsForRacialTrait AND $isEmpty">
+		<xf:set var="$title" value="Requires {$amountForRacial} {$racialCurrencyName}" />
+		<xf:set var="$addSignDisplay" value="" />
+		<xf:set var="$iconDisplay" value="display: none;" />
+	</xf:if>
+	
+	<xf:if is="$amountForRacial == 0">
+		<xf:set var="$title" value="Select a racial trait" />
+	</xf:if>
+	
+	<div class="character-sheet-race-trait grid-overlap">
+		<div class="character-sheet-race-trait-icon-container grid-overlap">
+			<img class="character-sheet-race-trait-icon grid-overlap"
+					src="{{ base_url('styles/default/Terrasphere/Charactermanager/plus_sign.png', true) }}"
+				 	style="{$addSignDisplay}" />
+			<img class="character-sheet-race-trait-icon grid-overlap"
+					src="{{$trait.icon_url}}"
+				 	style="{$iconDisplay}" />
+		</div>
+	</div>
+	<div class="character-sheet-race-trait-title">
+		<span class="rt-title">{$title}</span>
+	</div>
+	<div class="race-trait-change-flash grid-overlap"></div>
+</xf:macro>
+
 <xf:macro name="trait"
           arg-trait="!"
           arg-user="!"
           arg-isEmpty="!"
           arg-slotIndex="!"
           arg-traitSlot="!"
+		  arg-hasFundsForRacialTrait="!"
+		  arg-amountForRacial="!"
+		  arg-racialCurrencyName="!"
           arg-can_make_changes="!">
 	
 	<xf:set var="$displayFull" value=""/>
+	<xf:set var="$displayMain" value="display: none;"/>
 	<xf:set var="$displaySelect" value=""/>
 	<xf:if is="$isEmpty == 1">
 		<xf:set var="$displayFull" value="display: none;"/>
 	<xf:elseif is="$isEmpty == 0"/>
 		<xf:set var="$displaySelect" value="display: none;"/>
+		<xf:set var="$displayMain" value=""/>
     </xf:if>
 	
-	<div class="character-sheet-race-trait-container" id="race-trait-container-{$slotIndex}" style="{$displayFull}">
-        <div class="character-sheet-race-trait grid-overlap">
-            <div class="character-sheet-race-trait-icon-container grid-overlap"
-                 style="background-color: #B0B0B0;">
-                <img class="character-sheet-mastery-icon grid-overlap"
-                     src="{{$charEquipment.Equipment.icon_url}}"
-                     alt="{{$charEquipment.Equipment.display_name}} Slot"/>
-            </div>
-            <div class="character-sheet-race-trait-title">
-				<span class="rt-title">{{$trait.RacialTrait.name}}</span>
-            </div>
-        </div>
-		<div class="character-sheet-race-trait-empty grid-overlap" style="{$displaySelect};">
-            <a href="{{ link('members/cs/race-trait/selectNewTrait', $traitSlot, {'user_id': $user.user_id, 'slot_index': $slotIndex})}}"
-               class="character-sheet-race-trait-icon-container grid-overlap"
-               data-xf-click="overlay">
-                <img class="character-sheet-race-trait-icon grid-overlap"
-                     src="{{ base_url('styles/default/Terrasphere/Charactermanager/plus_sign.png', true) }}"
-                     alt="Race trait slot"
-                     style="width:50%;height:50%;"/>
-            </a>
-        </div>
-        <div class="race-trait-change-flash grid-overlap"></div>
-    </div>
+	<xf:if is="$isEmpty == 2 AND !$can_make_changes">
+		<xf:set var="$displayFull" value="display: none;"/>
+	</xf:if>
+	
+	<xf:set var="$tooltipText" value="Git gud."/>
+	<xf:if is="!$isEmpty OR $hasFundsForRacialTrait">
+		<xf:set var="$tooltipText" value="{$trait.tooltip}"/>
+	</xf:if>
+	
+	<xf:if is="!$isEmpty OR !$hasFundsForRacialTrait">
+		<div class="character-sheet-race-trait-container"
+			 id="race-trait-container-{$slotIndex}"
+			 data-xf-init="tooltip" title="{$tooltipText}"
+			 style="{$displayFull}">
+			<xf:macro name="trait_inner"
+					  arg-trait="{$trait}"
+					  arg-isEmpty="{$isEmpty}"
+					  arg-hasFundsForRacialTrait="{$hasFundsForRacialTrait}"
+					  arg-amountForRacial="{$amountForRacial}"
+					  arg-racialCurrencyName="{$racialCurrencyName}" />
+		</div>
+	<xf:else />
+		<a href="{{ link('members/cs/race-trait/selectNewTrait', $traitSlot, {'user_id': $user.user_id, 'slot_index': $slotIndex})}}"
+		   class="character-sheet-race-trait-container"
+		   id="race-trait-container-{$slotIndex}"
+		   data-xf-click="overlay"
+		   style="{$displayFull}">
+			<xf:macro name="trait_inner"
+					  arg-trait="{$trait}"
+					  arg-isEmpty="{$isEmpty}"
+					  arg-hasFundsForRacialTrait="{$hasFundsForRacialTrait}"
+					  arg-amountForRacial="{$amountForRacial}"
+					  arg-racialCurrencyName="{$racialCurrencyName}" />
+		</a>
+	</xf:if>
+	
 </xf:macro>

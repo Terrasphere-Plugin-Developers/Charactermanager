@@ -1,0 +1,1 @@
+The currency to be used for the purchasing of additional racial traits (beyond the first one).
