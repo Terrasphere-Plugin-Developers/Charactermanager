@@ -17,7 +17,7 @@ class RacialTraits extends Repository
     public function getRacialTraitsByUsergroups(): array
     {
         $queryResults = $this
-            ->finder('Terrasphere\CharacterManager:RacialTrait')
+            ->finder('Terrasphere\Charactermanager:RacialTrait')
             ->order('name', 'ASC')
             ->fetch();
 
@@ -53,7 +53,7 @@ class RacialTraits extends Repository
     public function getTraitSelectionsAvailableForUser(User $user) : array
     {
         $ret = [];
-        $currentTraits = $this->finder('Terrasphere\CharacterManager:CharacterRaceTrait')
+        $currentTraits = $this->finder('Terrasphere\Charactermanager:CharacterRaceTrait')
             ->where('user_id', $user->user_id)
             ->with('RacialTrait')
             ->order('slot_index', 'ASC')
@@ -63,7 +63,7 @@ class RacialTraits extends Repository
         foreach ($user->secondary_group_ids as $id) array_push($where, ['cached_group_id', $id]);
 
         $racialTraits =
-            $this->finder('Terrasphere\CharacterManager:RacialTrait')
+            $this->finder('Terrasphere\Charactermanager:RacialTrait')
             ->whereOr($where)
             ->fetch()->toArray();
 
@@ -107,7 +107,7 @@ class RacialTraits extends Repository
      */
     public function getRacialTraitSlotsForUser(User $user) : array
     {
-        $userTraits = $this->finder('Terrasphere\CharacterManager:CharacterRaceTrait')
+        $userTraits = $this->finder('Terrasphere\Charactermanager:CharacterRaceTrait')
             ->where('user_id', $user->user_id)
             ->with('RacialTrait')
             ->order('slot_index', 'ASC')

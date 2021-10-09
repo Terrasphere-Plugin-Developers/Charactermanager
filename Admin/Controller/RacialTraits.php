@@ -21,18 +21,18 @@ class RacialTraits extends AbstractController
         $viewParams = [];
 
         /** @var \Terrasphere\Charactermanager\Repository\RacialTraits $repo */
-        $repo = $this->repository('Terrasphere\CharacterManager:RacialTraits');
+        $repo = $this->repository('Terrasphere\Charactermanager:RacialTraits');
 
         $racialTraits = $repo->getRacialTraitsByUsergroups();
         $viewParams['racialTraits'] = $racialTraits;
 
-        return $this->view('Terrasphere\CharacterManager:RacialTrait', 'terrasphere_cm_racial_traits', $viewParams);
+        return $this->view('Terrasphere\Charactermanager:RacialTrait', 'terrasphere_cm_racial_traits', $viewParams);
     }
 
     public function actionAddOrEdit(RacialTrait $trait): \XF\Mvc\Reply\View
     {
         /** @var \Terrasphere\Charactermanager\Repository\RacialTraits $repo */
-        $repo = $this->repository('Terrasphere\CharacterManager:RacialTraits');
+        $repo = $this->repository('Terrasphere\Charactermanager:RacialTraits');
 
         // We need a way to tell the edit page if each group is selected or not.
         // It won't let you add custom data in an entity's array, but random parameters work as long as we don't save.
@@ -46,18 +46,18 @@ class RacialTraits extends AbstractController
             'userGroups' => $this->finder('XF:UserGroup')->fetch(),
         ];
 
-        return $this->view('Terrasphere\CharacterManager:RacialTrait\Edit', 'terrasphere_cm_racial_traits_edit', $viewParams);
+        return $this->view('Terrasphere\Charactermanager:RacialTrait\Edit', 'terrasphere_cm_racial_traits_edit', $viewParams);
     }
 
     public function actionAdd(): \XF\Mvc\Reply\View
     {
-        $newRacialTrait = $this->em()->create('Terrasphere\CharacterManager:RacialTrait');
+        $newRacialTrait = $this->em()->create('Terrasphere\Charactermanager:RacialTrait');
         return $this->actionAddOrEdit($newRacialTrait);
     }
 
     public function actionEdit(ParameterBag $params): \XF\Mvc\Reply\View
     {
-        $racialTrait = $this->assertRecordExists('Terrasphere\CharacterManager:RacialTrait', $params['race_trait_id']);
+        $racialTrait = $this->assertRecordExists('Terrasphere\Charactermanager:RacialTrait', $params['race_trait_id']);
         return $this->actionAddOrEdit($racialTrait);
     }
 
@@ -66,9 +66,9 @@ class RacialTraits extends AbstractController
         $this->assertPostOnly();
 
         if ($params['race_trait_id'])
-            $trait = $this->assertRecordExists('Terrasphere\CharacterManager:RacialTrait', $params['race_trait_id']);
+            $trait = $this->assertRecordExists('Terrasphere\Charactermanager:RacialTrait', $params['race_trait_id']);
         else
-            $trait = $this->em()->create('Terrasphere\CharacterManager:RacialTrait');
+            $trait = $this->em()->create('Terrasphere\Charactermanager:RacialTrait');
 
         $this->save($trait)->run();
 
@@ -114,7 +114,7 @@ class RacialTraits extends AbstractController
 
         // Set user group access.
         /** @var \Terrasphere\Charactermanager\Repository\RacialTraits $repo */
-        $repo = $this->repository('Terrasphere\CharacterManager:RacialTraits');
+        $repo = $this->repository('Terrasphere\Charactermanager:RacialTraits');
 
         $form->complete(function(FormAction $form) use ($repo, $trait, $selectedGroupIDs) {
             $repo->setUserGroupAccessForRacialTrait($trait, $selectedGroupIDs);
@@ -127,10 +127,10 @@ class RacialTraits extends AbstractController
     public function actionDelete(ParameterBag $params)
     {
         /** @var \Terrasphere\Charactermanager\Entity\RacialTrait $trait */
-        $trait = $this->assertRecordExists('Terrasphere\CharacterManager:RacialTrait', $params['race_trait_id']);
+        $trait = $this->assertRecordExists('Terrasphere\Charactermanager:RacialTrait', $params['race_trait_id']);
 
         /** @var \Terrasphere\Charactermanager\Repository\RacialTraits $repo */
-        $repo = $this->repository('Terrasphere\CharacterManager:RacialTraits');
+        $repo = $this->repository('Terrasphere\Charactermanager:RacialTraits');
         $repo->setUserGroupAccessForRacialTrait($trait, []);
 
         /** @var \XF\ControllerPlugin\Delete $plugin */

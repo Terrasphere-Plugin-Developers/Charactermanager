@@ -22,7 +22,7 @@ class CharacterRaceTrait extends Entity
         $structure->getters = [];
         $structure->relations = [
             'RacialTrait' => [
-                'entity' => 'Terrasphere\CharacterManager:RacialTrait',
+                'entity' => 'Terrasphere\Charactermanager:RacialTrait',
                 'type' => SELF::TO_ONE,
                 'conditions' => 'race_trait_id',
                 'primary' => true,
