@@ -30,7 +30,7 @@ class Member extends XFCP_Member
         $armor = $user->getOrInitiateArmor();
 
         /** @var RacialTraits $raceTraitRepo */
-        $raceTraitRepo = $this->repository('Terrasphere\CharacterManager:RacialTraits');
+        $raceTraitRepo = $this->repository('Terrasphere\Charactermanager:RacialTraits');
 
         /** @var Currency $raceTraitCurrency */
         $raceTraitCurrency = $this->assertRecordExists('DBTech\Credits:Currency', $this->options()['terrasphereRaceTraitCurrency'], null, null);
@@ -250,7 +250,7 @@ class Member extends XFCP_Member
         $slotIndex = $this->filter('slot_index', 'uint');
 
         /** @var RacialTraits $repo */
-        $repo = $this->repository('Terrasphere\CharacterManager:RacialTraits');
+        $repo = $this->repository('Terrasphere\Charactermanager:RacialTraits');
 
         /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
         $user = $this->assertViewableUser($userID);
