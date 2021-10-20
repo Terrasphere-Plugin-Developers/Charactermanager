@@ -24,8 +24,6 @@ class RacialTrait extends Entity
         $structure->getters = [
             'icon_url' => true,
         ];
-
-        $structure->getters = [];
         $structure->relations = [];
 
         return $structure;
