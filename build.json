@@ -13,6 +13,11 @@
     "styles/default/Terrasphere/Charactermanager/armor-icon.png",
     "styles/default/Terrasphere/Charactermanager/armor-light.png",
     "styles/default/Terrasphere/Charactermanager/armor-medium.png",
-    "styles/default/Terrasphere/Charactermanager/armor-heavy.png"
+    "styles/default/Terrasphere/Charactermanager/armor-heavy.png",
+    "styles/default/Terrasphere/Charactermanager/rank1.png",
+    "styles/default/Terrasphere/Charactermanager/rank2.png",
+    "styles/default/Terrasphere/Charactermanager/rank3.png",
+    "styles/default/Terrasphere/Charactermanager/rank4.png",
+    "styles/default/Terrasphere/Charactermanager/rank5.png"
   ]
 }
