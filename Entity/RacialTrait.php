@@ -21,9 +21,18 @@ class RacialTrait extends Entity
             'cached_group_id' => ['type' => self::INT, 'required' => true],
         ];
 
+        $structure->getters = [
+            'icon_url' => true,
+        ];
+
         $structure->getters = [];
         $structure->relations = [];
 
         return $structure;
+    }
+
+    //getter that overrides icon_url property. To get the underlying actual value gotta work with the _values array
+    public function getIconUrl(){
+        return \XF::options()->boardUrl . '/' . $this->_values['icon_url'];
     }
 }
