@@ -4,6 +4,7 @@ namespace Terrasphere\Charactermanager\XF\Entity;
 
 use Terrasphere\Charactermanager\Entity\CharacterEquipment;
 use Terrasphere\Charactermanager\Entity\CharacterMastery;
+use Terrasphere\Charactermanager\Entity\CharacterRaceTrait;
 use Terrasphere\Core\Entity\Rank;
 use XF;
 
@@ -28,6 +29,10 @@ class User extends XFCP_User
         return $masteries;
     }
 
+    public function getTraits(): array{
+        $traits = CharacterRaceTrait::getCharacterTraits($this,$this->user_id);
+        return $traits;
+    }
     public function getBannerButtons() : array
     {
         return $this->finder('Terrasphere\Core:BannerButton')->fetch()->toArray();

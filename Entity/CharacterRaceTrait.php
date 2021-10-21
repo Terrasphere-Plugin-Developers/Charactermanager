@@ -37,4 +37,21 @@ class CharacterRaceTrait extends Entity
 
         return $structure;
     }
+
+    public static function getCharacterTraits($mustHaveFinderAndEM, int $userID): array
+    {
+        $results = $mustHaveFinderAndEM->finder('Terrasphere\Charactermanager:CharacterRaceTrait')
+            ->with(['RacialTrait'])
+            ->where('user_id', $userID)
+            ->order('slot_index', 'ASC')
+            ->fetch();
+
+        $results = $results->toArray();
+
+        $ret = [];
+        foreach ($results as $masteryID => $entry)
+            $ret[$entry['slot_index']] = $entry;
+
+        return $ret;
+    }
 }
