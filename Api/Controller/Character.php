@@ -117,16 +117,22 @@ class Character extends AbstractController{
         $result = [];
         $subs = $user->xc_la_user_ids;
         foreach ($subs as $key=>$sub){
-            $result[] = $this->buildProfileUrlNamePairById($key);
+            $potentialArray = $this->buildProfileUrlNamePairById($key);
+            if($potentialArray != null) $result[] = $potentialArray;
         }
         return $result;
     }
-    private function buildProfileUrlNamePairById(int $id):array{
+    private function buildProfileUrlNamePairById(int $id){
         $user = $this->finder('XF:User')->where('user_id',$id)->fetchOne();
+        if(!$user){
+            return null;
+        }
         $baseUrl = \XF::options()->boardUrl;
+        $url = "$baseUrl/members/{$user->username}.{$user->user_id}";
+        $url = str_replace(' ', '-', $url);
         return  [
             'name' => $user->username,
-            'url' => "$baseUrl/members/{$user->username}.{$user->user_id}",
+            'url' => $url,
         ];
     }
     private function getUserTraits(User $user):array{
