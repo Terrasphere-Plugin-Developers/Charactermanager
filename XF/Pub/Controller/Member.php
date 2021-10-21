@@ -94,6 +94,9 @@ class Member extends XFCP_Member
     {
         if($this->isPost())
         {
+            if(!$this->doesVisitorHaveCharacterModPowers())
+                return $this->error("You lack permission to link posts.");
+
             $vals = $this->filter([
                 'post_id' => 'int',
                 'desc_post_id' => 'int',
@@ -757,6 +760,10 @@ class Member extends XFCP_Member
 
     public function canVisitorViewCharacterSheet(int $userID): bool {
         return true;
+    }
+
+    public function doesVisitorHaveCharacterModPowers(): bool {
+        return \XF::visitor()->hasPermission('terrasphere', 'terrasphere_cm_review');
     }
 
     public function canVisitorViewRevisions(int $userID): bool {
