@@ -94,6 +94,9 @@ class Member extends XFCP_Member
     {
         if($this->isPost())
         {
+            if(!$this->doesVisitorHaveCharacterModPowers())
+                return $this->error("You lack permission to link posts.");
+
             $vals = $this->filter([
                 'post_id' => 'int',
                 'desc_post_id' => 'int',
@@ -244,7 +247,7 @@ class Member extends XFCP_Member
     /**
      * @throws Exception
      */
-    public function actionSelectNewTrait(ParameterBag $params): \XF\Mvc\Reply\View
+    public function actionSelectNewTrait(ParameterBag $params)
     {
         $userID = $this->filter('user_id', 'uint');
         $slotIndex = $this->filter('slot_index', 'uint');
@@ -459,6 +462,10 @@ class Member extends XFCP_Member
 
     public function actionUpgrade(ParameterBag $params)
     {
+        // Permission check
+        if(!$this->canVisitorEditCharacterSheet($params['user_id']))
+            return $this->error("You don't have permission to edit this character.");
+
         $mastery = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
             ->with('Mastery')
             ->where('user_id', $params['user_id'])
@@ -640,6 +647,10 @@ class Member extends XFCP_Member
         $userId = $params['user_id'];
         $equipId = $this->filter('equipment', 'uint');
 
+        // Permission check
+        if(!$this->canVisitorEditCharacterSheet($userId))
+            return $this->error("You don't have permission to edit this character.");
+
         try {
             /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
             $user = $this->assertViewableUser($userId);
@@ -692,6 +703,9 @@ class Member extends XFCP_Member
         $user_id = $this->filter('user_id', 'uint');
         $equipId = $this->filter('equip_id', 'uint');
 
+        // Permission check
+        if(!$this->canVisitorEditCharacterSheet($user_id))
+            return $this->error("You don't have permission to edit this character.");
 
         try {
             /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
@@ -757,6 +771,10 @@ class Member extends XFCP_Member
 
     public function canVisitorViewCharacterSheet(int $userID): bool {
         return true;
+    }
+
+    public function doesVisitorHaveCharacterModPowers(): bool {
+        return \XF::visitor()->hasPermission('terrasphere', 'terrasphere_cm_review');
     }
 
     public function canVisitorViewRevisions(int $userID): bool {

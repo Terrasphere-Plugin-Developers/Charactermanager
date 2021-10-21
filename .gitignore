@@ -1,2 +1,7 @@
 /_releases/
 /_data/
+/.idea/.gitignore
+/.idea/Charactermanager.iml
+/.idea/modules.xml
+/.idea/php.xml
+/.idea/vcs.xml
