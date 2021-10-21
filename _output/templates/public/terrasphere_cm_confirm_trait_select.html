@@ -3,7 +3,7 @@
 <xf:macro name="trait"
 		  arg-trait="!">
 	<label>
-		<div class="character-sheet-race-trait-option-container">
+		<div class="character-sheet-race-trait-option-container" data-xf-init="tooltip" title="{$trait.tooltip}">
 			<input class="race-trait-option grid-overlap"
 			   type="radio"
 			   id="trait-{$trait.race_trait_id}"
