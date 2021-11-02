@@ -22,6 +22,11 @@ class Character extends AbstractController{
         ///Check if the user ID is numeric or a name, if numeric it's the user id, if name it is the user name
         $account = $this->filter("id","string");
         $user = $this->getUserObj($account);
+        if(!$user){
+            return $this->apiResult([
+                'error' => 'user not found'
+            ]);
+        }
         $isSubAccount = $user->xc_la_is_sub_account;
         $avatarUrls = $this->getAvatarUrls($user);
         $result = [
@@ -79,7 +84,7 @@ class Character extends AbstractController{
         }
         return $avatarUrls;
     }
-    private function getUserObj(String $id):User{
+    private function getUserObj(String $id){
         if(is_numeric($id)){
             $user=$this->finder('XF:User')->where('user_id',$id)->fetchOne();
         }else{
