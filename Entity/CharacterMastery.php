@@ -84,7 +84,6 @@ class CharacterMastery extends Entity
                 $dummy['mastery_id'] = 0;
                 $dummy['rank_id'] = 0;
                 $dummy['target_index'] = $index;
-                $dummy['mastery_id'] = 'N/A';
                 $ret[$index] = $dummy;
             }
             else

@@ -1,7 +1,7 @@
 <div class="character-sheet-cell">
                 <div class="character-sheet-mastery-list">
                     <xf:foreach loop="$masterySlots" value="$masterySlot" key="$slotNum">
-                        <xf:if is="$masterySlot.mastery_id == 'N/A'">
+                        <xf:if is="$masterySlot.mastery_id == 0">
                             <xf:if is="$canMakeChanges">
                                 <xf:if is="$slotNum == 3">
                                     <xf:macro template="terrasphere_cm_character_sheet_macros"
@@ -34,7 +34,7 @@
                                               arg-max_rank="{$maxRank}"/>
                                 </xf:if>
                             </xf:if>
-                            <xf:else/>
+                        <xf:else/>
                             <xf:macro template="terrasphere_cm_character_sheet_macros"
 									  name="mastery"
                                       arg-is_empty="0"
