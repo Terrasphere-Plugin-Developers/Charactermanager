@@ -73,5 +73,10 @@
         "version_id": 1000600,
         "version_string": "1.0.6",
         "hash": "0dc9fef407b37bf3ddd4b71e6f1a1b4b"
+    },
+    "public/terrasphere_cm_refund.html": {
+        "version_id": 1001100,
+        "version_string": "1.0.11",
+        "hash": "8b54617a151bcb0b9362b55fcc61302b"
     }
 }

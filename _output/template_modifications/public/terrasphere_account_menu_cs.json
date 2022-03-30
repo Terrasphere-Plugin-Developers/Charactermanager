@@ -1,0 +1,9 @@
+{
+    "template": "account_visitor_menu",
+    "description": "Adds character mastery refund option to the account menu for characters.",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<!--[XF:account_links:bottom]-->",
+    "replace": "$0\n<xf:if is=\"$xf.visitor.user_id != 0\"> <xf:if is=\"$xf.visitor.canShowCharacterElements()\">\n\t<li><a href=\"{{ link('terrasphere/refund') }}\" class=\"menu-linkRow\">Character Refunds</a></li>\n</xf:if> </xf:if>"
+}

@@ -1,0 +1,11 @@
+{
+    "route_type": "public",
+    "route_prefix": "terrasphere",
+    "sub_name": "refund",
+    "format": "refund/",
+    "build_class": "",
+    "build_method": "",
+    "controller": "Terrasphere\\Charactermanager:Refund",
+    "context": "members",
+    "action_prefix": ""
+}

@@ -1,0 +1,51 @@
+<xf:css>
+.refund_list {
+	max-width: 600px;
+	padding: 0px;
+    margin: 0px;
+}
+.refund_list_item {
+	display: flex;
+	justify-content: space-between;
+	padding: 10px;
+	margin: 5px 0px;
+	background-color: #FFF;
+	flex-wrap: wrap;
+	flex-direction: column;
+    align-content: center;
+	border: #0088ff solid 1px;
+}
+.refund_cell {
+	margin: 10px auto;
+}
+.refund_stats {
+	display: flex;
+	justify-content: space-between;
+}
+.refund_stat {
+	margin: 0px 10px;
+}
+.refund_title {
+	font-weight: bolder;
+    font-size: larger;
+}
+</xf:css>
+
+<xf:title>Character Refund Shop</xf:title>
+
+<div class="body">
+	<div class="refund_container">
+		<ul class="refund_list">
+			<xf:foreach loop="$masteries" value="$mastery">
+				<li class="refund_list_item">
+					<div class="refund_title refund_cell">{$mastery.Mastery.display_name} {$mastery.Rank.name}</div>
+					<div class="refund_stats refund_cell">
+						<div class="refund_stat"><b>Return:</b> {{$mastery.Rank.getRefund($mastery.Mastery.getRankSchema())}} {{$mastery.Mastery.getRankSchema().Currency.title}}</div>
+						<div class="refund_stat"><b>Loss:</b> {{$mastery.Rank.getCumulativeCost($mastery.Mastery.getRankSchema()) - $mastery.Rank.getRefund($mastery.Mastery.getRankSchema())}} {{$mastery.Mastery.getRankSchema().Currency.title}}</div>
+					</div>
+					<xf:button class="refund_button refund_cell" href="{{ link('terrasphere/refund/refund', $xf.visitor, {'user_id': $xf.visitor.user_id, 'mastery_id': $mastery.mastery_id}) }}">Refund</xf:button>
+				</li>
+			</xf:foreach>
+		</ul>
+	</div>
+</div>
