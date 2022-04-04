@@ -49,6 +49,7 @@ trait DBTableInit
                 $table->addColumn("user_id","int");
                 $table->addColumn("rank_id","int")->nullable(true)->setDefault(1);
                 $table->addColumn("target_index","int")->setDefault(0);
+                $table->addColumn('overrank', 'int')->unsigned(true)->setDefault(0);
             }
         );
     }

@@ -5,6 +5,8 @@
     "js/Terrasphere/Charactermanager/upgrade_equip.js",
     "js/Terrasphere/Charactermanager/armor_dialogue.js",
     "js/Terrasphere/Charactermanager/armor_change.js",
+    "js/Terrasphere/Charactermanager/stats.js",
+    "styles/default/Terrasphere/Charactermanager/crown.png",
     "styles/default/Terrasphere/Charactermanager/plus_sign.png",
     "styles/default/Terrasphere/Charactermanager/missing_img.png",
     "styles/default/Terrasphere/Charactermanager/padlock.png",

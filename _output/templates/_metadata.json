@@ -40,9 +40,9 @@
         "hash": "d3bec71569e5310eba5af18e43c67a8f"
     },
     "public/terrasphere_cm_character_sheet_macros.html": {
-        "version_id": 1000700,
-        "version_string": "1.0.7",
-        "hash": "8e34097ad4e2dfa985cd1239655c0f14"
+        "version_id": 1001100,
+        "version_string": "1.0.11",
+        "hash": "7093513e10dcd7b97b1359badbd20820"
     },
     "public/terrasphere_cm_confirm_armor_selection.html": {
         "version_id": 1000600,
@@ -78,5 +78,15 @@
         "version_id": 1001100,
         "version_string": "1.0.11",
         "hash": "8b54617a151bcb0b9362b55fcc61302b"
+    },
+    "public/terrasphere_cm_stats.html": {
+        "version_id": 1001100,
+        "version_string": "1.0.11",
+        "hash": "292a209885dda6293e577d6dde3bcdd8"
+    },
+    "public/terrasphere_crown_button.html": {
+        "version_id": 1001100,
+        "version_string": "1.0.11",
+        "hash": "0068f2d519b31cc084bf10bb527c7b03"
     }
 }

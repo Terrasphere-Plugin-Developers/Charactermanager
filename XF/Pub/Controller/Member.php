@@ -75,6 +75,18 @@ class Member extends XFCP_Member
 
 		return $this->view('XF:Member\CharacterSheet', 'terrasphere_cm_character_sheet', $viewParams);
 	}
+    /**
+     * @throws Exception
+     */
+    public function actionCharacterThread(ParameterBag $params)
+    {
+        /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
+        $user = $this->assertViewableUser($params['user_id']);
+
+        $postAndThread = PostProxyHelper::getPostProxyParams($this, $user['ts_cm_character_sheet_post_id']);
+
+        return $this->redirectPermanently('threads/'.$postAndThread['thread']['thread_id']);
+    }
 
     /**
      * @throws Exception

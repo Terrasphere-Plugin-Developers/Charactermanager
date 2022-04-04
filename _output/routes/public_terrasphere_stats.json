@@ -1,0 +1,11 @@
+{
+    "route_type": "public",
+    "route_prefix": "terrasphere",
+    "sub_name": "stats",
+    "format": "stats",
+    "build_class": "",
+    "build_method": "",
+    "controller": "Terrasphere\\Charactermanager:Stats",
+    "context": "",
+    "action_prefix": ""
+}

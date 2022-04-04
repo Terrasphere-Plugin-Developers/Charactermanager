@@ -86,7 +86,6 @@ class Refund extends AbstractController
         // Make sure this is set
         $currency->verifyAdjustEvent();
 
-        $message = $input['message'];
         $multiplier = $input['negate'] ? (-1 * $input['amount']) : $input['amount'];
 
         // First test add or remove credits

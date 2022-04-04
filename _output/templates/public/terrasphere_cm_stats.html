@@ -1,0 +1,106 @@
+<xf:css>
+#mastery-rankings {
+	display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+	
+.masters-list {
+	display: flex;
+	align-items: flex-end;
+}
+
+.mastery-ranking-title {
+	text-align: center;
+    font-size: x-large;
+    text-shadow: 0px 1px cyan;
+    text-transform: uppercase;
+	border-bottom: cyan solid 1px;
+    margin: 10px auto;
+    max-width: 300px;
+}
+
+.master {
+    margin: 10px 20px;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+	width: 100px;
+}
+	
+.master-text {
+	margin: 20px 0;
+    text-align: center;
+}
+	
+.master-rank-0 {
+	width: 200px;
+}
+
+.master-rank-1 {
+	margin-top: 30px;
+}
+.master-rank-2 {
+	margin-top: 30px;
+}
+
+@media (max-width: 500px)
+{
+	.master-rank-1 {
+		display: none;
+	}
+	.master-rank-2 {
+		display: none;
+	}
+}
+</xf:css>
+
+<div id="chart"></div>
+<xf:js src="Terrasphere/Charactermanager/stats.js" addon="Terrasphere/Charactermanager" />
+<div id="mastery-rankings">
+	<xf:foreach loop="$masters_list" value="$masters" key="$masteryID">
+		<div class="mastery-ranking-container">
+			<div class="mastery-ranking-title">{$masters.name}</div>
+			<div class="masters-list">
+				<xf:macro name="ranking"
+					  arg-r="1"
+					  arg-master="{{$masters.masters.1}}" />
+				<xf:macro name="ranking"
+					  arg-r="0"
+					  arg-master="{{$masters.masters.0}}" />
+				<xf:macro name="ranking"
+					  arg-r="2"
+					  arg-master="{{$masters.masters.2}}" />
+			</div>
+		</div>
+	</xf:foreach>
+</div>
+
+
+<xf:macro name="ranking"
+	   arg-r="!"
+	   arg-master="!">
+	<div class="master master-rank-{$r}">
+		<div class="master-avatar-container">
+			<xf:if is="$r == 0">
+				<xf:avatar user="{$master.user}" size="l" canonical="true" />
+			<xf:else />
+				<xf:avatar user="{$master.user}" size="m" canonical="true" />
+			</xf:if>
+		</div>
+		<div class="master-text">
+			<div class="master-username">
+				{$master.username}
+			</div>
+			<xf:if is="$master.rank.tier > -1">
+				<div class="master-rank">
+					<xf:if is="$master.overrank > 0">
+						Rank {$master.rank.name} + {$master.overrank}
+					<xf:else />
+						Rank {$master.rank.name}
+					</xf:if>
+				</div>
+			</xf:if>
+		</div>
+	</div>
+</xf:macro>

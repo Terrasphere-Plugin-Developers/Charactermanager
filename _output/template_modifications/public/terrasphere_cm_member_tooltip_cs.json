@@ -5,5 +5,5 @@
     "enabled": true,
     "action": "str_replace",
     "find": "<xf:avatar user=\"{$user}\" size=\"m\" notooltip=\"true\" />",
-    "replace": "$0\n<xf:if is=\"$user.canShowCharacterElements()\">\n\t<xf:macro template=\"terrasphere_core_generic_macros\"\n\t\t  name=\"character_sheet_modal_button\"\n\t\t  arg-user=\"{$user}\" />\n</xf:if>"
+    "replace": "$0\n<xf:if is=\"$user.canShowCharacterElements()\">\n\t<xf:macro template=\"terrasphere_core_generic_macros\"\n\t\t  name=\"character_sheet_modal_button\"\n\t\t  arg-user=\"{$user}\" />\n\t<xf:if is=\"$xf.visitor.hasPermission('terrasphere', 'terrasphere_cm_review')\">\n\t\t<xf:macro template=\"terrasphere_core_generic_macros\"\n\t\t  \tname=\"character_sheet_thread_link\"\n\t\t  \targ-user=\"{$user}\" />\n\t</xf:if>\n</xf:if>"
 }

@@ -18,6 +18,7 @@ class CharacterMastery extends Entity
             'user_id' => ['type' => self::UINT, 'required' => true],
             'rank_id' => ['type' => self::UINT, 'required' => false],
             'target_index' => ['type' => self::UINT],
+            'overrank' => ['type' => self::UINT],
         ];
 
         $structure->getters = [];

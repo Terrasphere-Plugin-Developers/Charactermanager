@@ -32,7 +32,17 @@
                          src="{$mastery_slot.Mastery.icon_url}"
                          alt="Mastery slot"/>
                 </a>
-            <xf:else/>
+            <xf:elseif is="$can_make_changes AND $mastery_slot.rank_id == $max_rank" />
+				<a href="{{ link('members/cs/mastery/confirmPrestige', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
+                   class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.Rank.tier}"
+                   data-xf-click="overlay"
+                   data-cache="false"
+                   style="background-color: {$mastery_slot.Mastery.color};">
+                    <img class="character-sheet-mastery-icon grid-overlap"
+                         src="{$mastery_slot.Mastery.icon_url}"
+                         alt="Mastery slot"/>
+                </a>
+			<xf:else/>
                 <div class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.Rank.tier}"
                      style="background-color: {$mastery_slot.Mastery.color};">
                     <img class="character-sheet-mastery-icon grid-overlap"

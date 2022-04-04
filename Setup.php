@@ -73,4 +73,13 @@ class Setup extends AbstractSetup
             $table->addColumn('ts_cm_character_sheet_build_post_id', 'int')->unsigned(false)->setDefault(-1);
         });
     }
+
+    ### UPDATE STUFF  VERSION 1.0.6###
+    public function upgrade1001200Step1()
+    {
+        $this->schemaManager()->alterTable('xf_terrasphere_cm_character_masteries', function(Alter $table)
+        {
+            $table->addColumn('overrank', 'int')->unsigned(true)->setDefault(0);
+        });
+    }
 }
