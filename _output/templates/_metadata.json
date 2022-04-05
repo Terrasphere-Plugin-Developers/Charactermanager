@@ -54,6 +54,11 @@
         "version_string": "1.0.6",
         "hash": "22eee54e329894683c612142dc09c8c9"
     },
+    "public/terrasphere_cm_confirm_mastery_prestige.html": {
+        "version_id": 1001100,
+        "version_string": "1.0.11",
+        "hash": "18cd823ee9c9a6ef7b9d152993a8448b"
+    },
     "public/terrasphere_cm_confirm_mastery_upgrade.html": {
         "version_id": 1000600,
         "version_string": "1.0.6",

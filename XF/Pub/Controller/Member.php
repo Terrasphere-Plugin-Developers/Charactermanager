@@ -555,6 +555,121 @@ class Member extends XFCP_Member
     }
 
     /**
+    * Opens prestige confirmation screen.
+    */
+    public function actionConfirmPrestige(ParameterBag $params)
+    {
+        // Get character's mastery instance.
+        $mastery = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
+            ->with('Mastery')
+            ->where('user_id', $params['user_id'])
+            ->where('target_index', $params['target_index'])
+            ->fetchOne();
+
+        // Get the current rank.
+        $thisRank = $this->finder('Terrasphere\Core:Rank')
+            ->where('rank_id', $mastery['rank_id'])
+            ->fetchOne();
+
+        // Rank exists check.
+        if($thisRank == null)
+            return $this->error('NullRankError.');
+        // Make sure it's maxed.
+        if($thisRank['tier'] < Rank::maxRank($this)['tier'])
+            return $this->error('Must be max tier to prestige.');
+
+        // Get rank schema (and the currency associated with it).
+        $rankSchema = $mastery->Mastery->getRankSchema();
+
+        // Rank schema exists check.
+        if($rankSchema == null)
+            return $this->error('No rank schema associated with this mastery type.');
+
+        $user = $this->finder('XF:User')->where('user_id', $params['user_id'])->fetchOne();
+        $userVal = $rankSchema->Currency->getValueFromUser($user, false);
+
+        $mastery_slot = $this->em()->create("Terrasphere\Charactermanager:CharacterMastery");
+        $mastery_slot['user_id'] = $params['user_id'];
+        $mastery_slot['target_index'] = $params['target_index'];
+
+
+        $viewparams = [
+            'rankSchema' => $rankSchema,
+            'prestige' => $mastery['overrank'],
+            'mastery' => $mastery->Mastery,
+            'user' => $user,
+            'userVal' => $rankSchema->Currency->getFormattedValue($userVal),
+            'mastery_slot' => $mastery_slot,
+        ];
+        return $this->view('Terrasphere\Charactermanager:MasteryPrestigeConfirm', 'terrasphere_cm_confirm_mastery_prestige', $viewparams);
+    }
+    /**
+     * Opens prestige confirmation screen.
+     */
+    public function actionPrestige(ParameterBag $params)
+    {
+        // Permission check
+        if(!$this->canVisitorEditCharacterSheet($params['user_id']))
+            return $this->error("You don't have permission to edit this character.");
+
+        $params['amount'] = $this->filter('amount', 'int');
+
+        // Negative value.
+        if($params['amount'] <= 0)
+            return $this->error("Amount must be positive.");
+
+        // Get character's mastery instance.
+        $mastery = $this->finder('Terrasphere\Charactermanager:CharacterMastery')
+            ->with('Mastery')
+            ->where('user_id', $params['user_id'])
+            ->where('target_index', $params['target_index'])
+            ->fetchOne();
+
+        // Get the current rank.
+        $thisRank = $this->finder('Terrasphere\Core:Rank')
+            ->where('rank_id', $mastery['rank_id'])
+            ->fetchOne();
+
+        // Rank exists check.
+        if($thisRank == null)
+            return $this->error('NullRankError.');
+        // Make sure it's maxed.
+        if($thisRank['tier'] < Rank::maxRank($this)['tier'])
+            return $this->error('Must be max tier to prestige.');
+
+        // Get rank schema (and the currency associated with it).
+        $rankSchema = $mastery->Mastery->getRankSchema();
+
+        // Rank schema exists check.
+        if($rankSchema == null)
+            return $this->error('No rank schema associated with this mastery type.');
+
+        $user = $this->finder('XF:User')->where('user_id', $params['user_id'])->fetchOne();
+        $userVal = $rankSchema->Currency->getValueFromUser($user, false);
+
+        //$mastery_slot = $this->em()->create("Terrasphere\Charactermanager:CharacterMastery");
+        //$mastery_slot['user_id'] = $params['user_id'];
+        //$mastery_slot['target_index'] = $params['target_index'];
+
+        if($params['amount'] > $userVal)
+            return $this->error('Error: Insufficient Funds.');
+
+        if($this->adjustCurrency($user, $params['amount'], "Prestige (".$mastery->Mastery->display_name." +".$params['amount'].")", $rankSchema->Currency->currency_id))
+        {
+            // Update character mastery entity.
+            $mastery->fastUpdate('overrank', $mastery['overrank'] + $params['amount']);
+
+            // Close overlay via redirect and setup AJAX parameters.
+            $redirect = $this->redirect($this->buildLink('members', null, ['user_id' => $params['user_id']]));
+            $redirect->setJsonParam('masterySlotIndex', $params['target_index']);
+
+            return $redirect;
+        }
+
+        return $this->error("Currency adjustment error...");
+    }
+
+    /**
      * @throws Exception
      */
     public function actionConfirmUpgradeEquip(ParameterBag $params)

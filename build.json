@@ -6,6 +6,7 @@
     "js/Terrasphere/Charactermanager/armor_dialogue.js",
     "js/Terrasphere/Charactermanager/armor_change.js",
     "js/Terrasphere/Charactermanager/stats.js",
+    "js/Terrasphere/Charactermanager/prestige_confirm_screen.js",
     "styles/default/Terrasphere/Charactermanager/crown.png",
     "styles/default/Terrasphere/Charactermanager/plus_sign.png",
     "styles/default/Terrasphere/Charactermanager/missing_img.png",

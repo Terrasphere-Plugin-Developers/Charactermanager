@@ -1,0 +1,151 @@
+<xf:css>
+#prestige-form {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+	row-gap: 15px;
+}
+
+#prestige-prompt {
+	
+}
+
+#prestige-progression-mask {
+	-webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0), rgba(0,0,0,1), rgba(0,0,0,0));
+}
+#prestige-progression-line {
+	display: grid;
+    width: 2500px;
+    align-items: flex-end;
+    border-bottom: black solid 1px;
+    transition: transform 2s;
+    transform: translateX(0px);
+	margin-left: 50%;
+}
+
+#prestige-progression-top {
+    display: flex;
+	transform: translateX(-70px);
+    justify-content: space-between;
+    width: 2640px;
+}
+	
+#prestige-progression-bottom {
+    display: flex;
+	height: 5px;
+	width: 2500px;
+    justify-content: space-between;
+}
+
+#pointy-thingy-container {
+	display: flex;
+    justify-content: center;
+	margin-top: 5px;
+}
+
+.between-line {
+    background-color: black;
+    width: 2px;
+    height: 10px;
+}
+</xf:css>
+
+<xf:title>Mastery Prestige</xf:title>
+
+<div id="ineedthisforthejavascript" style="display:none;">{$prestige}</div>
+
+<div class="block-container">
+	<h1 class="character-sheet-overlay-title">Prestige</h1>
+	<hr>
+	<h2 class="character-sheet-overlay-subtitle">{$mastery.display_name} Prestige</h2>
+	
+	<div id="prestige-progression-mask">
+		<div id="prestige-progression-line">
+			<div id="prestige-progression-top" class="grid-overlap">
+				<xf:macro name="mastery_bubble"
+					  arg-prestige="0"
+					  arg-mastery="{$mastery}"
+					  arg-masteryElementDisplay="{$masteryElementDisplay}"
+					  arg-masterySlot="{$mastery_slot}" />
+				<xf:macro name="mastery_bubble"
+					  arg-prestige="1"
+					  arg-mastery="{$mastery}"
+					  arg-masteryElementDisplay="{$masteryElementDisplay}"
+					  arg-masterySlot="{$mastery_slot}" />
+				<xf:macro name="mastery_bubble"
+					  arg-prestige="2"
+					  arg-mastery="{$mastery}"
+					  arg-masteryElementDisplay="{$masteryElementDisplay}"
+					  arg-masterySlot="{$mastery_slot}" />
+				<xf:macro name="mastery_bubble"
+					  arg-prestige="3"
+					  arg-mastery="{$mastery}"
+					  arg-masteryElementDisplay="{$masteryElementDisplay}"
+					  arg-masterySlot="{$mastery_slot}" />
+				<xf:macro name="mastery_bubble"
+					  arg-prestige="4"
+					  arg-mastery="{$mastery}"
+					  arg-masteryElementDisplay="{$masteryElementDisplay}"
+					  arg-masterySlot="{$mastery_slot}" />
+				<xf:macro name="mastery_bubble"
+					  arg-prestige="5"
+					  arg-mastery="{$mastery}"
+					  arg-masteryElementDisplay="{$masteryElementDisplay}"
+					  arg-masterySlot="{$mastery_slot}" />
+			</div>
+			<div id="prestige-progression-bottom" class="grid-overlap">
+				<div class="between-line"></div>
+				<xf:macro name="inbetween_line" />
+				<xf:macro name="inbetween_line" />
+				<xf:macro name="inbetween_line" />
+				<xf:macro name="inbetween_line" />
+				<xf:macro name="inbetween_line" />
+			</div>
+		</div>
+		<div id="pointy-thingy-container">
+			<img id="pointy-thingy"
+				 src="{{ base_url('styles/default/Terrasphere/Charactermanager/pointer.png', true) }}"/>
+		</div>
+	</div>
+	<div style="width:100%; padding:1.5rem; display:flex;">
+		<xf:form action="{{ link('members/cs/mastery/prestige', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index}) }}"
+			  		method="post"
+				    id="prestige-form" 
+			  		ajax="true"
+					data-xf-init="upgrade-mastery"
+			  		data-reset-complete="true"
+			  		data-redirect="off"
+					 style="margin:auto;">
+			<div id="currency-amount">You have {$userVal} {$rankSchema.Currency.title}</div>
+			<xf:numberbox name="amount" id="prestige-val" />
+			<xf:submitrow sticky="true" icon="Confirm" />
+		</xf:form>
+	</div>
+</div>
+
+<xf:macro name="mastery_bubble"
+		  arg-prestige="!"
+		  arg-mastery="!"
+		  arg-masteryElementDisplay="!"
+		  arg-masterySlot="!">
+	<div class="character-sheet-mastery-container" id="mastery-container-{$masterySlot.target_index}">
+		<div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
+			<div class="character-sheet-mastery-icon-container grid-overlap prestige-{$prestige}}"
+				 style="background-color: {$mastery.color}">
+				<img class="character-sheet-mastery-icon grid-overlap"
+				 	 src="{$mastery.icon_url}"
+				 	 alt="Mastery slot" />
+			</div>
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro name="inbetween_line">
+	<div class="between-line"></div>
+	<div class="between-line"></div>
+	<div class="between-line"></div>
+	<div class="between-line"></div>
+	<div class="between-line"></div>
+</xf:macro>
+
+<xf:js src="Terrasphere/Charactermanager/prestige_confirm_screen.js" addon="Terrasphere/Charactermanager" />
