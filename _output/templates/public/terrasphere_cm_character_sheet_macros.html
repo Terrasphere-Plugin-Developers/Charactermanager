@@ -5,35 +5,28 @@
           arg-is_locked="0"
           arg-can_make_changes="!"
           arg-max_rank="!">
+    <xf:set var="$masteryElementDisplay" value="none"/>
+    <xf:set var="$prestigeElementDisplay" value="none"/>
+    <xf:set var="$emptyElementDisplay" value="none"/>
+    <xf:set var="$lockElementDisplay" value="none"/>
     <xf:if is="$is_empty">
-        <xf:set var="$masteryElementDisplay" value="none"/>
         <xf:if is="$is_locked">
-            <xf:set var="$emptyElementDisplay" value="none"/>
             <xf:set var="$lockElementDisplay" value="inherit"/>
-            <xf:else/>
-            <xf:set var="$emptyElementDisplay" value="inherit"/>
-            <xf:set var="$lockElementDisplay" value="none"/>
-        </xf:if>
         <xf:else/>
-        <xf:set var="$emptyElementDisplay" value="none"/>
-        <xf:set var="$lockElementDisplay" value="none"/>
-        <xf:set var="$masteryElementDisplay" value="interit"/>
+            <xf:set var="$emptyElementDisplay" value="inherit"/>
+        </xf:if>
+    <xf:else/>
+		<xf:if is="false"> <!-- Future: is_prestige_available -->
+        	<xf:set var="$prestigeElementDisplay" value="inherit"/>
+		<xf:else/>
+        	<xf:set var="$masteryElementDisplay" value="inherit"/>
+		</xf:if>
     </xf:if>
     <div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
         <div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
             <div class="rank-stars grid-overlap rank-stars-{$mastery_slot.Rank.tier}"></div>
             <xf:if is="$can_make_changes AND $mastery_slot.rank_id != $max_rank">
                 <a href="{{ link('members/cs/mastery/confirmUpgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
-                   class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.Rank.tier}"
-                   data-xf-click="overlay"
-                   data-cache="false"
-                   style="background-color: {$mastery_slot.Mastery.color};">
-                    <img class="character-sheet-mastery-icon grid-overlap"
-                         src="{$mastery_slot.Mastery.icon_url}"
-                         alt="Mastery slot"/>
-                </a>
-            <xf:elseif is="$can_make_changes AND $mastery_slot.rank_id == $max_rank" />
-				<a href="{{ link('members/cs/mastery/confirmPrestige', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
                    class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.Rank.tier}"
                    data-xf-click="overlay"
                    data-cache="false"
@@ -72,6 +65,17 @@
                      alt="Locked mastery slot"
                      style="width:50%;height:50%;"/>
             </div>
+        </div>
+        <div class="character-sheet-mastery-prestige grid-overlap" style="display: {$prestigeElementDisplay};">
+            <a href="{{ link('members/cs/mastery/confirmPrestige', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
+               class="character-sheet-mastery-icon-container grid-overlap rank-5"
+               data-xf-click="overlay"
+               data-cache="false"
+               style="background-color: {$mastery_slot.Mastery.color};">
+            	<img class="character-sheet-mastery-icon grid-overlap"
+                     src="{$mastery_slot.Mastery.icon_url}"
+                     alt="Mastery slot"/>
+            </a>
         </div>
         <div class="mastery-change-flash grid-overlap"></div>
     </div>
