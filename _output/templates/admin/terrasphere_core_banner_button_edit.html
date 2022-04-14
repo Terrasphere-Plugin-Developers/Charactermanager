@@ -10,14 +10,8 @@
 			<xf:textboxrow name="name" value="{$button.name}"
 				label="{{ phrase('name') }}" />
 			
-			<xf:formrow label="Icon Image">
-				<div class="inputGroup inputGroup--joined" data-xf-init="asset-upload" data-asset="BannerButton-icon_urls">
-					<input type="text" class="input js-assetPath " name="icon_url" value="{{$button.icon_url}}" dir="ltr" id="stilldontknowwhythisexists">
-					<label class="inputGroup-text inputUploadButton" data-xf-init="tooltip" data-original-title="Upload file" id="stilldontknowwhythisexistseither">
-						<input type="file" class="js-uploadAsset" accept=".gif,.jpeg,.jpg,.jpe,.png">
-					</label>
-				</div>
-			</xf:formrow>
+			<xf:textboxrow name="icon_url" value="{$button.icon_url}"
+				label="Icon" hint="Uses FA classes." />
 			
 			<xf:textboxrow name="url" value="{$button.url}"
 				label="URL" hint="URL is relative to index unless the protocol is included (eg. https://xyz)." />

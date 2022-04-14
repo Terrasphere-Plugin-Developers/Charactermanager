@@ -35,16 +35,7 @@ class Member extends XFCP_Member
         /** @var Currency $raceTraitCurrency */
         $raceTraitCurrency = $this->assertRecordExists('DBTech\Credits:Currency', $this->options()['terrasphereRaceTraitCurrency'], null, null);
         $traitCurrencyVal = $raceTraitCurrency->getValueFromUser($user, false);
-        $traitCost = 0;
-
-        foreach ($raceTraitRepo->getRacialTraitSlotsForUser($user) as $slot)
-        {
-            if(!$slot['isEmpty'])
-            {
-                $traitCost = $this->options()['terrasphereRaceTraitCost'];
-                break;
-            }
-        }
+        $traitCost = $raceTraitRepo->getRaceTraitCostForUser($user);
 
         $maxRank = Rank::maxRank($this);
 
@@ -84,6 +75,7 @@ class Member extends XFCP_Member
         $user = $this->assertViewableUser($params['user_id']);
 
         $postAndThread = PostProxyHelper::getPostProxyParams($this, $user['ts_cm_character_sheet_post_id']);
+        if($postAndThread == null) return $this->message("User hasn't created a character thread yet (or it's awaiting approval).");
 
         return $this->redirectPermanently('threads/'.$postAndThread['thread']['thread_id']);
     }
@@ -279,24 +271,15 @@ class Member extends XFCP_Member
         /** @var Currency $currency */
         $currency = $this->assertRecordExists('DBTech\Credits:Currency', $this->options()['terrasphereRaceTraitCurrency'], null, null);
         $currentVal = $currency->getValueFromUser($user, false);
-        $traitCost = 0;
-
-        foreach ($repo->getRacialTraitSlotsForUser($user) as $slot)
-        {
-            if(!$slot['isEmpty'])
-            {
-                $traitCost = $this->options()['terrasphereRaceTraitCost'];
-                break;
-            }
-        }
+        $traitCost = $repo->getRaceTraitCostForUser($user);
 
         $viewparams = [
             'traits' => $traits,
             'slot' => $dummySlot,
             'currencyName' => $currency->title,
-            'currencyCost' => (int) $traitCost,
+            'currencyCost' => $traitCost,
             'currencyCurrent' => (int) $currentVal,
-            'currencyAfter' => (int) $currentVal - (int) $traitCost,
+            'currencyAfter' => (int) $currentVal - $traitCost,
         ];
 
         return $this->view('Terrasphere\Charactermanager:TraitSelection', 'terrasphere_cm_confirm_trait_select', $viewparams);
@@ -314,7 +297,7 @@ class Member extends XFCP_Member
                 return $this->error("You don't have permission to edit this character.");
 
             // Mastery slot index bounds check
-            if($params['slot_index'] < 0 || $params['slot_index'] > 4)
+            if($params['slot_index'] < 0 || $params['slot_index'] > $this->options()['terrasphereCMMaxRaceTraits'] - 1)
                 return $this->error('Invalid slot index.');
 
             $input = $this->filter([
@@ -351,7 +334,7 @@ class Member extends XFCP_Member
                 return $this->error("Trait missing from database (or user groups may be broken). IDs:".$str);
             }
 
-            $traitCost = $params['slot_index'] == 0 ? 0 : $this->options()['terrasphereRaceTraitCost'];
+            $traitCost = $repo->getRaceTraitCostForUser($user);
             if($traitCost > 0)
             {
                 $this->adjustCurrency($user, $traitCost, "Purchased Race Trait: ".$trait['name'], $this->options()['terrasphereRaceTraitCurrency']);
@@ -608,6 +591,7 @@ class Member extends XFCP_Member
      */
     public function actionPrestige(ParameterBag $params)
     {
+        return $this->error("Nope.");
         // Permission check
         if(!$this->canVisitorEditCharacterSheet($params['user_id']))
             return $this->error("You don't have permission to edit this character.");

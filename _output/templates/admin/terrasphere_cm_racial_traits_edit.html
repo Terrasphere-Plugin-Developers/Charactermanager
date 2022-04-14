@@ -10,20 +10,21 @@
 			<xf:textboxrow name="name" value="{$trait.name}"
 				label="{{ phrase('name') }}" />
 			
-			<xf:formrow label="Icon Image" hint="Trait icon">
-				<div class="inputGroup inputGroup--joined" data-xf-init="asset-upload" data-asset="{{'RacialTrait-icon_url-' . $trait.race_trait_id}}">
-					<input type="text" class="input js-assetPath " name="icon_url" value="{{$trait.icon_url}}" dir="ltr" id="stilldontknowwhythisexists">
-					<label class="inputGroup-text inputUploadButton" data-xf-init="tooltip" data-original-title="Upload file" id="stilldontknowwhythisexistseither">
-						<input type="file" class="js-uploadAsset" accept=".gif,.jpeg,.jpg,.jpe,.png">
-					</label>
-				</div>
-			</xf:formrow>
+			<xf:textboxrow name="icon_url" value="{$trait.icon_url}"
+						   label="Icon" hint="Use FA classes." />
 			
 			<xf:textboxrow name="wiki_url" value="{$trait.wiki_url}"
 						   label="{{ phrase('wiki_url') }}" />
 
 			<xf:textboxrow name="tooltip" value="{$trait.tooltip}"
 						   label="Tooltip" />
+
+			<xf:checkboxrow label="Innate" hint="Innate traits are considered free, are auto-selected by races which can select them, and don't count against freebies or max traits.">
+				<xf:option name="autoselect" label="" checked="{$trait.autoselect}" />
+			</xf:checkboxrow>
+
+			<xf:numberboxrow name="exclusivity" value="{$trait.exclusivity}" default="-1"
+						   label="Group" hint="If not -1, this trait will lock other traits in the same group from being purchased if a user has it."/>
 			
 			<xf:checkboxrow label="Available Races" hint="Which groups can select this racial triat?">
 				<xf:foreach loop="$userGroups" value="$usergroup">

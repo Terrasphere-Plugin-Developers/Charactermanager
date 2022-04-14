@@ -59,18 +59,20 @@ class RacialTraits extends Repository
             ->order('slot_index', 'ASC')
             ->fetch();
 
+        $exclusions = [];
+        foreach ($currentTraits as $t) $exclusions[$t->RacialTrait['exclusivity']] = true;
+
         $where = [['cached_group_id', -1], ['cached_group_id', $user->user_group_id]];
         foreach ($user->secondary_group_ids as $id) array_push($where, ['cached_group_id', $id]);
 
         $racialTraits =
             $this->finder('Terrasphere\Charactermanager:RacialTrait')
             ->whereOr($where)
+            ->where('autoselect', false) // Skip traits that are auto-selected.
             ->fetch()->toArray();
 
         foreach ($racialTraits as $option)
         {
-            // TODO Does PHP suffer from concurrent modification errors...?
-
             // Check if player already selected this trait.
             $exists = false;
             foreach ($currentTraits as $trait)
@@ -86,9 +88,12 @@ class RacialTraits extends Repository
             if($exists)
                 continue;
 
+            // Skip if a trait is already selected from a non-negative-one exclusivity group.
+            if($option['exclusivity'] != -1 && array_key_exists($option['exclusivity'], $exclusions))
+                continue;
 
             // For shared traits, skip if our user doesn't have one of the appropriate user groups.
-            if(!$this->canUserChooseRacialTrait($user, $option['race_trait_id']))
+            if(!$this->doesUserHaveGroupForTrait($user, $option['race_trait_id']))
                 continue;
 
             // If we make it to here, we're good to push it to the return array of valid options.
@@ -99,7 +104,8 @@ class RacialTraits extends Repository
     }
 
     /**
-     * Get a 5-element array of 3-tuples, indexed 0 to 4.
+     * Get an array of 3-tuples. At least n will exist, indexed 0 to n, where n is the max trait count. Others may also
+     * exist with index = -1, all of which will be non-empty, innate, auto-selected traits.
      *
      * 'isEmpty' => 2 if lowest empty slot, 1 if other empty slot, 0 otherwise.
      * 'slotIndex' => Index for this slot.
@@ -113,9 +119,10 @@ class RacialTraits extends Repository
             ->order('slot_index', 'ASC')
             ->fetch()->toArray();
 
+        // Set up the main entity slots.
         $firstEmptySlotMarked = false;
         $ret = [];
-        for($i = 0; $i < 5; $i++)
+        for($i = 0; $i < $this->options()['terrasphereCMMaxRaceTraits']; $i++)
         {
             $found = false;
             foreach ($userTraits as $t)
@@ -133,6 +140,26 @@ class RacialTraits extends Repository
             $firstEmptySlotMarked = true;
         }
 
+
+        // Append innate traits.
+        $innateTraits = $this->finder('Terrasphere\Charactermanager:RacialTrait')
+            ->where('autoselect', true)
+            ->fetch()->toArray();
+
+        foreach ($innateTraits as $it)
+        {
+            if($this->doesUserHaveGroupForTrait($user, $it['race_trait_id']))
+            {
+                $dummy = [];
+                $dummy['race_trait_id'] = 0;
+                $dummy['user_id'] = $user['user_id'];
+                $dummy['slot_index'] = -1;
+                $dummy['RacialTrait'] = $it;
+                $d = ['isEmpty' => false, 'slotIndex' => -1, 'trait' => $dummy];
+                $ret = array_merge([$d], $ret);
+            }
+        }
+
         return $ret;
     }
 
@@ -142,9 +169,9 @@ class RacialTraits extends Repository
     }
 
     /**
-     * If the user can pick this racial trait. This doesn't check for duplicate selections.
+     * True if the user has one of the groups required for the trait.
      */
-    public function canUserChooseRacialTrait(User $user, $traitID) : bool
+    public function doesUserHaveGroupForTrait(User $user, $traitID) : bool
     {
         $result = $this->db()->fetchAll('SELECT * FROM xf_terrasphere_cm_racial_trait_group_access WHERE race_trait_id = ' . $traitID);
         foreach ($result as $r)
@@ -178,5 +205,17 @@ class RacialTraits extends Repository
         }
 
         $this->db()->insertBulk('xf_terrasphere_cm_racial_trait_group_access', $rows);
+    }
+
+    public function getRaceTraitCostForUser($user) : int
+    {
+        $filledSlots = 0;
+        foreach ($this->getRacialTraitSlotsForUser($user) as $slot)
+            if(!$slot['isEmpty'])
+                $filledSlots++;
+
+        if($this->options()['terrasphereCMFreeRaceTraits'] > $filledSlots)
+            return 0;
+        return $this->options()['terrasphereRaceTraitCost'];
     }
 }

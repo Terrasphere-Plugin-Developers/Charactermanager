@@ -19,6 +19,8 @@ class RacialTrait extends Entity
             'wiki_url' => ['type' => self::STR, 'required' => true],
             'tooltip' => ['type' => self::STR, 'required' => true],
             'cached_group_id' => ['type' => self::INT, 'required' => true],
+            'autoselect' => ['type' => self::BOOL, 'required' => true],
+            'exclusivity' => ['type' => self::INT, 'required' => true],
         ];
 
         $structure->getters = [
@@ -31,6 +33,6 @@ class RacialTrait extends Entity
 
     //getter that overrides icon_url property. To get the underlying actual value gotta work with the _values array
     public function getIconUrl(){
-        return \XF::options()->boardUrl . '/' . $this->_values['icon_url'];
+        return $this->_values['icon_url'];
     }
 }

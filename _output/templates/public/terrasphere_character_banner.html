@@ -130,18 +130,18 @@
 			<a href="{$link}"
 		   	   class="character-banner-interface-button"
 		   	   data-xf-click="overlay">
-				<img src="{$src}" alt="{$alt}}">
+				<i class="char-banner-custom-button-icon {$src}"></i>
 			</a>
 			
 		<xf:elseif is="{{$behavior == 1}}" />
 			<a href="{$link}"
 		       class="character-banner-interface-button">
-				<img src="{$src}" alt="{$alt}}">
+				<i class="char-banner-custom-button-icon {$src}"></i>
 			</a>
 		<xf:else />
 			<a href="{$link}" target="_blank"
 			   class="character-banner-interface-button">
-				<img src="{$src}" alt="{$alt}}">
+				<i class="char-banner-custom-button-icon {$src}"></i>
 			</a>
 		</xf:if>
 	</div>
@@ -184,7 +184,7 @@
 					<div class="character-banner-interface">
 						<xf:foreach loop="$xf.visitor.getBannerButtons()" value="$button">
 							<xf:macro name="interface_button"
-								  arg-src="{{base_url($button.icon_url, true)}}"
+								  arg-src="{$button.icon_url}"
 								  arg-alt="Unanswered Threads"
 								  arg-link="{{ $button.getParsedURL($xf.visitor) }}"
 								  arg-behavior="{$button.behavior}" />

@@ -1,0 +1,1 @@
+The maximum amount of race traits that can be held by one character (not including innate traits). May be increased, but never decreased.

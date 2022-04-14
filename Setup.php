@@ -74,12 +74,22 @@ class Setup extends AbstractSetup
         });
     }
 
-    ### UPDATE STUFF  VERSION 1.0.6###
+    ### UPDATE STUFF  VERSION 1.1.2###
     public function upgrade1001200Step1()
     {
         $this->schemaManager()->alterTable('xf_terrasphere_cm_character_masteries', function(Alter $table)
         {
             $table->addColumn('overrank', 'int')->unsigned(true)->setDefault(0);
+        });
+    }
+
+    ### UPDATE STUFF  VERSION 1.1.3###
+    public function upgrade1001300Step1()
+    {
+        $this->schemaManager()->alterTable('xf_terrasphere_cm_racial_trait', function(Alter $table)
+        {
+            $table->addColumn('autoselect', 'bool')->setDefault(0);
+            $table->addColumn('exclusivity', 'int')->unsigned(false)->setDefault(-1);
         });
     }
 }

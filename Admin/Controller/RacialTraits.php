@@ -84,6 +84,8 @@ class RacialTraits extends AbstractController
             'icon_url' => 'str',
             'wiki_url' => 'str',
             'tooltip' => 'str',
+            'autoselect' => 'bool',
+            'exclusivity' => 'int',
         ];
 
         $simpleEntityData = $this->filter($filterItems);
