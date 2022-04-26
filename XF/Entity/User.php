@@ -10,6 +10,19 @@ use XF;
 
 class User extends XFCP_User
 {
+    public function getTraitCumulativeCost() : int
+    {
+        $traitCount = count($this->getTraits());
+        $payedTraits =  $traitCount - XF::options()['terrasphereCMFreeRaceTraits'];
+        if($payedTraits <= 0) return 0;
+        return $payedTraits * XF::options()['terrasphereRaceTraitCost'];
+    }
+
+    public function getTraitRefund() : int
+    {
+        return XF::options()['terrasphereRaceTraitRefundMulti'] * 0.01 * $this->getTraitCumulativeCost();
+    }
+
     public function canLinkCharacterSheet() : int
     {
         return (int) XF::visitor()->hasPermission('terrasphere', 'terrasphere_cm_review');
@@ -29,6 +42,10 @@ class User extends XFCP_User
         return $masteries;
     }
 
+    /**
+     * Get an array of all traits, indexed by the slot index.
+     * WARNING: This does NOT include innate traits; only those specifically owned by the user.
+     */
     public function getTraits(): array{
         $traits = CharacterRaceTrait::getCharacterTraits($this,$this->user_id);
         return $traits;

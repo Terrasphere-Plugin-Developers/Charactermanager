@@ -13,9 +13,15 @@ class Refund extends AbstractController
 {
     public function actionIndex(ParameterBag $params)
     {
-        $masteries = CharacterMastery::getCharacterMasteries($this, \XF::visitor()->user_id);
+        $user = \XF::visitor();
+        $masteries = CharacterMastery::getCharacterMasteries($this, $user->user_id);
+        $currency = $this->assertRecordExists('DBTech\Credits:Currency', $this->options()['terrasphereRaceTraitCurrency'], null, null);
         $viewParams = [
-            "masteries" => $masteries
+            "masteries" => $masteries,
+            "traitCost" => $user->getTraitCumulativeCost(),
+            "traitRefund" => $user->getTraitRefund(),
+            "traitCurrency" => $currency,
+            "traitCount" => count($user->getTraits())
         ];
         return $this->view('Terrasphere\Charactermanager:Refund', 'terrasphere_cm_refund', $viewParams);
     }
@@ -61,6 +67,30 @@ class Refund extends AbstractController
 
         $mastery->delete();
         $this->adjustCurrency($user, $refundAmount, $msg, $refundCurrency);
+        return $this->actionIndex($params);
+    }
+
+    /**
+     * @throws Exception
+     * @throws PrintableException
+     */
+    public function actionRefundTraits(ParameterBag $params)
+    {
+        $user_id = $this->filter('user_id', 'uint');
+        if(\XF::visitor()['user_id'] != $user_id)
+            return $this->error("Users don't match: visitor " . \XF::visitor()['user_id'] . ", target " . $user_id);
+
+        /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
+        $user = $this->assertViewableUser($user_id);
+
+        $refundAmount = $user->getTraitRefund();
+        $refundCurrency = $this->options()['terrasphereRaceTraitCurrency'];
+        $msg = "Refunded Race Traits";
+
+        $this->adjustCurrency($user, $refundAmount, $msg, $refundCurrency);
+        foreach($user->getTraits() as $trait)
+            $trait->delete();
+
         return $this->actionIndex($params);
     }
 

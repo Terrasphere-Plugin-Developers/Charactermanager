@@ -1,0 +1,1 @@
+Refunding all race traits will return this percentage of the cumulative cost of all those traits, assuming current costs.

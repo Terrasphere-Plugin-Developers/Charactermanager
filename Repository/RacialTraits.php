@@ -209,10 +209,7 @@ class RacialTraits extends Repository
 
     public function getRaceTraitCostForUser($user) : int
     {
-        $filledSlots = 0;
-        foreach ($this->getRacialTraitSlotsForUser($user) as $slot)
-            if(!$slot['isEmpty'])
-                $filledSlots++;
+        $filledSlots = count($user->getTraits());
 
         if($this->options()['terrasphereCMFreeRaceTraits'] > $filledSlots)
             return 0;

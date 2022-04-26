@@ -35,6 +35,18 @@
 
 <div class="body">
 	<div class="refund_container">
+		<xf:if is="$traitCount > 0">
+			<ul class="refund_list">
+				<li class="refund_list_item">
+					<div class="refund_title refund_cell">Refund Traits</div>
+					<div class="refund_stats refund_cell">
+						<div class="refund_stat"><b>Return:</b> {$traitRefund} {$traitCurrency.title}</div>
+						<div class="refund_stat"><b>Loss:</b> {{$traitCost - $traitRefund}} {$traitCurrency.title}</div>
+					</div>
+					<xf:button class="refund_button refund_cell" href="{{ link('terrasphere/refund/refundTraits', $xf.visitor, {'user_id': $xf.visitor.user_id}) }}">Refund</xf:button>
+				</li>
+			</ul>
+		</xf:if>
 		<ul class="refund_list">
 			<xf:foreach loop="$masteries" value="$mastery">
 				<li class="refund_list_item">

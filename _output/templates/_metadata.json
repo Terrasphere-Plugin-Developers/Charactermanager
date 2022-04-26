@@ -40,9 +40,9 @@
         "hash": "d3bec71569e5310eba5af18e43c67a8f"
     },
     "public/terrasphere_cm_character_sheet_macros.html": {
-        "version_id": 1001200,
-        "version_string": "1.0.12",
-        "hash": "b9cf2fec12662a2f3f9bacc509fb063d"
+        "version_id": 1001300,
+        "version_string": "1.0.13",
+        "hash": "08e284f18a92ea3f221637076a94261a"
     },
     "public/terrasphere_cm_confirm_armor_selection.html": {
         "version_id": 1000600,
@@ -80,9 +80,9 @@
         "hash": "0dc9fef407b37bf3ddd4b71e6f1a1b4b"
     },
     "public/terrasphere_cm_refund.html": {
-        "version_id": 1001100,
-        "version_string": "1.0.11",
-        "hash": "8b54617a151bcb0b9362b55fcc61302b"
+        "version_id": 1001300,
+        "version_string": "1.0.13",
+        "hash": "4811335eed5fb13fef73c2c76ef643e6"
     },
     "public/terrasphere_cm_stats.html": {
         "version_id": 1001100,

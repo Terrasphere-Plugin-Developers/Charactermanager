@@ -35,6 +35,12 @@
         "version_string": "1.0.6",
         "hash": "a47bf66e9e29789cc3df1d1ac293b0c6"
     },
+    "option.terrasphereRaceTraitRefundMulti.txt": {
+        "global_cache": false,
+        "version_id": 1001300,
+        "version_string": "1.0.13",
+        "hash": "3c5154324df870129f2a1ffe2d7c109a"
+    },
     "option_explain.terrasphereCMFreeRaceTraits.txt": {
         "global_cache": false,
         "version_id": 1001300,
@@ -58,6 +64,12 @@
         "version_id": 1000600,
         "version_string": "1.0.6",
         "hash": "33ee89c334ee2737d071ac679221e1ae"
+    },
+    "option_explain.terrasphereRaceTraitRefundMulti.txt": {
+        "global_cache": false,
+        "version_id": 1001300,
+        "version_string": "1.0.13",
+        "hash": "b405b4818d50ea0615028c863c38c6a3"
     },
     "permission.terrasphere_terrasphere_cm_review.txt": {
         "global_cache": false,
