@@ -2,6 +2,7 @@
 
 namespace Terrasphere\Charactermanager\Api\Controller;
 
+use Terrasphere\Charactermanager\Repository\RacialTraits;
 use Terrasphere\Charactermanager\XF\Entity\User;
 use XF\Api\Controller\AbstractController;
 use XF\Mvc\Entity\Entity;
@@ -10,7 +11,6 @@ use XF\Mvc\ParameterBag;
 use XF\Api\Mvc\Reply\ApiResult;
 
 class Character extends AbstractController{
-
 
     /**
      * Default Get Action for the Character Controller, requiring a user_id/name to function.
@@ -21,6 +21,7 @@ class Character extends AbstractController{
     {
         ///Check if the user ID is numeric or a name, if numeric it's the user id, if name it is the user name
         $account = $this->filter("id","string");
+        /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
         $user = $this->getUserObj($account);
         if(!$user){
             return $this->apiResult([
@@ -29,31 +30,58 @@ class Character extends AbstractController{
         }
         $isSubAccount = $user->xc_la_is_sub_account;
         $avatarUrls = $this->getAvatarUrls($user);
+        $bannerUrls = $this->getBannerUrls($user);
         $result = [
             'username' => $user->username,
             'user_id' => $user->user_id,
             'avatar_urls' => $avatarUrls,
+            'banner_urls' => $bannerUrls,
+            'primary_user_group_id' => $user->user_group_id,
+            'secondary_user_group_ids' => $user->secondary_group_ids,
             'is_sub_account' => $isSubAccount,
         ];
+
+        if($user['custom_title'] != '')
+            $result['custom_title'] = $user['custom_title'];
 
         if($isSubAccount){
             $result['main_account'] = $this->buildProfileUrlNamePairById($user->ParentAccount->user_id);
             //Put in race
             $result['Race'] = $this->getRaceName($user);
-            //Build proper equipment array to return apiresult
+            //Build equipment array to return apiresult
             $equipResult = $this->getEquipmentArray($user);
             $result['equipment'] = $equipResult;
-            //Build the prooper mastery array to return
+            //Build the mastery array to return
             $masteryResult = $this->getMasteryArray($user);
             $result['masteries'] = $masteryResult;
-            $result['traits'] = $this->getUserTraits($user);
+            $result['racial_traits'] = $this->getUserTraits($user);
 
         }else{
             $result['sub_accounts'] = $this->getSubUsers($user);
         }
 
+        $result['inventory'] = $this->getInventory($user);
 
         return $this->apiResult($result);
+    }
+
+    private function getInventory(User $user): array {
+        $repo = $this->repository('DBTech\Shop:Purchase');
+        $inventory = $repo->findInventoryForUser($user['user_id'])->fetch()->toArray();
+        $i = [];
+        foreach ($inventory as $iv)
+        {
+            $item = [];
+            $item['id'] = $iv->Item->item_id;
+            $item['is_active'] = $iv->isActive();
+            $item['is_expired'] = $iv->isExpired();
+            $item['expiry_date'] = $iv->expiry_date;
+            $item['name'] = $iv->Item->getTitle();
+            $item['tagline'] = $iv->Item->getTagline();
+
+            $i[] = $item;
+        }
+        return $i;
     }
 
     private function getEquipmentArray(User $user): array{
@@ -83,6 +111,14 @@ class Character extends AbstractController{
             $avatarUrls[$avatarSize] = $user->getAvatarUrl($avatarSize, null, true);
         }
         return $avatarUrls;
+    }
+    private function getBannerUrls(User $user):array{
+        $profileBannerUrls = [];
+        foreach (array_keys($this->app()->container('profileBannerSizeMap')) AS $bannerSize)
+        {
+            $profileBannerUrls[$bannerSize] = $user->Profile->getBannerUrl($bannerSize, true);
+        }
+        return $profileBannerUrls;
     }
     private function getUserObj(String $id){
         if(is_numeric($id)){
@@ -141,10 +177,20 @@ class Character extends AbstractController{
         ];
     }
     private function getUserTraits(User $user):array{
-        $traits = $user->getTraits();
+        $raceTraitRepo = $this->repository('Terrasphere\Charactermanager:RacialTraits');
+        $traits = $raceTraitRepo->getRacialTraitSlotsForUser($user);
+        # $traits = $user->getTraits();
         $traitResult = [];
-        foreach ($traits as $trait){
-            $traitResult[] = $trait->RacialTrait->name;
+        foreach ($traits as $trait)
+        {
+            if($trait['isEmpty'] >= 1)
+            {
+                $traitResult[] = "EMPTY";
+            }
+            else
+            {
+                $traitResult[] = $trait['trait']['RacialTrait']['name'];
+            }
         }
         return $traitResult;
     }
