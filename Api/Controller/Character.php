@@ -154,13 +154,19 @@ class Character extends AbstractController{
         }
         return "Not found";
     }
-    private function getSubUsers(User $user):array{
+    private function getSubUsers(User $user):array
+    {
         $result = [];
+
         $subs = $user->xc_la_user_ids;
+
+        if($subs === null) return $result;
+
         foreach ($subs as $key=>$sub){
             $potentialArray = $this->buildProfileUrlNamePairById($key);
             if($potentialArray != null) $result[] = $potentialArray;
         }
+
         return $result;
     }
     private function buildProfileUrlNamePairById(int $id){
