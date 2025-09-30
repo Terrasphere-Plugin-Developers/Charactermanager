@@ -127,6 +127,8 @@ trait DBTableInit
             $table->addColumn("wiki_url", "varchar", 999);
             $table->addColumn("tooltip", "varchar", 999)->setDefault('');
             $table->addColumn("cached_group_id", "int")->unsigned(false);
+            $table->addColumn('autoselect', 'bool')->setDefault(0);
+            $table->addColumn('exclusivity', 'int')->unsigned(false)->setDefault(-1);
         }
         );
     }
