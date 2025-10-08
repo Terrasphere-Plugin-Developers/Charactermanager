@@ -26,7 +26,7 @@
         <div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
             <div class="rank-stars grid-overlap rank-stars-{$mastery_slot.Rank.tier}"></div>
             <xf:if is="$can_make_changes AND $mastery_slot.rank_id != $max_rank">
-                <a href="{{ link('members/cs/mastery/confirmUpgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
+                <a href="{{ link('members/cs/mastery/confirmUpgradeMastery', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
                    class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.Rank.tier}"
                    data-xf-click="overlay"
                    data-cache="false"
@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class="character-sheet-mastery-empty grid-overlap" style="display: {$emptyElementDisplay};">
-            <a href="{{ link('members/cs/mastery/selectNew', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
+            <a href="{{ link('members/cs/mastery/selectNewMastery', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
                class="character-sheet-mastery-icon-container grid-overlap"
                data-xf-click="overlay">
                 <img class="character-sheet-mastery-icon grid-overlap"
@@ -78,6 +78,89 @@
             </a>
         </div>
         <div class="mastery-change-flash grid-overlap"></div>
+    </div>
+</xf:macro>
+
+<xf:macro name="expertise"
+          arg-is_empty="!"
+          arg-user="!"
+          arg-slot="!"
+          arg-is_locked="0"
+          arg-can_make_changes="!"
+          arg-max_rank="!">
+    <xf:set var="$expertiseElementDisplay" value="none"/>
+    <xf:set var="$prestigeElementDisplay" value="none"/>
+    <xf:set var="$emptyElementDisplay" value="none"/>
+    <xf:set var="$lockElementDisplay" value="none"/>
+    <xf:if is="$is_empty">
+        <xf:if is="$is_locked">
+            <xf:set var="$lockElementDisplay" value="inherit"/>
+        <xf:else/>
+            <xf:set var="$emptyElementDisplay" value="inherit"/>
+        </xf:if>
+    <xf:else/>
+		<xf:if is="false"> <!-- Future: is_prestige_available -->
+        	<xf:set var="$prestigeElementDisplay" value="inherit"/>
+		<xf:else/>
+        	<xf:set var="$expertiseElementDisplay" value="inherit"/>
+		</xf:if>
+    </xf:if>
+    <div class="character-sheet-expertise-container" id="expertise-container-{$slot.target_index}">
+        <div class="character-sheet-expertise grid-overlap" style="display: {$expertiseElementDisplay};">
+            <div class="rank-stars grid-overlap rank-stars-{$slot.Rank.tier}"></div>
+            <xf:if is="$can_make_changes AND $slot.rank_id != $max_rank">
+                <a href="{{ link('members/cs/expertise/confirmUpgradeExpertise', $slot, {'user_id': $slot.user_id, 'target_index': $slot.target_index})}}"
+                   class="character-sheet-expertise-icon-container grid-overlap rank-{$slot.Rank.tier}"
+                   data-xf-click="overlay"
+                   data-cache="false"
+                   style="background-color: {$slot.Expertise.color};">
+                    <img class="character-sheet-expertise-icon grid-overlap"
+                         src="{$slot.Expertise.icon_url}"
+                         alt="Expertise slot"/>
+                </a>
+			<xf:else/>
+                <div class="character-sheet-expertise-icon-container grid-overlap rank-{$slot.Rank.tier}"
+                     style="background-color: {$slot.Expertise.color};">
+                    <img class="character-sheet-expertise-icon grid-overlap"
+                         src="{$slot.Expertise.icon_url}"
+                         alt="Expertise slot"/>
+                </div>
+            </xf:if>
+            <div class="character-sheet-expertise-title">
+                {$slot.Expertise.display_name}<br>
+                <span class="m-title-rank">{$slot.Rank.name}</span>
+            </div>
+        </div>
+        <div class="character-sheet-expertise-empty grid-overlap" style="display: {$emptyElementDisplay};">
+            <a href="{{ link('members/cs/expertise/selectNewExpertise', $slot, {'user_id': $slot.user_id, 'target_index': $slot.target_index})}}"
+               class="character-sheet-expertise-icon-container grid-overlap"
+               data-xf-click="overlay">
+                <img class="character-sheet-expertise-icon grid-overlap"
+                     src="{{ base_url('styles/default/Terrasphere/Charactermanager/plus_sign.png', true) }}"
+                     alt="Expertise slot"
+                     style="width:50%;height:50%;"/>
+            </a>
+        </div>
+        <div class="character-sheet-expertise-lock grid-overlap" style="display: {$lockElementDisplay};">
+            <div class="character-sheet-expertise-icon-container grid-overlap locked">
+                <img class="character-sheet-expertise-icon grid-overlap"
+                     src="{{ base_url('styles/default/Terrasphere/Charactermanager/padlock.png', true) }}"
+                     alt="Locked expertise slot"
+                     style="width:50%;height:50%;"/>
+            </div>
+        </div>
+        <div class="character-sheet-expertise-prestige grid-overlap" style="display: {$prestigeElementDisplay};">
+            <a href="{{ link('members/cs/expertise/confirmPrestige', $slot, {'user_id': $slot.user_id, 'target_index': $slot.target_index})}}"
+               class="character-sheet-expertise-icon-container grid-overlap rank-5"
+               data-xf-click="overlay"
+               data-cache="false"
+               style="background-color: {$slot.Expertise.color};">
+            	<img class="character-sheet-expertise-icon grid-overlap"
+                     src="{$slot.Expertise.icon_url}"
+                     alt="Expertise slot"/>
+            </a>
+        </div>
+        <div class="expertise-change-flash grid-overlap"></div>
     </div>
 </xf:macro>
 

@@ -92,4 +92,10 @@ class Setup extends AbstractSetup
             $table->addColumn('exclusivity', 'int')->unsigned(false)->setDefault(-1);
         });
     }
+
+    ### UPDATE STUFF  VERSION 1.2.0###
+    public function upgrade1002000Step1()
+    {
+        $this->characterExpertiseTable($this->schemaManager());
+    }
 }

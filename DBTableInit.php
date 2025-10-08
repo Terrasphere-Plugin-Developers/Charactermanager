@@ -18,6 +18,8 @@ trait DBTableInit
         $this->raceTraitTable($sm);
         $this->raceTraitGroupAccessTable($sm);
         $this->characterRaceTraitTable($sm);
+
+        $this->characterExpertiseTable($sm);
         // etc...
     }
 
@@ -33,7 +35,21 @@ trait DBTableInit
         $sm->dropTable("xf_terrasphere_cm_racial_trait_group_access");
         $sm->dropTable("xf_terrasphere_cm_character_race_traits");
 
+        $sm->dropTable("xf_terrasphere_cm_character_expertise");
         // etc...
+    }
+
+    /**
+     * Should contain all tables that are created by the addon with data associated with a user_id.
+     */
+    public static function getUserTablesForPostDeletion() {
+        return [
+            "xf_terrasphere_cm_character_masteries",
+            "xf_terrasphere_cm_cs",
+            "xf_terrasphere_cm_character_equipment",
+            "xf_terrasphere_cm_character_race_traits",
+            "xf_terrasphere_cm_character_expertise",
+        ];
     }
 
 
@@ -46,6 +62,20 @@ trait DBTableInit
             "xf_terrasphere_cm_character_masteries", function(create $table) {
                 $table->addColumn("id","int")->primaryKey()->autoIncrement(true);
                 $table->addColumn("mastery_id","int");
+                $table->addColumn("user_id","int");
+                $table->addColumn("rank_id","int")->nullable(true)->setDefault(1);
+                $table->addColumn("target_index","int")->setDefault(0);
+                $table->addColumn('overrank', 'int')->unsigned(true)->setDefault(0);
+            }
+        );
+    }
+
+    private function characterExpertiseTable(SchemaManager $sm)
+    {
+        $sm->createTable(
+                "xf_terrasphere_cm_character_expertise", function(create $table) {
+                $table->addColumn("id","int")->primaryKey()->autoIncrement(true);
+                $table->addColumn("expertise_id","int");
                 $table->addColumn("user_id","int");
                 $table->addColumn("rank_id","int")->nullable(true)->setDefault(1);
                 $table->addColumn("target_index","int")->setDefault(0);

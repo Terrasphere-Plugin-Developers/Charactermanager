@@ -31,7 +31,8 @@ class CharacterRaceTrait extends Entity
                 'entity' => 'XF:User',
                 'type' => SELF::TO_ONE,
                 'conditions' => 'user_id',
-                'primary' => true
+                'primary' => true,
+                'cascadeDelete' => true
             ],
         ];
 

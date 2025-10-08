@@ -43,7 +43,7 @@
 		</div>
 	</div>
 	<div style="width:100%; padding:1.5rem; display:flex;">
-		<xf:form action="{{ link('members/cs/mastery/upgrade', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index}) }}"
+		<xf:form action="{{ link('members/cs/mastery/upgradeMastery', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index}) }}"
 			  		method="post"
 			  		ajax="true"
 					data-xf-init="upgrade-mastery"

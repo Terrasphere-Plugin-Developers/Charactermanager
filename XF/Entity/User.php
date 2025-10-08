@@ -2,7 +2,9 @@
 
 namespace Terrasphere\Charactermanager\XF\Entity;
 
+use Terrasphere\Charactermanager\DBTableInit;
 use Terrasphere\Charactermanager\Entity\CharacterEquipment;
+use Terrasphere\Charactermanager\Entity\CharacterExpertise;
 use Terrasphere\Charactermanager\Entity\CharacterMastery;
 use Terrasphere\Charactermanager\Entity\CharacterRaceTrait;
 use Terrasphere\Core\Entity\Rank;
@@ -10,6 +12,15 @@ use XF;
 
 class User extends XFCP_User
 {
+    protected function _postDelete()
+    {
+        parent::_postDelete();
+
+        $db = $this->db();
+        foreach(DBTableInit::getUserTablesForPostDeletion() as $tableName)
+            $db->delete($tableName, 'user_id = ?', $this->user_id);
+    }
+
     public function getTraitCumulativeCost() : int
     {
         $traitCount = count($this->getTraits());
@@ -33,6 +44,39 @@ class User extends XFCP_User
         return (int) $this->hasPermission('terrasphere', 'terrasphere_cm_showcs');
     }
 
+    public function getUsergroupBanners() : array
+    {
+        // Get user from ID
+        /** @var XF\Entity\User $user */
+        $user = $this->em()->find('XF:User', $this->user_id);
+        $userGroups = $user->getUserGroupRepo(); // Includes primary + secondary groups
+        return $userGroups->getUserBannerCacheData();
+    }
+
+    public function getCharacterRank() : string
+    {
+        $masteries = $this->getMasteries();
+
+        $averageEquipmentTier = 0;
+        $averageEquipmentTier += $this->getOrInitiateWeapon()['Rank']['tier'];
+        $averageEquipmentTier += $this->getOrInitiateArmor()['Rank']['tier'];
+        $averageEquipmentTier += $this->getOrInitiateAccessory()['Rank']['tier'];
+
+        $averageEquipmentTier = floor($averageEquipmentTier / 3);
+
+        // Find highest mastery rank
+        $highestRank = null;
+        foreach($masteries as $mastery)
+        {
+            if($highestRank == null || $mastery->Rank->tier > $highestRank->tier)
+                $highestRank = $mastery->Rank;
+        }
+
+        // Find highest expertise rank
+
+        return ($highestRank != null ? $highestRank->name : "Beginner")." (+".$averageEquipmentTier.")";
+    }
+
     /**
      * Gets all masteries for the character/user.
      */
@@ -40,6 +84,15 @@ class User extends XFCP_User
     {
         $masteries = CharacterMastery::getCharacterMasteries($this, $this->user_id);
         return $masteries;
+    }
+
+    /**
+     * Gets all expertise for the character/user.
+     */
+    public function getExpertises() : array
+    {
+        $expertises = CharacterExpertise::getCharacterExpertises($this, $this->user_id);
+        return $expertises;
     }
 
     /**
@@ -79,6 +132,7 @@ class User extends XFCP_User
 
     public function getOrInitiateArmor() : CharacterEquipment
     {
+        /** @var CharacterEquipment $armor */
         $armor = $this->finder('Terrasphere\Charactermanager:CharacterEquipment')
             ->with('Equipment')
             ->where([
@@ -98,5 +152,29 @@ class User extends XFCP_User
         }
 
         return $armor;
+    }
+
+    public function getOrInitiateAccessory() : CharacterEquipment
+    {
+        /** @var CharacterEquipment $accessory */
+        $accessory = $this->finder('Terrasphere\Charactermanager:CharacterEquipment')
+            ->with('Equipment')
+            ->where([
+                ['user_id', $this->user_id],
+                ['Equipment.equip_group', 'Accessory'],
+            ])
+            ->fetchOne();
+        
+        if(!$accessory) {
+            $accessory = $this->em()->create('Terrasphere\Charactermanager:CharacterEquipment');
+            $accessory->user_id = $this->user_id;
+            $accessory->rank_id = Rank::minRank($this)->rank_id;
+            $accessory->equipment_id = $this->finder('Terrasphere\Core:Equipment')
+                ->where('display_name', 'Combat Accessory')
+                ->fetchOne()->equipment_id;
+            $accessory->save();
+        }
+
+        return $accessory;
     }
 }

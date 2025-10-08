@@ -46,14 +46,22 @@ class Character extends AbstractController{
 
         if($isSubAccount){
             $result['main_account'] = $this->buildProfileUrlNamePairById($user->ParentAccount->user_id);
+
             //Put in race
             $result['Race'] = $this->getRaceName($user);
+
             //Build equipment array to return apiresult
             $equipResult = $this->getEquipmentArray($user);
             $result['equipment'] = $equipResult;
+
             //Build the mastery array to return
             $masteryResult = $this->getMasteryArray($user);
             $result['masteries'] = $masteryResult;
+
+            //Build the expertise array to return
+            $expertiseResult = $this->getExpertiseArray($user);
+            $result['expertises'] = $expertiseResult;
+
             $result['racial_traits'] = $this->getUserTraits($user);
 
         }else{
@@ -103,6 +111,16 @@ class Character extends AbstractController{
             $masteryResult[] = ['Mastery' => $masteryName, 'Rank' => $masteryRank];
         }
         return $masteryResult;
+    }
+    private function getExpertiseArray(User $user):array{
+        $expertises = $user->getExpertises();
+        $expertiseResult = array();
+        foreach($expertises as $expertise){
+            $expertiseName = $expertise->Expertise->display_name;
+            $expertiseRank = $expertise->Rank->name;
+            $expertiseResult[] = ['Expertise' => $expertiseName, 'Rank' => $expertiseRank];
+        }
+        return $expertiseResult;
     }
     private function getAvatarUrls(User $user):array{
         $avatarUrls = array();

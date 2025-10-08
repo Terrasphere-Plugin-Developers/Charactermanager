@@ -1,11 +1,11 @@
-<xf:title>Swap Armor Type</xf:title>
+<xf:title>Swap Accessory Class</xf:title>
 
 <xf:macro name="selection"
 		  arg-equipment="!">
 	<label class="character-sheet-mastery-container">
 		<input class="mastery-option grid-overlap"
 		   type="radio"
-		   id="armor-{$equipment.equipment_id}"
+		   id="accessory-{$equipment.equipment_id}"
 		   name="equipment"
 		   value="{$equipment.equipment_id}">
 		<div class="character-sheet-mastery grid-overlap">
@@ -23,7 +23,7 @@
 </xf:macro>
 
 <div class="block-container">
-	<h1 class="character-sheet-overlay-title">Select New Armor Class</h1>
+	<h1 class="character-sheet-overlay-title">Select New Accessory Class</h1>
 	<hr>
 	<div class="character-sheet-overlay-stats">
 		<ul>
@@ -33,20 +33,20 @@
 		</ul>
 	</div>
 	
-	<xf:form action="{{ link('members/cs/equipment/changeArmor', $user, {'user_id': $user.user_id}) }}"
+	<xf:form action="{{ link('members/cs/equipment/changeAccessory', $user, {'user_id': $user.user_id}) }}"
 			  	method="post"
 			  	ajax="true"
-				data-xf-init="change-armor"
+				data-xf-init="change-accessory"
 			  	data-reset-complete="true"
 			  	data-redirect="off">
 		<div class="mastery-category">
 			<div class="mastery-category-list">
-				<xf:macro name="selection" arg-equipment="{$armor1}" />
-				<xf:macro name="selection" arg-equipment="{$armor2}" />
+				<xf:macro name="selection" arg-equipment="{$accessory1}" />
+				<xf:macro name="selection" arg-equipment="{$accessory2}" />
 			</div>
 		</div>
-		<xf:submitrow icon="Swap Armor" />
+		<xf:submitrow icon="Swap Accessory" />
 	</xf:form>
 </div>
 
-<xf:js src="Terrasphere/Charactermanager/armor_change.js" addon="Terrasphere/Charactermanager" />
+<xf:js src="Terrasphere/Charactermanager/accessory_change.js" addon="Terrasphere/Charactermanager" />

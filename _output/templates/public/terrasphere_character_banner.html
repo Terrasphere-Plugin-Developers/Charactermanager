@@ -23,6 +23,17 @@
     justify-content: space-between;
 }
 	
+.character-banner-top-left {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+	
+.character-banner-header {
+	display: flex;
+	flex-direction: column;
+}
+	
 .character-banner-username {
 	color: white;
 	font-size: 2.5rem;
@@ -31,12 +42,39 @@
 	padding-left: 13px;
 	font-weight: 600;
 }
+	
+.character-banner-group-tag {
+	
+}
+	
+.character-tag {
+	font-size: 0.9rem;
+	color: white;
+	border: 1px solid cyan;
+	padding: 4px 7px;
+	background-color: #00000055;
+}
+	
+.character-banner-rank-subheading {
+	color: white;
+	font-size: 1.2rem;
+	text-shadow: 0px 1px 1px black;
+	font-variant: small-caps;
+	padding-left: 13px;
+	font-weight: 500;
+	margin: 0;
+}
 
 .character-banner-icons {
 	display: inline-block;
 }
 
 .character-banner-masteries {
+	display: flex;
+    justify-content: flex-end;
+}
+
+.character-banner-expertises {
 	display: flex;
     justify-content: flex-end;
 }
@@ -70,7 +108,7 @@
 
 .character-banner-equips {
 	display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
 .character-banner-bottom {
@@ -153,18 +191,17 @@
 											 background-position-y: {$xf.visitor.Profile.banner_position_y}%;">
 			<div class="character-banner-overlay">
 				<div class="character-banner-top">
-					<a href="{{ link('members/charactersheet', $xf.visitor, {}) }}"
-					   data-xf-click="overlay"
-					   class="character-banner-username">{$xf.visitor.username}</a>
-					<div class="character-banner-icons">
-						<div class="character-banner-masteries">
-							<xf:foreach loop="$xf.visitor.getMasteries()" key="$id" value="$masteryEntry">
-								<xf:macro name="icon"
-										  arg-src="{$masteryEntry.Mastery.icon_url}"
-										  arg-name="{$masteryEntry.Mastery.display_name}"
-										  arg-color="{$masteryEntry.Mastery.color}"
-										  arg-rank="{$masteryEntry.Rank.name}" />
+					
+					<!-- Left-side of top section -->
+					<div class="character-banner-top-left">
+						<div class="character-banner-header">
+							<a href="{{ link('members/charactersheet', $xf.visitor, {}) }}"
+					   		data-xf-click="overlay"><span class="character-banner-username">{$xf.visitor.username}</span>
+							<xf:foreach loop="{{$xf.visitor.getUsergroupBanners()}}" key="$id" value="$banner">
+								<span class="character-banner-group-tag {$banner.class}">{{$banner.text}}</span>
 							</xf:foreach>
+							</a>
+							<p class="character-banner-rank-subheading">Rank {{$xf.visitor.getCharacterRank()}}</p>
 						</div>
 						<div class="character-banner-equips">
 							<xf:macro name="icon"
@@ -177,6 +214,34 @@
 									  arg-name="{{base_url($xf.visitor.getOrInitiateArmor().Equipment.display_name, true)}}"
 									  arg-color="#B0B0B0"
 									  arg-rank="{{$xf.visitor.getOrInitiateArmor().Rank.name}}" />
+							<xf:macro name="icon"
+									  arg-src="{{base_url($xf.visitor.getOrInitiateAccessory().Equipment.icon_url, true)}}"
+									  arg-name="{{base_url($xf.visitor.getOrInitiateAccessory().Equipment.display_name, true)}}"
+									  arg-color="#B0B0B0"
+									  arg-rank="{{$xf.visitor.getOrInitiateAccessory().Rank.name}}" />
+						</div>
+					</div>
+					
+					
+					<!-- Right-side of top section -->
+					<div class="character-banner-icons">
+						<div class="character-banner-masteries">
+							<xf:foreach loop="$xf.visitor.getMasteries()" key="$id" value="$masteryEntry">
+								<xf:macro name="icon"
+										  arg-src="{$masteryEntry.Mastery.icon_url}"
+										  arg-name="{$masteryEntry.Mastery.display_name}"
+										  arg-color="{$masteryEntry.Mastery.color}"
+										  arg-rank="{$masteryEntry.Rank.name}" />
+							</xf:foreach>
+						</div>
+						<div class="character-banner-expertises">
+							<xf:foreach loop="$xf.visitor.getExpertises()" key="$id" value="$expertiseEntry">
+								<xf:macro name="icon"
+										  arg-src="{$expertiseEntry.Expertise.icon_url}"
+										  arg-name="{$expertiseEntry.Expertise.display_name}"
+										  arg-color="{$expertiseEntry.Expertise.color}"
+										  arg-rank="{$expertiseEntry.Rank.name}" />
+							</xf:foreach>
 						</div>
 					</div>
 				</div>

@@ -1,0 +1,11 @@
+{
+    "route_type": "public",
+    "route_prefix": "members",
+    "sub_name": "cs/expertise",
+    "format": ":int<user_id,username>/cs/expertise/:int<target_index>",
+    "build_class": "",
+    "build_method": "",
+    "controller": "XF:Member",
+    "context": "account",
+    "action_prefix": ""
+}

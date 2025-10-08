@@ -16,7 +16,7 @@
 {
     "use strict";
 
-    XF.TS_CM_UpgradeMastery = XF.Element.newHandler({
+    XF.TS_CM_UpgradeExpertise = XF.Element.newHandler({
 
         options: {},
 
@@ -29,38 +29,38 @@
 
         ajaxResponse: function(e, data)
         {
-            // Set up the new mastery's display...
+            // Set up the new expertise's display...
             var lastRankClass = "rank-"+(data.newRankTier-1);
             var newRankClass = "rank-"+(data.newRankTier);
-            $("#mastery-container-" + data.masterySlotIndex + " ." + lastRankClass).removeClass(lastRankClass).addClass(newRankClass);
-            $("#mastery-container-" + data.masterySlotIndex + " .rank-stars").removeClass("rank-stars-" + (data.newRankTier-1)).addClass("rank-stars-" + data.newRankTier);
-            $("#mastery-container-" + data.masterySlotIndex + " .m-title-rank").text("" + data.newRankTitle);
+            $("#expertise-container-" + data.expertiseSlotIndex + " ." + lastRankClass).removeClass(lastRankClass).addClass(newRankClass);
+            $("#expertise-container-" + data.expertiseSlotIndex + " .rank-stars").removeClass("rank-stars-" + (data.newRankTier-1)).addClass("rank-stars-" + data.newRankTier);
+            $("#expertise-container-" + data.expertiseSlotIndex + " .m-title-rank").text("" + data.newRankTitle);
 
             // Reset flashy animation element by clone+delete.
-            var elem = $("#mastery-container-" + data.masterySlotIndex + " .mastery-change-flash");
+            var elem = $("#expertise-container-" + data.expertiseSlotIndex + " .expertise-change-flash");
             var copy = elem.clone(true);
             elem.before(copy);
-            $("#mastery-container-" + data.masterySlotIndex + " .mastery-change-flash:last-child").remove();
+            $("#expertise-container-" + data.expertiseSlotIndex + " .expertise-change-flash:last-child").remove();
 
             // Play reset animation.
             copy.css("animation-play-state", "running");
 
             // Check if any slots were unlocked by this upgrade
-            if(data.previousUnlockedMasterySlots && data.unlockedMasterySlots)
+            if(data.previousUnlockedExpertiseSlots && data.unlockedExpertiseSlots)
             {
-                for(var i = 0; i < data.unlockedMasterySlots.length; i++)
+                for(var i = 0; i < data.unlockedExpertiseSlots.length; i++)
                 {
                     // If this slot was just unlocked (was 0, now 1)
-                    if(data.previousUnlockedMasterySlots[i] === 0 && data.unlockedMasterySlots[i] === 1)
+                    if(data.previousUnlockedExpertiseSlots[i] === 0 && data.unlockedExpertiseSlots[i] === 1)
                     {
                         // Hide the locked element of the previously locked slot.
-                        $("#mastery-container-" + i + " .character-sheet-mastery-lock").hide();
+                        $("#expertise-container-" + i + " .character-sheet-expertise-lock").hide();
 
                         // Show the empty 'select new' portion of the slot.
-                        $("#mastery-container-" + i + " .character-sheet-mastery-empty").show();
+                        $("#expertise-container-" + i + " .character-sheet-expertise-empty").show();
 
                         // ...also play the flashy animation thingy.
-                        $("#mastery-container-" + i + " .mastery-change-flash").css("animation-play-state", "running");
+                        $("#expertise-container-" + i + " .expertise-change-flash").css("animation-play-state", "running");
                     }
                 }
             }
@@ -69,7 +69,7 @@
             // If rank is now maxed out, make it so we can't click on it anymore.
             if(data.max)
             {
-                $("#mastery-container-" + data.masterySlotIndex + " .character-sheet-mastery-icon-container")
+                $("#expertise-container-" + data.expertiseSlotIndex + " .character-sheet-expertise-icon-container")
                     .removeAttr('href')
                     .removeAttr('data-xf-click')
                     .removeAttr('data-cache')
@@ -79,6 +79,6 @@
     });
 
     // First element same as "data-xf-init" attribute
-    XF.Element.register('upgrade-mastery', 'XF.TS_CM_UpgradeMastery');
+    XF.Element.register('upgrade-expertise', 'XF.TS_CM_UpgradeExpertise');
 }
 (jQuery, window, document);

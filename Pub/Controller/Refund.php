@@ -2,7 +2,9 @@
 
 namespace Terrasphere\Charactermanager\Pub\Controller;
 
+use Terrasphere\Charactermanager\Entity\CharacterExpertise;
 use Terrasphere\Charactermanager\Entity\CharacterMastery;
+use Terrasphere\Charactermanager\Helper\CharacterSheetHelper;
 use XF\Entity\User;
 use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\Exception;
@@ -15,9 +17,11 @@ class Refund extends AbstractController
     {
         $user = \XF::visitor();
         $masteries = CharacterMastery::getCharacterMasteries($this, $user->user_id);
+        $expertises = CharacterExpertise::getCharacterExpertises($this, $user->user_id);
         $currency = $this->assertRecordExists('DBTech\Credits:Currency', $this->options()['terrasphereRaceTraitCurrency'], null, null);
         $viewParams = [
             "masteries" => $masteries,
+            "expertises" => $expertises,
             "traitCost" => $user->getTraitCumulativeCost(),
             "traitRefund" => $user->getTraitRefund(),
             "traitCurrency" => $currency,
@@ -39,12 +43,49 @@ class Refund extends AbstractController
     {
         $user_id = $this->filter('user_id', 'uint');
         $mastery_id = $this->filter('mastery_id', 'uint');
+        $expertise_id = $this->filter('expertise_id', 'uint');
         if(\XF::visitor()['user_id'] != $user_id)
             return $this->error("Users don't match: visitor " . \XF::visitor()['user_id'] . ", target " . $user_id);
 
         /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
         $user = $this->assertViewableUser($user_id);
 
+
+        if($mastery_id != null)
+            return $this->masteryRefund($user_id, $mastery_id, $user, $params);
+
+        if($expertise_id != null)
+            return $this->expertiseRefund($user_id, $expertise_id, $user, $params);
+
+        return null;
+    }
+
+    /**
+     * @throws Exception
+     * @throws PrintableException
+     */
+    public function actionRefundTraits(ParameterBag $params)
+    {
+        $user_id = $this->filter('user_id', 'uint');
+        if(\XF::visitor()['user_id'] != $user_id)
+            return $this->error("Users don't match: visitor " . \XF::visitor()['user_id'] . ", target " . $user_id);
+
+        /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
+        $user = $this->assertViewableUser($user_id);
+
+        $refundAmount = $user->getTraitRefund();
+        $refundCurrency = $this->options()['terrasphereRaceTraitCurrency'];
+        $msg = "Refunded Race Traits";
+
+        CharacterSheetHelper::adjustCurrency($this, $user, $refundAmount, $msg, $refundCurrency);
+        foreach($user->getTraits() as $trait)
+            $trait->delete();
+
+        return $this->redirect($this->buildLink('terrasphere/refund', null));
+    }
+
+    protected function masteryRefund($user_id, $mastery_id, $user, $params)
+    {
         $masteries = CharacterMastery::getCharacterMasteries($this, $user_id);
         /** @var CharacterMastery $mastery */
         $mastery = null;
@@ -66,75 +107,35 @@ class Refund extends AbstractController
         $msg = "Refunded " . $mastery->Mastery['display_name'] . " Rank " . $mastery->Rank['name'];
 
         $mastery->delete();
-        $this->adjustCurrency($user, $refundAmount, $msg, $refundCurrency);
-        return $this->actionIndex($params);
+        CharacterSheetHelper::adjustCurrency($this, $user, $refundAmount, $msg, $refundCurrency);
+        return $this->redirect($this->buildLink('terrasphere/refund', null));
     }
 
-    /**
-     * @throws Exception
-     * @throws PrintableException
-     */
-    public function actionRefundTraits(ParameterBag $params)
+    protected function expertiseRefund($user_id, $expertise_id, $user, $params)
     {
-        $user_id = $this->filter('user_id', 'uint');
-        if(\XF::visitor()['user_id'] != $user_id)
-            return $this->error("Users don't match: visitor " . \XF::visitor()['user_id'] . ", target " . $user_id);
-
-        /** @var \Terrasphere\Charactermanager\XF\Entity\User $user */
-        $user = $this->assertViewableUser($user_id);
-
-        $refundAmount = $user->getTraitRefund();
-        $refundCurrency = $this->options()['terrasphereRaceTraitCurrency'];
-        $msg = "Refunded Race Traits";
-
-        $this->adjustCurrency($user, $refundAmount, $msg, $refundCurrency);
-        foreach($user->getTraits() as $trait)
-            $trait->delete();
-
-        return $this->actionIndex($params);
-    }
-
-    private function adjustCurrency(User $user, int $gain, string $message, int $currencyID)
-    {
-        /** @var Currency $currency */
-        $currency = $this->assertRecordExists('DBTech\Credits:Currency', $currencyID, null, null);
-
-        $input = [
-            'username' => $user['username'],
-            'amount' => $gain,
-            'message' => $message,
-            'negate' => false
-        ];
-
-        /** @var \DBTech\Credits\EventTrigger\Adjust $adjustEvent */
-        $adjustEvent = $this->repository('DBTech\Credits:EventTrigger')->getHandler('adjust');
-        if (!$adjustEvent->isActive())
+        $expertises = CharacterExpertise::getCharacterExpertises($this, $user_id);
+        /** @var CharacterExpertise $expertise */
+        $expertise = null;
+        foreach ($expertises as $exp)
         {
-            return $this->error(\XF::phrase('dbtech_credits_invalid_eventtrigger'));
+            if($exp->Expertise['expertise_id'] == $expertise_id)
+            {
+                $expertise = $exp;
+                break;
+            }
         }
 
-        // Make sure this is set
-        $currency->verifyAdjustEvent();
+        if($expertise == null)
+            return $this->error("Expertise not found...");
 
-        $multiplier = $input['negate'] ? (-1 * $input['amount']) : $input['amount'];
+        $rankSchema = $expertise->Expertise->getRankSchema();
+        $refundAmount = $expertise->Rank->getRefund($expertise->Expertise->getRankSchema());
+        $refundCurrency = $rankSchema['currency_id'];
+        $msg = "Refunded " . $expertise->Expertise['display_name'] . " Rank " . $expertise->Rank['name'];
 
-        // First test add or remove credits
-        $adjustEvent->testApply([
-            'currency_id' => $currency->currency_id,
-            'multiplier' => $multiplier,
-            'message' => $message,
-            'source_user_id' => $user->user_id,
-        ], $user);
-
-        // Then properly add or remove credits
-        $adjustEvent->apply($user->user_id, [
-            'currency_id' => $currency->currency_id,
-            'multiplier' => $multiplier,
-            'message' => $message,
-            'source_user_id' => $user->user_id,
-        ], $user);
-
-        return true;
+        $expertise->delete();
+        CharacterSheetHelper::adjustCurrency($this, $user, $refundAmount, $msg, $refundCurrency);
+        return $this->redirect($this->buildLink('terrasphere/refund', null));
     }
 
     protected function assertViewableUser($userId, array $extraWith = [], $basicProfileOnly = false)

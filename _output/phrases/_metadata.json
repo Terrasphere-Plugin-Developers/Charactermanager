@@ -23,6 +23,12 @@
         "version_string": "1.0.13",
         "hash": "038903e2f449e3d4e15ffcf729e2e36b"
     },
+    "option.terrasphereExpertiseRankSchema.txt": {
+        "global_cache": false,
+        "version_id": 1001700,
+        "version_string": "1.0.17",
+        "hash": "c47546926dc8fce8f33825dd83d981f7"
+    },
     "option.terrasphereRaceTraitCost.txt": {
         "global_cache": false,
         "version_id": 1000600,
@@ -52,6 +58,12 @@
         "version_id": 1001300,
         "version_string": "1.0.13",
         "hash": "aa6c48b171942f4f9c9626dc6c9dc7fc"
+    },
+    "option_explain.terrasphereExpertiseRankSchema.txt": {
+        "global_cache": false,
+        "version_id": 1001700,
+        "version_string": "1.0.17",
+        "hash": "af027ecfa3a9b4b83fc1899b440fdd36"
     },
     "option_explain.terrasphereRaceTraitCost.txt": {
         "global_cache": false,

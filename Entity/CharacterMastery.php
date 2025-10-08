@@ -34,7 +34,8 @@ class CharacterMastery extends Entity
                 'entity' => 'XF:User',
                 'type' => SELF::TO_ONE,
                 'conditions' => 'user_id',
-                'primary' => true
+                'primary' => true,
+                'cascadeDelete' => true
             ],
             'Rank' => [
                 'entity' => 'Terrasphere\Core:Rank',
@@ -68,14 +69,14 @@ class CharacterMastery extends Entity
     }
 
     /**
-     * Similar to above, but always includes an entry for all 5 mastery slots, inserting dummies where a mastery has
+     * Similar to above, but always includes an entry for all mastery slots, inserting dummies where a mastery has
      * yet to be selected.
      */
     public static function getCharacterMasterySlots($mustHaveFinderAndEM, int $userID): array
     {
         $masteries = self::getCharacterMasteries($mustHaveFinderAndEM, $userID);
         $ret = [];
-        for ($index = 0; $index < 5; $index++)
+        for ($index = 0; $index < 6; $index++)
         {
             if(!array_key_exists($index, $masteries))
             {
@@ -94,6 +95,72 @@ class CharacterMastery extends Entity
         }
 
         return $ret;
+    }
+
+    public static function unlockedMasterySlots($finderContainer, int $userID): array {
+        $slotArray = [1, 1, 1];
+        $upgradedMasteryCount = $finderContainer->finder('Terrasphere\Charactermanager:CharacterMastery')
+            ->with('Rank')
+            ->where('user_id', $userID)
+            ->where('Rank.tier', '>', 0)
+            ->total();
+
+        $doubleUpgradedMasteryCount = $finderContainer->finder('Terrasphere\Charactermanager:CharacterMastery')
+            ->with('Rank')
+            ->where('user_id', $userID)
+            ->where('Rank.tier', '>', 1)
+            ->total();
+
+        // Slot 4 - When at least 3 are upgraded at least once
+        // Slot 5 - When at least 1 has been upgraded at least twice
+        // Slot 6 - When at least 3 have been upgraded at least twice
+        array_push($slotArray,
+            ($upgradedMasteryCount >= 3 ? 1 : 0),
+            ($doubleUpgradedMasteryCount >= 1 ? 1 : 0),
+            ($doubleUpgradedMasteryCount >= 3 ? 1 : 0));
+
+
+        return $slotArray;
+    }
+
+    public static function canSelectMasteryFromCategory($member, array $masteryGroup, int $userID, int $slotIndex): bool
+    {
+        // 'No' if the group is empty
+        if(count($masteryGroup['masteries']) == 0)
+            return false;
+
+        $masteryList = $masteryGroup['masteries'];
+        $firstMastery = $masteryList[array_keys($masteryList)[0]];
+
+        $typeID = $firstMastery->mastery_type_id;
+        $typeCap = $firstMastery->MasteryType->cap_per_character;
+
+        $alterTypeID = $member->options()->terrasphereAlterType;
+        $characterMasteries = CharacterMastery::getCharacterMasteries($member, $userID);
+        $amountOfThisType = 0;
+        $nonAlterCountFirst3Slots = 0;
+        foreach ($characterMasteries as $m)
+        {
+            if ($m['target_index'] < 3 && $m->Mastery->mastery_type_id != $alterTypeID)
+                $nonAlterCountFirst3Slots++;
+
+            if($m->Mastery->mastery_type_id == $typeID)
+            {
+                $amountOfThisType++;
+                if($amountOfThisType >= $typeCap)
+                    return false;
+            }
+        }
+
+        // Alter mastery must be one of the first 3 slots and is invalid for further slots.
+        if($typeID == $alterTypeID && $slotIndex >= 3)
+            return false;
+
+        // Non-alter masteries are invalid for the first 3 slots when 2 non-alters have been selected.
+        if($typeID != $alterTypeID && $slotIndex < 3 && $nonAlterCountFirst3Slots >= 2)
+            return false;
+
+        return true;
     }
 
     protected function setupApiResultData(\XF\Api\Result\EntityResult $result, $verbosity = self::VERBOSITY_NORMAL, array $options = [])

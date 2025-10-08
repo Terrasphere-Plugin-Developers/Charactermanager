@@ -1,12 +1,15 @@
 {
     "admin_terrasphere-cm_racial-traits.json": {
-        "hash": "2df3a1fea95ef9adc0f899f488cfef33"
+        "hash": "41d4c8973d23b9399f75f88e3ba5d73c"
     },
     "api_terrasphere-charactermanager_.json": {
         "hash": "63bdb9372acdb7fa9cc3941ef6f95c41"
     },
     "public_members_cs-equipment.json": {
         "hash": "98137edc96710aa7c0b23a9b238757fb"
+    },
+    "public_members_cs-expertise.json": {
+        "hash": "1b9642e305ff10fbe42e7c9589f4014c"
     },
     "public_members_cs-mastery.json": {
         "hash": "45a54795c29ccf39f1b2b158ab60a926"

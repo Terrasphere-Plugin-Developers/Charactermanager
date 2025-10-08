@@ -60,6 +60,18 @@
 					</li>
 				</xf:if>
 			</xf:foreach>
+			<xf:foreach loop="$expertises" value="$expertise">
+				<xf:if is="!($expertise === null || $expertise.Rank === null)">
+					<li class="refund_list_item">
+						<div class="refund_title refund_cell">{$expertise.Expertise.display_name} {$expertise.Rank.name}</div>
+						<div class="refund_stats refund_cell">
+							<div class="refund_stat"><b>Return:</b> {{$expertise.Rank.getRefund($expertise.Expertise.getRankSchema())}} {{$expertise.Expertise.getRankSchema().Currency.title}}</div>
+							<div class="refund_stat"><b>Loss:</b> {{$expertise.Rank.getCumulativeCost($expertise.Expertise.getRankSchema()) - $expertise.Rank.getRefund($expertise.Expertise.getRankSchema())}} {{$expertise.Expertise.getRankSchema().Currency.title}}</div>
+						</div>
+						<xf:button class="refund_button refund_cell" href="{{ link('terrasphere/refund/refund', $xf.visitor, {'user_id': $xf.visitor.user_id, 'expertise_id': $expertise.expertise_id}) }}">Refund</xf:button>
+					</li>
+				</xf:if>
+			</xf:foreach>
 		</ul>
 	</div>
 </div>

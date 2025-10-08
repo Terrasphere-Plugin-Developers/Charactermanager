@@ -1,0 +1,55 @@
+<xf:title>New Expertise Selection</xf:title>
+
+<xf:macro name="expertise"
+		  arg-expertise="!">
+	<label class="character-sheet-expertise-container">
+		<input class="expertise-option grid-overlap"
+		   type="radio"
+		   id="expertise-{$expertise.expertise_id}"
+		   name="expertise"
+		   value="{$expertise.expertise_id}">
+		<div class="character-sheet-expertise grid-overlap">
+			<div class="character-sheet-expertise-icon-container grid-overlap" style="background-color: {{$expertise.color}};">
+				<xf:if is="$expertise.icon_url != ''">
+					<img src="{$expertise.icon_url}" class="character-sheet-expertise-icon">
+				<xf:else />
+					<img src="{{ base_url('styles/default/Terrasphere/Charactermanager/missing_img.png', true) }}" class="character-sheet-expertise-icon">
+				</xf:if>
+			</div>
+			<div class="expertise-unselect-overlay grid-overlap"></div>
+			<div class="character-sheet-expertise-title">{$expertise.display_name}</div>
+			<div class="expertise-option-trait-container">
+				<div class="expertise-trait-icon role-icon {$expertise.ExpertiseRole.css_classes}" style="color:{$expertise.ExpertiseRole.hex_color}"></div>
+			</div>
+		</div>
+	</label>
+</xf:macro>
+
+<xf:macro name="expertise_category"
+		  arg-category="!">
+	<div class="expertise-category">
+		<h2 class="expertise-category-title">{$category.name}</h2>
+		<div class="expertise-category-list">
+			<xf:foreach loop="$category.expertises" value="$expertise">
+				<xf:macro name="expertise" arg-expertise="{$expertise}"></xf:macro>
+			</xf:foreach>
+		</div>
+	</div>
+</xf:macro>
+
+<div class="block-container">
+	<xf:form action="{{ link('members/cs/expertise/saveNewExpertise', $expertiseSlot, {'user_id': $expertiseSlot.user_id, 'target_index': $expertiseSlot.target_index}) }}"
+		  	class="block-container"
+		  	method="post"
+		  	ajax="true"
+			data-xf-init="new-expertise"
+		  	data-reset-complete="true"
+		  	data-redirect="off">
+		<xf:foreach loop="$expertises" value="$expertiseCategory" key="$categoryIndex">
+			<xf:macro name="expertise_category" arg-category="{$expertiseCategory}"></xf:macro>
+		</xf:foreach>
+		<xf:submitrow icon="save" />
+	</xf:form>
+</div>
+
+<xf:js src="Terrasphere/Charactermanager/new_expertise.js" addon="Terrasphere/Charactermanager" />
