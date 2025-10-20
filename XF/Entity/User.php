@@ -53,28 +53,64 @@ class User extends XFCP_User
         return $userGroups->getUserBannerCacheData();
     }
 
+    private function getRankValue($rankNum) : int
+    {
+        $RANK_BONUSES = [
+            0 => 0,   // E rank
+            1 => 10,  // D rank
+            2 => 15,  // C rank
+            3 => 25,  // B rank
+            4 => 30,  // A rank
+            5 => 40   // S rank
+        ];
+
+        return $RANK_BONUSES[$rankNum] ?? 0;
+    }
+
     public function getCharacterRank() : string
     {
+        $weaponRank = $this->getOrInitiateWeapon()['Rank']['tier'];
+        $armorRank = $this->getOrInitiateArmor()['Rank']['tier'];
+        $equipmentRank = $this->getOrInitiateAccessory()['Rank']['tier'];
+
+        $weaponScore = $this->getRankValue($weaponRank);
+        $armorScore = $this->getRankValue($armorRank);
+        $equipmentScore = $this->getRankValue($equipmentRank);
+
         $masteries = $this->getMasteries();
-
-        $averageEquipmentTier = 0;
-        $averageEquipmentTier += $this->getOrInitiateWeapon()['Rank']['tier'];
-        $averageEquipmentTier += $this->getOrInitiateArmor()['Rank']['tier'];
-        $averageEquipmentTier += $this->getOrInitiateAccessory()['Rank']['tier'];
-
-        $averageEquipmentTier = floor($averageEquipmentTier / 3);
-
-        // Find highest mastery rank
-        $highestRank = null;
+        $masteryScore = 0;
         foreach($masteries as $mastery)
-        {
-            if($highestRank == null || $mastery->Rank->tier > $highestRank->tier)
-                $highestRank = $mastery->Rank;
-        }
+            $masteryScore += $this->getRankValue($mastery->Rank['tier']);
 
-        // Find highest expertise rank
+        $expertises = $this->getExpertises();
+        $expertiseScore = 0;
+        foreach($expertises as $expertise)
+            $expertiseScore += $this->getRankValue($expertise->Rank['tier']);
 
-        return ($highestRank != null ? $highestRank->name : "Beginner")." (+".$averageEquipmentTier.")";
+        $totalScore = $weaponScore + $armorScore + $equipmentScore + $masteryScore + ($expertiseScore / 4);
+
+        $characterRanks = [
+            0 => 'E',
+            31 => 'E+',
+            62 => 'D',
+            93 => 'D+',
+            124 => 'C',
+            155 => 'C+',
+            186 => 'B',
+            217 => 'B+',
+            248 => 'A',
+            279 => 'A+',
+            310 => 'S',
+            339 => 'S+',
+        ];
+
+        $ret = $characterRanks[0];
+
+        foreach($characterRanks as $scoreThreshold => $name)
+            if($totalScore >= $scoreThreshold)
+                $ret = $name;
+
+        return $ret;
     }
 
     /**
