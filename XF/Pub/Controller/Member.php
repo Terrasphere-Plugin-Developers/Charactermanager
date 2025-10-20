@@ -932,8 +932,8 @@ class Member extends XFCP_Member
     public function actionConfirmUpgradeEquip(ParameterBag $params)
     {
         $validation = CharacterSheetHelper::validateEquipmentUpgrade($this, $params);
-        if(gettype($validation) == gettype($this->error('Error')))
-            return $validation; // If we received an error, return it.
+        if(gettype($validation) == gettype($this->error('Error')) || gettype($validation) == gettype($this->message('Message')))
+            return $validation; // If we received an error (or a message), return it.
 
         $viewparams = [
             'name' => $validation['equipment']['display_name'],
@@ -958,8 +958,8 @@ class Member extends XFCP_Member
     public function actionUpgradeEquip(ParameterBag $params)
     {
         $validation = CharacterSheetHelper::validateEquipmentUpgrade($this, $params);
-        if(gettype($validation) == gettype($this->error('Error')))
-            return $validation; // If we received an error, return it.
+        if(gettype($validation) == gettype($this->error('Error')) || gettype($validation) == gettype($this->message('Message')))
+            return $validation; // If we received an error or message, return it.
 
         // This differs from the helper function in that we need to get the equipment instance.
         // $charEquip = CharacterEquipment::getEquipment($this,$user_id,$equipId);

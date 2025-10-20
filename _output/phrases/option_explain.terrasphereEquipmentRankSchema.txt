@@ -1,0 +1,1 @@
+Rank schema to use for equipment. Value in the database is now ignored.

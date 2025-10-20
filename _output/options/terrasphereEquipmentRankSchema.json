@@ -1,0 +1,13 @@
+{
+    "edit_format": "callback",
+    "edit_format_params": "Terrasphere\\Charactermanager\\Option\\RankSchemaSelect::renderOption",
+    "data_type": "unsigned_integer",
+    "sub_options": [],
+    "validation_class": "",
+    "validation_method": "",
+    "advanced": false,
+    "default_value": "1",
+    "relations": {
+        "terrasphere": 0
+    }
+}

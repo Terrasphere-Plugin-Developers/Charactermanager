@@ -109,7 +109,11 @@ class CharacterSheetHelper
             return $member->error('Already at max rank.');
 
         // Get rank schema (and the currency associated with it).
-        $rankSchema = $equipment->RankSchema;
+        //$rankSchema = $equipment->RankSchema; - Switched to an option instead of per-equipment.
+        $rankSchemaID = $member->options()->terrasphereEquipmentRankSchema;
+        $rankSchema = $member->finder('Terrasphere\Core:RankSchema')
+            ->with('Currency')
+            ->where('rank_schema_id', $rankSchemaID)->fetchOne();
 
         // Rank schema exists check.
         if($rankSchema == null)
@@ -130,7 +134,7 @@ class CharacterSheetHelper
         $userVal = $rankSchema['Currency']->getValueFromUser($user, false);
 
         if($nextCost > $userVal)
-            return $member->error('Error: Insufficient Funds.');
+            return $member->message('Upgrade requires ' . $nextCost .' '. $rankSchema['Currency']['title'] . ' (current balance: ' . ((int) $userVal).')');
 
         return [
             'user' => $user,

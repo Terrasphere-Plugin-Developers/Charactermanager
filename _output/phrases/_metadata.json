@@ -23,6 +23,12 @@
         "version_string": "1.0.13",
         "hash": "038903e2f449e3d4e15ffcf729e2e36b"
     },
+    "option.terrasphereEquipmentRankSchema.txt": {
+        "global_cache": false,
+        "version_id": 1001700,
+        "version_string": "1.0.17",
+        "hash": "a49004ba584b837e9742d9cab8241439"
+    },
     "option.terrasphereExpertiseRankSchema.txt": {
         "global_cache": false,
         "version_id": 1001700,
@@ -58,6 +64,12 @@
         "version_id": 1001300,
         "version_string": "1.0.13",
         "hash": "aa6c48b171942f4f9c9626dc6c9dc7fc"
+    },
+    "option_explain.terrasphereEquipmentRankSchema.txt": {
+        "global_cache": false,
+        "version_id": 1001700,
+        "version_string": "1.0.17",
+        "hash": "dd3379a7cb21b40bc4fbf6fcb177d029"
     },
     "option_explain.terrasphereExpertiseRankSchema.txt": {
         "global_cache": false,
