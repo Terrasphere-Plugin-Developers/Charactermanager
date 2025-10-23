@@ -1,17 +1,17 @@
 {
     "admin/terrasphere_cm_racial_traits.html": {
-        "version_id": 1000600,
-        "version_string": "1.0.6",
+        "version_id": 1001700,
+        "version_string": "1.0.17",
         "hash": "d4746700313fdce7281c24e623338abc"
     },
     "admin/terrasphere_cm_racial_traits_edit.html": {
-        "version_id": 1001300,
-        "version_string": "1.0.13",
+        "version_id": 1001700,
+        "version_string": "1.0.17",
         "hash": "04f68a27f5c290332364537b3667ade1"
     },
     "admin/terrasphere_core_banner_button_edit.html": {
-        "version_id": 1001200,
-        "version_string": "1.0.12",
+        "version_id": 1001700,
+        "version_string": "1.0.17",
         "hash": "aa5d1d74f415b449ad16af298533ec35"
     },
     "public/terrasphere_character_banner.html": {
@@ -20,18 +20,18 @@
         "hash": "afd3393b3010394cf71249d8507697a8"
     },
     "public/terrasphere_cm_character_sheet.html": {
-        "version_id": 1000600,
-        "version_string": "1.0.6",
+        "version_id": 1001700,
+        "version_string": "1.0.17",
         "hash": "e01a0f2110289653251ced5bd615e8af"
     },
     "public/terrasphere_cm_character_sheet_cell_mastery_equip.html": {
-        "version_id": 1001700,
-        "version_string": "1.0.17",
-        "hash": "3c393cae9892743d01070a4540dcf05e"
+        "version_id": 1002100,
+        "version_string": "1.2.1",
+        "hash": "5dfd7b3651f22af208a16983fb61b939"
     },
     "public/terrasphere_cm_character_sheet_cell_race_traits.html": {
-        "version_id": 1001200,
-        "version_string": "1.0.12",
+        "version_id": 1001700,
+        "version_string": "1.0.17",
         "hash": "f3c7c0cb095168e1211be1fb018c780a"
     },
     "public/terrasphere_cm_character_sheet_css.html": {
@@ -55,8 +55,8 @@
         "hash": "4108d1bd086739f128a9ec667f398c73"
     },
     "public/terrasphere_cm_confirm_equip_upgrade.html": {
-        "version_id": 1000600,
-        "version_string": "1.0.6",
+        "version_id": 1001700,
+        "version_string": "1.0.17",
         "hash": "22eee54e329894683c612142dc09c8c9"
     },
     "public/terrasphere_cm_confirm_expertise_upgrade.html": {
@@ -65,8 +65,8 @@
         "hash": "2e19c6efc6deecedc8dbb4064f2a43c4"
     },
     "public/terrasphere_cm_confirm_mastery_prestige.html": {
-        "version_id": 1001100,
-        "version_string": "1.0.11",
+        "version_id": 1001700,
+        "version_string": "1.0.17",
         "hash": "18cd823ee9c9a6ef7b9d152993a8448b"
     },
     "public/terrasphere_cm_confirm_mastery_upgrade.html": {
@@ -75,13 +75,13 @@
         "hash": "e8664905cd81fff1120d5b90a0b00f47"
     },
     "public/terrasphere_cm_confirm_trait_select.html": {
-        "version_id": 1000700,
-        "version_string": "1.0.7",
+        "version_id": 1001700,
+        "version_string": "1.0.17",
         "hash": "06ad586f86536f3716c1b187d64573be"
     },
     "public/terrasphere_cm_cs_link_page.html": {
-        "version_id": 1000600,
-        "version_string": "1.0.6",
+        "version_id": 1001700,
+        "version_string": "1.0.17",
         "hash": "175deb3eebab7842654e01da217135e1"
     },
     "public/terrasphere_cm_expertise_selection.html": {
@@ -90,8 +90,8 @@
         "hash": "80327665b702dae959ca751dfaaca3b4"
     },
     "public/terrasphere_cm_mastery_selection.html": {
-        "version_id": 1000600,
-        "version_string": "1.0.6",
+        "version_id": 1001700,
+        "version_string": "1.0.17",
         "hash": "0dc9fef407b37bf3ddd4b71e6f1a1b4b"
     },
     "public/terrasphere_cm_refund.html": {
@@ -100,13 +100,13 @@
         "hash": "66ac3a73a88a85310cffa48611e09aa8"
     },
     "public/terrasphere_cm_stats.html": {
-        "version_id": 1001100,
-        "version_string": "1.0.11",
+        "version_id": 1001700,
+        "version_string": "1.0.17",
         "hash": "292a209885dda6293e577d6dde3bcdd8"
     },
     "public/terrasphere_crown_button.html": {
-        "version_id": 1001100,
-        "version_string": "1.0.11",
+        "version_id": 1001700,
+        "version_string": "1.0.17",
         "hash": "0068f2d519b31cc084bf10bb527c7b03"
     }
 }

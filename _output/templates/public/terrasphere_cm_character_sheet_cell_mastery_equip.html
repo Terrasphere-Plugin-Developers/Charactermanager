@@ -89,13 +89,26 @@
                                 <xf:js src="Terrasphere/Charactermanager/armor_dialogue.js"
                                        addon="Terrasphere/Charactermanager"/>
                             <xf:else/>
-                                <div class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier} armor armor-icon"
-                                   style="background-color: #B0B0B0; cursor: initial;">
-                                    <img class="character-sheet-mastery-icon grid-overlap"
-                                         src="{{$armor.Equipment.icon_url}}"
-                                         alt="{{$armor.Equipment.display_name}} Slot"/>
-
-                                </div>
+								<xf:if is="$canMakeChanges AND {$armor.Rank.rank_id} == $maxRank">
+									<a href="{{ link('members/cs/equipment/confirmChangeArmor', null, {'user_id': $user.user_id, 'equipment_group': $armor.Equipment.equip_group}) }}"
+                                         data-xf-click="overlay"
+                                         data-cache="false"
+									   	 class="grid-overlap">
+										<div class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier} armor armor-icon"
+											 style="background-color: #B0B0B0; cursor: initial;">
+											<img class="character-sheet-mastery-icon grid-overlap"
+												src="{{$armor.Equipment.icon_url}}"
+												alt="{{$armor.Equipment.display_name}} Slot"/>
+										</div>
+									</a>
+								<xf:else/>
+									<div class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier} armor armor-icon"
+										 style="background-color: #B0B0B0; cursor: initial;">
+										<img class="character-sheet-mastery-icon grid-overlap"
+											 src="{{$armor.Equipment.icon_url}}"
+											 alt="{{$armor.Equipment.display_name}} Slot"/>
+									</div>
+								</xf:if>
                             </xf:if>
                             <div class="character-sheet-mastery-title armor-name">
                                 {{$armor.Equipment.display_name}}<br>
@@ -133,13 +146,26 @@
                                 <xf:js src="Terrasphere/Charactermanager/accessory_dialogue.js"
                                        addon="Terrasphere/Charactermanager"/>
                             <xf:else/>
-                                <div class="character-sheet-mastery-icon-container grid-overlap rank-{$accessory.Rank.tier} accessory accessory-icon"
-                                   style="background-color: #B0B0B0; cursor: initial;">
-                                    <img class="character-sheet-mastery-icon grid-overlap"
-                                         src="{{$accessory.Equipment.icon_url}}"
-                                         alt="{{$accessory.Equipment.display_name}} Slot"/>
-
-                                </div>
+								<xf:if is="$canMakeChanges AND {$accessory.Rank.rank_id} == $maxRank">
+									<a href="{{ link('members/cs/equipment/confirmChangeAccessory', null, {'user_id': $user.user_id, 'equipment_group': $accessory.Equipment.equip_group}) }}"
+                                         data-xf-click="overlay"
+                                         data-cache="false"
+									   	 class="grid-overlap">
+										<div class="character-sheet-mastery-icon-container grid-overlap rank-{$accessory.Rank.tier} accessory accessory-icon"
+									   		 style="background-color: #B0B0B0; cursor: initial;">
+											<img class="character-sheet-mastery-icon grid-overlap"
+												 src="{{$accessory.Equipment.icon_url}}"
+												 alt="{{$accessory.Equipment.display_name}} Slot"/>
+										</div>
+									</a>
+								<xf:else/>
+									<div class="character-sheet-mastery-icon-container grid-overlap rank-{$accessory.Rank.tier} accessory accessory-icon"
+									   style="background-color: #B0B0B0; cursor: initial;">
+										<img class="character-sheet-mastery-icon grid-overlap"
+											 src="{{$accessory.Equipment.icon_url}}"
+											 alt="{{$accessory.Equipment.display_name}} Slot"/>
+                                	</div>
+								</xf:if>
                             </xf:if>
                             <div class="character-sheet-mastery-title accessory-name">
                                 {{$accessory.Equipment.display_name}}<br>
