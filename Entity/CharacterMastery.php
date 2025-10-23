@@ -35,7 +35,6 @@ class CharacterMastery extends Entity
                 'type' => SELF::TO_ONE,
                 'conditions' => 'user_id',
                 'primary' => true,
-                'cascadeDelete' => true
             ],
             'Rank' => [
                 'entity' => 'Terrasphere\Core:Rank',
