@@ -49,8 +49,29 @@ class User extends XFCP_User
         // Get user from ID
         /** @var XF\Entity\User $user */
         $user = $this->em()->find('XF:User', $this->user_id);
-        $userGroups = $user->getUserGroupRepo(); // Includes primary + secondary groups
-        return $userGroups->getUserBannerCacheData();
+
+        $userGroupIds = array_merge([$user->user_group_id], $user->secondary_group_ids);
+
+        $groups = \XF::finder('XF:UserGroup')
+            ->where('user_group_id', $userGroupIds)
+            ->fetch();
+
+
+        $groupsWithBanners = [];
+
+        foreach ($groups as $group)
+        {
+            if ($group->banner_text)
+            {
+                $groupsWithBanners[] = [
+                    'title' => $group->title,
+                    'text' => $group->banner_text,
+                    'class' => $group->banner_css_class
+                ];
+            }
+        }
+
+        return $groupsWithBanners;
     }
 
     private function getRankValue($rankNum) : int
