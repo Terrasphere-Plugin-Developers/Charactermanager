@@ -11,7 +11,7 @@
                                             arg-icon_url="{$masterySlot.Mastery.icon_url}"
                                             arg-is_locked="{{!$unlockedMasterySlots.{$slotNum}}}"
                                             arg-can_make_changes="{$canMakeChanges}"
-                                            arg-max_rank="{$maxRank}"/>
+                                            arg-max_rank="{$user.getMasteryRankCap($masterySlot)}"/>
                             </xf:if>
                         <xf:else/>
                             <xf:macro template="terrasphere_cm_character_sheet_macros"
@@ -21,7 +21,7 @@
                                       arg-mastery_slot="{$masterySlot}"
                                       arg-icon_url="{$masterySlot.Mastery.icon_url}"
                                       arg-can_make_changes="{$canMakeChanges}"
-                                      arg-max_rank="{$maxRank}"/>
+                                      arg-max_rank="{$user.getMasteryRankCap($masterySlot)}"/>
                         </xf:if>
                     </xf:foreach>
                 </div>
@@ -37,7 +37,7 @@
                                             arg-icon_url="{$expertiseSlot.Expertise.icon_url}"
                                             arg-is_locked="{{!$unlockedExpertiseSlots.{$slotNum}}}"
                                             arg-can_make_changes="{$canMakeChanges}"
-                                            arg-max_rank="{$maxRank}"/>
+                                            arg-max_rank="{$user.getExpertiseRankCap($expertiseSlot)}"/>
                             </xf:if>
                         <xf:else/>
                             <xf:macro template="terrasphere_cm_character_sheet_macros"
@@ -47,7 +47,7 @@
                                       arg-slot="{$expertiseSlot}"
                                       arg-icon_url="{$expertiseSlot.Expertise.icon_url}"
                                       arg-can_make_changes="{$canMakeChanges}"
-                                      arg-max_rank="{$maxRank}"/>
+                                      arg-max_rank="{$user.getExpertiseRankCap($expertiseSlot)}"/>
                         </xf:if>
                     </xf:foreach>
                 </div>
@@ -59,13 +59,13 @@
                               arg-user="{$user}"
                               arg-charEquipment="{$weapon}"
                               arg-can_make_changes="{$canMakeChanges}"
-                              arg-max_rank="{$maxRank}"/>
+                              arg-max_rank="{$user.getEquipmentRankCap()}"/>
 					
 					<!-- ARMOR -->
                     <div class="character-sheet-mastery-container" id="equip-container-{$armor.Equipment.equip_group}">
                         <div class="character-sheet-mastery grid-overlap">
                             <div class="rank-stars grid-overlap rank-stars-{$armor.Rank.tier}"></div>
-                            <xf:if is="$canMakeChanges AND {$armor.Rank.rank_id} != $maxRank">
+                            <xf:if is="$canMakeChanges AND {$armor.Rank.tier} < {$user.getEquipmentRankCap()}">
                                 <div class="character-sheet-mastery-icon-container grid-overlap rank-{$armor.Rank.tier} armor"
                                      style="background-color: #B0B0B0;">
                                     <img class="character-sheet-mastery-icon grid-overlap armor armor-icon"
@@ -89,7 +89,7 @@
                                 <xf:js src="Terrasphere/Charactermanager/armor_dialogue.js"
                                        addon="Terrasphere/Charactermanager"/>
                             <xf:else/>
-								<xf:if is="$canMakeChanges AND {$armor.Rank.rank_id} == $maxRank">
+								<xf:if is="$canMakeChanges AND {$armor.Rank.tier} == {$user.getEquipmentRankCap()}">
 									<a href="{{ link('members/cs/equipment/confirmChangeArmor', null, {'user_id': $user.user_id, 'equipment_group': $armor.Equipment.equip_group}) }}"
                                          data-xf-click="overlay"
                                          data-cache="false"
@@ -122,7 +122,7 @@
 					<div class="character-sheet-mastery-container" id="equip-container-{$accessory.Equipment.equip_group}">
                         <div class="character-sheet-mastery grid-overlap">
                             <div class="rank-stars grid-overlap rank-stars-{$accessory.Rank.tier}"></div>
-                            <xf:if is="$canMakeChanges AND {$accessory.Rank.rank_id} != $maxRank">
+                            <xf:if is="$canMakeChanges AND {$accessory.Rank.tier} < {$user.getEquipmentRankCap()}">
                                 <div class="character-sheet-mastery-icon-container grid-overlap rank-{$accessory.Rank.tier} accessory"
                                      style="background-color: #B0B0B0;">
                                     <img class="character-sheet-mastery-icon grid-overlap accessory accessory-icon"
@@ -146,7 +146,7 @@
                                 <xf:js src="Terrasphere/Charactermanager/accessory_dialogue.js"
                                        addon="Terrasphere/Charactermanager"/>
                             <xf:else/>
-								<xf:if is="$canMakeChanges AND {$accessory.Rank.rank_id} == $maxRank">
+								<xf:if is="$canMakeChanges AND {$accessory.Rank.tier} == {$user.getEquipmentRankCap()}">
 									<a href="{{ link('members/cs/equipment/confirmChangeAccessory', null, {'user_id': $user.user_id, 'equipment_group': $accessory.Equipment.equip_group}) }}"
                                          data-xf-click="overlay"
                                          data-cache="false"

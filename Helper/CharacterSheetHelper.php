@@ -10,6 +10,8 @@ class CharacterSheetHelper
 {
     public static function validateMasteryUpgrade($member, $params)
     {
+        $user = $member->finder('XF:User')->where('user_id', $params['user_id'])->fetchOne();
+
         // Get character's mastery instance.
         $mastery = $member->finder('Terrasphere\Charactermanager:CharacterMastery')
             ->with('Mastery')
@@ -44,6 +46,10 @@ class CharacterSheetHelper
         if($nextRank == null)
             return $member->error('Already at max rank.');
 
+        // Validate rank cap.
+        if($nextRank['tier'] > $user->getMasteryRankCap($params['target_index']))
+            return $member->error('Already at max rank for mastery.');
+
         // Get rank schema (and the currency associated with it).
         $rankSchema = $member->finder('Terrasphere\Core:RankSchema')
             ->with('Currency')
@@ -64,7 +70,6 @@ class CharacterSheetHelper
             return $member->error('No rank schema cost entry for this mastery type and the next tier.');
 
         $nextCost = $nxt['cost'];
-        $user = $member->finder('XF:User')->where('user_id', $params['user_id'])->fetchOne();
         $userVal = $rankSchema->Currency->getValueFromUser($user, false);
 
         return [
@@ -108,6 +113,10 @@ class CharacterSheetHelper
         if($nextRank == null)
             return $member->error('Already at max rank.');
 
+        // Rank cap check.
+        if($nextRank['tier'] > $user->getEquipmentRankCap())
+            return $member->error('Already at max rank for equipment.');
+
         // Get rank schema (and the currency associated with it).
         //$rankSchema = $equipment->RankSchema; - Switched to an option instead of per-equipment.
         $rankSchemaID = $member->options()->terrasphereEquipmentRankSchema;
@@ -149,6 +158,8 @@ class CharacterSheetHelper
 
     public static function validateExpertiseUpgrade($member, $params)
     {
+        $user = $member->finder('XF:User')->where('user_id', $params['user_id'])->fetchOne();
+
         // Get character's mastery instance.
         $expertise = $member->finder('Terrasphere\Charactermanager:CharacterExpertise')
             ->with('Expertise')
@@ -177,6 +188,10 @@ class CharacterSheetHelper
         if($nextRank == null)
             return $member->error('Already at max rank.');
 
+        // Validate rank cap.
+        if($nextRank['tier'] > $user->getExpertiseRankCap($params['target_index']))
+            return $member->error('Already at max rank for expertise.');
+
         // Get rank schema (and the currency associated with it).
         $rankSchema = $member->finder('Terrasphere\Core:RankSchema')
             ->with('Currency')
@@ -197,7 +212,6 @@ class CharacterSheetHelper
             return $member->error('No rank schema cost entry for this mastery type and the next tier.');
 
         $nextCost = $nxt['cost'];
-        $user = $member->finder('XF:User')->where('user_id', $params['user_id'])->fetchOne();
         $userVal = $rankSchema->Currency->getValueFromUser($user, false);
 
         return [
@@ -211,7 +225,7 @@ class CharacterSheetHelper
         ];
     }
 
-    public static function adjustCurrency($finderContainer, User $user, int $cost, string $message, $currencyID)
+    public static function adjustCurrency($finderContainer, User $user, int $cost, string $message, $currencyID, $negate = true)
     {
         /** @var Currency $currency */
         $currency = $finderContainer->assertRecordExists('DBTech\Credits:Currency', $currencyID, null, null);
@@ -220,7 +234,7 @@ class CharacterSheetHelper
             'username' => $user['username'],
             'amount' => $cost,
             'message' => $message,
-            'negate' => true
+            'negate' => $negate
         ];
 
         /** @var \DBTech\Credits\EventTrigger\Adjust $adjustEvent */

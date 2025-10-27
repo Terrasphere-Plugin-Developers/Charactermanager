@@ -25,7 +25,7 @@
     <div class="character-sheet-mastery-container" id="mastery-container-{$mastery_slot.target_index}">
         <div class="character-sheet-mastery grid-overlap" style="display: {$masteryElementDisplay};">
             <div class="rank-stars grid-overlap rank-stars-{$mastery_slot.Rank.tier}"></div>
-            <xf:if is="$can_make_changes AND $mastery_slot.rank_id != $max_rank">
+            <xf:if is="$can_make_changes AND $mastery_slot.Rank.tier < $max_rank">
                 <a href="{{ link('members/cs/mastery/confirmUpgradeMastery', $mastery_slot, {'user_id': $mastery_slot.user_id, 'target_index': $mastery_slot.target_index})}}"
                    class="character-sheet-mastery-icon-container grid-overlap rank-{$mastery_slot.Rank.tier}"
                    data-xf-click="overlay"
@@ -108,7 +108,7 @@
     <div class="character-sheet-expertise-container" id="expertise-container-{$slot.target_index}">
         <div class="character-sheet-expertise grid-overlap" style="display: {$expertiseElementDisplay};">
             <div class="rank-stars grid-overlap rank-stars-{$slot.Rank.tier}"></div>
-            <xf:if is="$can_make_changes AND $slot.rank_id != $max_rank">
+            <xf:if is="$can_make_changes AND $slot.Rank.tier < $max_rank">
                 <a href="{{ link('members/cs/expertise/confirmUpgradeExpertise', $slot, {'user_id': $slot.user_id, 'target_index': $slot.target_index})}}"
                    class="character-sheet-expertise-icon-container grid-overlap rank-{$slot.Rank.tier}"
                    data-xf-click="overlay"
@@ -173,7 +173,7 @@
     <div class="character-sheet-mastery-container" id="equip-container-{$charEquipment.Equipment.equip_group}">
         <div class="character-sheet-mastery grid-overlap">
             <div class="rank-stars grid-overlap rank-stars-{$charEquipment.Rank.tier}"></div>
-            <xf:if is="$can_make_changes AND {$charEquipment.Rank.rank_id} != $max_rank">
+            <xf:if is="$can_make_changes AND {$charEquipment.Rank.tier} < $max_rank">
                 <a href="{{ link('members/cs/equipment/confirmUpgradeEquip', null, {'user_id': $user.user_id, 'equipment_group': $charEquipment.Equipment.equip_group}) }}"
                    class="character-sheet-mastery-icon-container grid-overlap rank-{$charEquipment.Rank.tier}"
                    data-xf-click="overlay"

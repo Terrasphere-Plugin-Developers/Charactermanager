@@ -62,7 +62,9 @@ class CharacterMastery extends Entity
 
         $ret = [];
         foreach ($results as $masteryID => $entry)
+        {
             $ret[$entry['target_index']] = $entry;
+        }
 
         return $ret;
     }

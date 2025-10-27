@@ -44,6 +44,83 @@ class User extends XFCP_User
         return (int) $this->hasPermission('terrasphere', 'terrasphere_cm_showcs');
     }
 
+    public function getEquipmentRankCap() : int
+    {
+        return Rank::maxRank($this)['tier'];
+    }
+
+    public function getMasteryRankCap($slotIndex = null) : int
+    {
+        $maxRank = Rank::maxRank($this);
+
+        $isAlter = false;
+        if($slotIndex != null)
+        {
+            $masterySlots = CharacterMastery::getCharacterMasterySlots($this, $this->user_id);
+
+            $slot = $this->finder('Terrasphere\Core:Mastery')
+                ->where('mastery_id', $masterySlots[(int) $slotIndex]['mastery_id'])
+                ->fetchOne();
+
+            if($slot != null && $slot['mastery_type_id'] != 1)
+                $isAlter = true;
+        }
+
+        if($isAlter)
+            return $maxRank['tier'];
+
+        $minusOne = $maxRank->getPreviousRank();
+        $minusTwo = $minusOne->getPreviousRank();
+
+        $masteries = $this->getMasteries();
+        $countAtMinusOne = 0; // Only counts standard masteries
+        foreach($masteries as $mastery)
+            if($mastery->Mastery['mastery_type_id'] == 1 && $mastery->Rank == $minusOne)
+                $countAtMinusOne++;
+
+        if($countAtMinusOne < 2)
+            return $minusOne['tier'];
+
+        return $minusTwo['tier'];
+    }
+
+    public function getExpertiseRankCap($slotIndex = null) : int
+    {
+        $maxRank = Rank::maxRank($this);
+        $minusOne = $maxRank->getPreviousRank();
+        $minusTwo = $minusOne->getPreviousRank();
+
+        $expertises = $this->getExpertises();
+        $countAtMax = 0;
+        $countAtMinusOne = 0;
+        foreach($expertises as $expertise)
+        {
+            if($expertise->Rank['tier'] > $minusTwo['tier'])
+                $countAtMinusOne++;
+            if($expertise->Rank['tier'] > $minusOne['tier'])
+                $countAtMax++;
+        }
+
+        // If there's no slot at (max), and this slot is (max - 1), it can be (max).
+        $expertiseSlots = CharacterExpertise::getCharacterExpertiseSlots($this, $this->user_id);
+        if($expertiseSlots[(int) $slotIndex]['rank_id'] == $minusOne['rank_id'] && $countAtMax < 1)
+            return $maxRank['tier'];
+
+        // Otherwise, if there are 3 slots which have reached (max - 1), it can only be (max - 2).
+        if($countAtMinusOne >= 3)
+        {
+            // Otherwise, it can only be (max - 2).
+            return $minusTwo['tier'];
+        }
+
+        // Otherwise, it can reach (max - 1), possibly reaching (max) later via condition 1.
+        if($countAtMax >= 1)
+            return $minusOne['tier'];
+
+        // Default to (max), before the conditions take over.
+        return $maxRank['tier'];
+    }
+
     public function getUsergroupBanners() : array
     {
         // Get user from ID

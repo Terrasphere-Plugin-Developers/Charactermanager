@@ -77,7 +77,7 @@ class Refund extends AbstractController
         $refundCurrency = $this->options()['terrasphereRaceTraitCurrency'];
         $msg = "Refunded Race Traits";
 
-        CharacterSheetHelper::adjustCurrency($this, $user, $refundAmount, $msg, $refundCurrency);
+        CharacterSheetHelper::adjustCurrency($this, $user, $refundAmount, $msg, $refundCurrency, false);
         foreach($user->getTraits() as $trait)
             $trait->delete();
 
@@ -107,7 +107,7 @@ class Refund extends AbstractController
         $msg = "Refunded " . $mastery->Mastery['display_name'] . " Rank " . $mastery->Rank['name'];
 
         $mastery->delete();
-        CharacterSheetHelper::adjustCurrency($this, $user, $refundAmount, $msg, $refundCurrency);
+        CharacterSheetHelper::adjustCurrency($this, $user, $refundAmount, $msg, $refundCurrency, false);
         return $this->redirect($this->buildLink('terrasphere/refund', null));
     }
 
@@ -134,7 +134,7 @@ class Refund extends AbstractController
         $msg = "Refunded " . $expertise->Expertise['display_name'] . " Rank " . $expertise->Rank['name'];
 
         $expertise->delete();
-        CharacterSheetHelper::adjustCurrency($this, $user, $refundAmount, $msg, $refundCurrency);
+        CharacterSheetHelper::adjustCurrency($this, $user, $refundAmount, $msg, $refundCurrency, false);
         return $this->redirect($this->buildLink('terrasphere/refund', null));
     }
 

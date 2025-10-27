@@ -25,9 +25,9 @@
         "hash": "e01a0f2110289653251ced5bd615e8af"
     },
     "public/terrasphere_cm_character_sheet_cell_mastery_equip.html": {
-        "version_id": 1002100,
-        "version_string": "1.2.1",
-        "hash": "5dfd7b3651f22af208a16983fb61b939"
+        "version_id": 1002200,
+        "version_string": "1.2.2",
+        "hash": "145002c0c93539a7162936898d0e2416"
     },
     "public/terrasphere_cm_character_sheet_cell_race_traits.html": {
         "version_id": 1001700,
@@ -40,9 +40,9 @@
         "hash": "c600c2a1237bac270d5f5f2e8ba2367f"
     },
     "public/terrasphere_cm_character_sheet_macros.html": {
-        "version_id": 1001700,
-        "version_string": "1.0.17",
-        "hash": "c2305623295a88fa4af76bca9ab56836"
+        "version_id": 1002200,
+        "version_string": "1.2.2",
+        "hash": "0cdd68bee413c052bc1b3975bdc00e85"
     },
     "public/terrasphere_cm_confirm_accessory_selection.html": {
         "version_id": 1001700,
