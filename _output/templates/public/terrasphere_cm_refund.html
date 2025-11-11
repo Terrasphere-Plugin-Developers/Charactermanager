@@ -48,13 +48,23 @@
 			</ul>
 		</xf:if>
 		<ul class="refund_list">
+			<li class="refund_list_item">
+				<div class="refund_title refund_cell">Refund Equipment</div>
+				<div class="refund_stats refund_cell">
+					<div class="refund_stat"><b>Return:</b> {$equipmentRefund} {$equipmentRefundCurrency.title}</div>
+					<div class="refund_stat"><b>Loss:</b> {{$equipmentCumulativeCost - $equipmentRefund}} {$equipmentRefundCurrency.title}</div>
+				</div>
+				<xf:button class="refund_button refund_cell" href="{{ link('terrasphere/refund/refund', $xf.visitor, {'user_id': $xf.visitor.user_id, 'equipment_id': True}) }}">Refund</xf:button>
+			</li>
+		</ul>
+		<ul class="refund_list">
 			<xf:foreach loop="$masteries" value="$mastery">
 				<xf:if is="!($mastery === null || $mastery.Rank === null)">
 					<li class="refund_list_item">
 						<div class="refund_title refund_cell">{$mastery.Mastery.display_name} {$mastery.Rank.name}</div>
 						<div class="refund_stats refund_cell">
-							<div class="refund_stat"><b>Return:</b> {{$mastery.Rank.getRefund($mastery.Mastery.getRankSchema())}} {{$mastery.Mastery.getRankSchema().Currency.title}}</div>
-							<div class="refund_stat"><b>Loss:</b> {{$mastery.Rank.getCumulativeCost($mastery.Mastery.getRankSchema()) - $mastery.Rank.getRefund($mastery.Mastery.getRankSchema())}} {{$mastery.Mastery.getRankSchema().Currency.title}}</div>
+							<div class="refund_stat"><b>Return:</b> {{$mastery.Rank.getMasteryRefund($mastery.Mastery.getRankSchema())}} {{$mastery.Mastery.getRankSchema().Currency.title}}</div>
+							<div class="refund_stat"><b>Loss:</b> {{$mastery.Rank.getCumulativeCost($mastery.Mastery.getRankSchema()) - $mastery.Rank.getMasteryRefund($mastery.Mastery.getRankSchema())}} {{$mastery.Mastery.getRankSchema().Currency.title}}</div>
 						</div>
 						<xf:button class="refund_button refund_cell" href="{{ link('terrasphere/refund/refund', $xf.visitor, {'user_id': $xf.visitor.user_id, 'mastery_id': $mastery.mastery_id}) }}">Refund</xf:button>
 					</li>
@@ -65,8 +75,8 @@
 					<li class="refund_list_item">
 						<div class="refund_title refund_cell">{$expertise.Expertise.display_name} {$expertise.Rank.name}</div>
 						<div class="refund_stats refund_cell">
-							<div class="refund_stat"><b>Return:</b> {{$expertise.Rank.getRefund($expertise.Expertise.getRankSchema())}} {{$expertise.Expertise.getRankSchema().Currency.title}}</div>
-							<div class="refund_stat"><b>Loss:</b> {{$expertise.Rank.getCumulativeCost($expertise.Expertise.getRankSchema()) - $expertise.Rank.getRefund($expertise.Expertise.getRankSchema())}} {{$expertise.Expertise.getRankSchema().Currency.title}}</div>
+							<div class="refund_stat"><b>Return:</b> {{$expertise.Rank.getMasteryRefund($expertise.Expertise.getRankSchema())}} {{$expertise.Expertise.getRankSchema().Currency.title}}</div>
+							<div class="refund_stat"><b>Loss:</b> {{$expertise.Rank.getCumulativeCost($expertise.Expertise.getRankSchema()) - $expertise.Rank.getMasteryRefund($expertise.Expertise.getRankSchema())}} {{$expertise.Expertise.getRankSchema().Currency.title}}</div>
 						</div>
 						<xf:button class="refund_button refund_cell" href="{{ link('terrasphere/refund/refund', $xf.visitor, {'user_id': $xf.visitor.user_id, 'expertise_id': $expertise.expertise_id}) }}">Refund</xf:button>
 					</li>

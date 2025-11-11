@@ -8,6 +8,12 @@
     "terrasphereEquipmentRankSchema.json": {
         "hash": "2a05c16865056c3a3c252616638df0e0"
     },
+    "terrasphereEquipmentRefundPercent.json": {
+        "hash": "ff7dc63c43d0f8b295fe3d5aafededba"
+    },
+    "terrasphereEquipmentRefundRankSkips.json": {
+        "hash": "0c32fdb26a2036f63295fdddc43b39ef"
+    },
     "terrasphereExpertiseRankSchema.json": {
         "hash": "7c5c9997afd8d67eff6b38f0b3c317fb"
     },

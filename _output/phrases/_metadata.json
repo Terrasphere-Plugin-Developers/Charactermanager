@@ -29,6 +29,18 @@
         "version_string": "1.0.17",
         "hash": "a49004ba584b837e9742d9cab8241439"
     },
+    "option.terrasphereEquipmentRefundPercent.txt": {
+        "global_cache": false,
+        "version_id": 1002300,
+        "version_string": "1.2.3",
+        "hash": "fda01f862d7154919d5c1fa795d2185a"
+    },
+    "option.terrasphereEquipmentRefundRankSkips.txt": {
+        "global_cache": false,
+        "version_id": 1002300,
+        "version_string": "1.2.3",
+        "hash": "65272edcb179ee55d3944af8d99e0380"
+    },
     "option.terrasphereExpertiseRankSchema.txt": {
         "global_cache": false,
         "version_id": 1001700,
@@ -70,6 +82,18 @@
         "version_id": 1001700,
         "version_string": "1.0.17",
         "hash": "dd3379a7cb21b40bc4fbf6fcb177d029"
+    },
+    "option_explain.terrasphereEquipmentRefundPercent.txt": {
+        "global_cache": false,
+        "version_id": 1002300,
+        "version_string": "1.2.3",
+        "hash": "7161757db45b39a71b6130458f7d7dbc"
+    },
+    "option_explain.terrasphereEquipmentRefundRankSkips.txt": {
+        "global_cache": false,
+        "version_id": 1002300,
+        "version_string": "1.2.3",
+        "hash": "7161757db45b39a71b6130458f7d7dbc"
     },
     "option_explain.terrasphereExpertiseRankSchema.txt": {
         "global_cache": false,

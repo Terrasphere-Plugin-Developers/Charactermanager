@@ -8,6 +8,7 @@ use Terrasphere\Charactermanager\Entity\CharacterExpertise;
 use Terrasphere\Charactermanager\Entity\CharacterMastery;
 use Terrasphere\Charactermanager\Entity\CharacterRaceTrait;
 use Terrasphere\Core\Entity\Rank;
+use Terrasphere\Core\Entity\RankSchema;
 use XF;
 
 class User extends XFCP_User
